@@ -151,10 +151,10 @@ class ImportLegacyCommand extends Command
     $this->writeln('Using Temp directory '.$this->importdir);
 
     $temp_dir = $this->importdir;
-    CommandHelper::executeShellCommand("tar xfz {$backup_file} --directory {$temp_dir}", ['timeout' => 3600], 'Extracting backupfile', $output);
-    CommandHelper::executeShellCommand("tar xf {$temp_dir}/".self::SQL_CONTAINER_FILE." --directory {$temp_dir}", ['timeout' => 3600], 'Extracting SQL files', $output);
-    CommandHelper::executeShellCommand("tar xfz {$temp_dir}/".self::SQL_WEB_CONTAINER_FILE." --directory {$temp_dir}", ['timeout' => 3600], 'Extracting Catroweb SQL files', $output);
-    CommandHelper::executeShellCommand("tar xf {$temp_dir}/".self::RESOURCE_CONTAINER_FILE." --directory {$temp_dir}", ['timeout' => 3600], 'Extracting resource files', $output);
+    CommandHelper::executeShellCommandLegacy("tar xfz {$backup_file} --directory {$temp_dir}", ['timeout' => 3600], 'Extracting backupfile', $output);
+    CommandHelper::executeShellCommandLegacy("tar xf {$temp_dir}/".self::SQL_CONTAINER_FILE." --directory {$temp_dir}", ['timeout' => 3600], 'Extracting SQL files', $output);
+    CommandHelper::executeShellCommandLegacy("tar xfz {$temp_dir}/".self::SQL_WEB_CONTAINER_FILE." --directory {$temp_dir}", ['timeout' => 3600], 'Extracting Catroweb SQL files', $output);
+    CommandHelper::executeShellCommandLegacy("tar xf {$temp_dir}/".self::RESOURCE_CONTAINER_FILE." --directory {$temp_dir}", ['timeout' => 3600], 'Extracting resource files', $output);
 
     $this->importUsers($this->importdir.'/'.self::TSV_USERS_FILE);
     $this->importPrograms($this->importdir.'/'.self::TSV_PROGRAMS_FILE);

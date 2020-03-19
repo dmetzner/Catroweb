@@ -23,7 +23,7 @@ class ProjectsApi implements ProjectsApiInterface
   /**
    * {@inheritdoc}
    */
-  public function projectProjectIdGet(string $projectId, &$responseCode, array &$responseHeaders)
+  public function projectProjectIdGet(?string $projectId, &$responseCode, array &$responseHeaders)
   {
     // TODO: Implement projectProjectIdGet() method.
   }
@@ -31,7 +31,7 @@ class ProjectsApi implements ProjectsApiInterface
   /**
    * {@inheritdoc}
    */
-  public function projectsFeaturedGet(string $platform = null, string $maxVersion = null, int $limit = 20, int $offset = 0, string $flavor = null, &$responseCode, array &$responseHeaders)
+  public function projectsFeaturedGet(?string $platform = null, ?string $maxVersion = null, ?int $limit = 20, ?int $offset = 0, ?string $flavor = null, &$responseCode, array &$responseHeaders)
   {
     // TODO: Implement projectsFeaturedGet() method.
   }
@@ -39,7 +39,7 @@ class ProjectsApi implements ProjectsApiInterface
   /**
    * {@inheritdoc}
    */
-  public function projectsGet(string $projectType, string $acceptLanguage = null, string $maxVersion = null, int $limit = 20, int $offset = 0, string $flavor = null, &$responseCode, array &$responseHeaders)
+  public function projectsGet(string $projectType, ?string $acceptLanguage = null, ?string $maxVersion = null, ?int $limit = 20, ?int $offset = 0, ?string $flavor = null, &$responseCode, array &$responseHeaders)
   {
     // TODO: Implement projectsGet() method.
   }
@@ -47,7 +47,7 @@ class ProjectsApi implements ProjectsApiInterface
   /**
    * {@inheritdoc}
    */
-  public function projectsPost(string $acceptLanguage = null, string $checksum = null, UploadedFile $file = null, string $flavor = null, array $tags = null, &$responseCode, array &$responseHeaders)
+  public function projectsPost(?string $acceptLanguage = null, ?string $checksum = null, UploadedFile $file = null, ?string $flavor = null, ?array $tags = null, ?bool $private = false, &$responseCode, array &$responseHeaders)
   {
     // TODO: Implement projectsPost() method.
   }
@@ -55,7 +55,7 @@ class ProjectsApi implements ProjectsApiInterface
   /**
    * {@inheritdoc}
    */
-  public function projectsSearchGet(string $queryString, string $maxVersion = null, int $limit = 20, int $offset = 0, string $flavor = null, &$responseCode, array &$responseHeaders)
+  public function projectsSearchGet(string $queryString, ?string $maxVersion = null, ?int $limit = 20, ?int $offset = 0, ?string $flavor = null, &$responseCode, array &$responseHeaders)
   {
     // TODO: Implement projectsSearchGet() method.
   }
@@ -63,7 +63,7 @@ class ProjectsApi implements ProjectsApiInterface
   /**
    * {@inheritdoc}
    */
-  public function projectsUserGet(string $maxVersion = null, int $limit = 20, int $offset = 0, string $flavor = null, &$responseCode, array &$responseHeaders)
+  public function projectsUserGet(?string $maxVersion = null, ?int $limit = 20, ?int $offset = 0, ?string $flavor = null, &$responseCode, array &$responseHeaders)
   {
     // TODO: Implement projectsUserGet() method.
   }
@@ -71,7 +71,7 @@ class ProjectsApi implements ProjectsApiInterface
   /**
    * {@inheritdoc}
    */
-  public function projectsUserUserIdGet(string $userId, string $maxVersion = null, int $limit = 20, int $offset = 0, string $flavor = null, &$responseCode, array &$responseHeaders)
+  public function projectsUserUserIdGet(string $userId, ?string $maxVersion = null, ?int $limit = 20, ?int $offset = 0, ?string $flavor = null, &$responseCode, array &$responseHeaders)
   {
     // TODO: Implement projectsUserUserIdGet() method.
   }

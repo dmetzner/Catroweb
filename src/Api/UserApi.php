@@ -23,7 +23,7 @@ class UserApi implements UserApiInterface
   /**
    * {@inheritdoc}
    */
-  public function userPost(Register $register, string $acceptLanguage = null, &$responseCode, array &$responseHeaders)
+  public function userPost(Register $register, ?string $acceptLanguage = null, &$responseCode, array &$responseHeaders)
   {
     // TODO: Implement userPost() method.
   }

@@ -39,12 +39,12 @@ class CheckCodeStyleCommand extends Command
       $output->writeln('PHP code style checking running only for git commit: '.$input->getArgument('githash'));
 
       $command_git = 'git diff-tree --no-commit-id --name-only -r '.$input->getArgument('githash');
-      $process_git = new Process($command_git);
+      $process_git = new Process(explode(" ", $command_git));
       $process_git->run();
 
       if (!$process_git->isSuccessful())
       {
-        throw new ProcessFailedException($command_git);
+        throw new ProcessFailedException($process_git);
       }
 
       $process_git_output = array_filter(explode("\n", $process_git->getOutput()), 'strlen');
@@ -72,7 +72,7 @@ class CheckCodeStyleCommand extends Command
         $command = $command.' --src '.$entry;
       }
 
-      $process = new Process($command);
+      $process = new Process(explode(" ", $command));
 
       // Getting real time output
       $process->run(function ($type, $buffer)
@@ -85,7 +85,7 @@ class CheckCodeStyleCommand extends Command
 
     $output->writeln('PHP code style checking running. This may take a few moments...');
     $command = 'time php ~/Catroweb-Symfony/vendor/phpcheckstyle/phpcheckstyle/run.php --src ~/Catroweb-Symfony/src/ --config ~/Catroweb-Symfony/tests/style-report/catroweb.xml --outdir ~/Catroweb-Symfony/tests/style-report';
-    $process = new Process($command);
+    $process = new Process(explode(" ", $command));
 
     // Getting real time output
     $process->run(function ($type, $buffer)
