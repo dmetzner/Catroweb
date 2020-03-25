@@ -2,6 +2,8 @@
 ![PhpSpec Tests](https://github.com/Catrobat/Catroweb-Symfony/workflows/PhpSpec%20Tests/badge.svg)
 ![PhpUnit Tests](https://github.com/Catrobat/Catroweb-Symfony/workflows/PhpUnit%20Tests/badge.svg)
 
+TEST
+
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
