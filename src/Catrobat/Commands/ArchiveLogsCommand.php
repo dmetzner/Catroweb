@@ -8,18 +8,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-/**
- * Class ArchiveLogsCommand.
- */
 class ArchiveLogsCommand extends Command
 {
   private OutputInterface $output;
 
   private ParameterBagInterface $parameter_bag;
 
-  /**
-   * ArchiveLogsCommand constructor.
-   */
   public function __construct(ParameterBagInterface $parameter_bag)
   {
     parent::__construct();
@@ -33,7 +27,7 @@ class ArchiveLogsCommand extends Command
     ;
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output): void
+  protected function execute(InputInterface $input, OutputInterface $output): int
   {
     $this->output = $output;
 
@@ -52,5 +46,7 @@ class ArchiveLogsCommand extends Command
       ['timeout' => 7200], 'Executing command: '.$compression_command.$log_dir, $output
     );
     $this->output->writeln('Successfully archived log files');
+
+    return 0;
   }
 }

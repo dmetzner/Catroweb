@@ -5,9 +5,6 @@ namespace App\Catrobat\Services\CatrobatCodeParser;
 use App\Catrobat\Services\ExtractedCatrobatFile;
 use Exception;
 
-/**
- * Class CatrobatCodeParser.
- */
 class CatrobatCodeParser
 {
   /**

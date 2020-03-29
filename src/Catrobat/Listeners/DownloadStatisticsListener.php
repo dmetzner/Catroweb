@@ -5,26 +5,19 @@ namespace App\Catrobat\Listeners;
 use App\Catrobat\RecommenderSystem\RecommendedPageId;
 use App\Catrobat\Services\StatisticsService;
 use Exception;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
-/**
- * Class DownloadStatisticsListener.
- */
 class DownloadStatisticsListener
 {
   /**
    * @var StatisticsService
    */
   private $statistics_service;
-  /**
-   * @var
-   */
+
   private $security_token_storage;
 
-  /**
-   * DownloadStatisticsListener constructor.
-   */
   public function __construct(StatisticsService $statistics_service, TokenStorageInterface $security_token_storage)
   {
     $this->statistics_service = $statistics_service;
@@ -80,25 +73,18 @@ class DownloadStatisticsListener
   }
 
   /**
-   * @param $request
-   * @param $program_id
-   * @param $referrer
-   * @param $rec_tag_by_program_id
-   * @param $rec_by_page_id
-   * @param $rec_by_program_id
-   * @param $locale
-   * @param $is_user_specific_recommendation
-   *
    * @throws Exception
    */
-  public function createProgramDownloadStatistics($request, $program_id, $referrer, $rec_tag_by_program_id,
-                                                  $rec_by_page_id, $rec_by_program_id, $locale,
-                                                  $is_user_specific_recommendation)
+  public function createProgramDownloadStatistics(Request $request, string $program_id, ?string $referrer,
+                                                  ?string $rec_tag_by_program_id, ?int $rec_by_page_id,
+                                                  ?string $rec_by_program_id, ?string $locale, bool $is_user_specific_recommendation = false): bool
   {
     if ((false === strpos($request->headers->get('User-Agent'), 'okhttp')) || (null != $rec_by_page_id))
     {
-      $this->statistics_service->createProgramDownloadStatistics($request, $program_id, $referrer,
+      return $this->statistics_service->createProgramDownloadStatistics($request, $program_id, $referrer,
         $rec_tag_by_program_id, $rec_by_page_id, $rec_by_program_id, $locale, $is_user_specific_recommendation);
     }
+
+    return false;
   }
 }

@@ -10,9 +10,6 @@ use App\Repository\ProgramRemixRepository;
 use App\Repository\ProgramRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-/**
- * Class RemixSubgraphManipulator.
- */
 class RemixSubgraphManipulator
 {
   const COMMON_TIMESTAMP = 'common_timestamp';
@@ -37,9 +34,6 @@ class RemixSubgraphManipulator
    */
   private $program_remix_backward_repository;
 
-  /**
-   * RemixManager constructor.
-   */
   public function __construct(EntityManagerInterface $entity_manager,
                               ProgramRepository $program_repository,
                               ProgramRemixRepository $program_remix_repository,
@@ -157,11 +151,8 @@ class RemixSubgraphManipulator
     }
   }
 
-  /**
-   * @return array
-   */
   private function splitNewParentIdsByRelationDirection(array $existing_descendant_relations_of_program,
-                                                        array $ids_of_new_parents)
+                                                        array $ids_of_new_parents): array
   {
     // check if any new parent is already an existing child of this program
     // (i.e. has a forward descendant connection to the program)!

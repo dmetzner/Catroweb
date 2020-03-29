@@ -4,14 +4,8 @@ namespace App\Catrobat\CatrobatCode\Statements;
 
 use App\Catrobat\CatrobatCode\SyntaxHighlightingConstants;
 
-/**
- * Class LookStatement.
- */
 class LookStatement extends Statement
 {
-  /**
-   * @var
-   */
   private $value;
   /**
    * @var Statement
@@ -21,10 +15,10 @@ class LookStatement extends Statement
   /**
    * LookStatement constructor.
    *
-   * @param $statementFactory
-   * @param $xmlTree
-   * @param $spaces
-   * @param $value
+   * @param mixed $statementFactory
+   * @param mixed $xmlTree
+   * @param mixed $spaces
+   * @param mixed $value
    */
   public function __construct($statementFactory, $xmlTree, $spaces, $value)
   {
@@ -34,10 +28,7 @@ class LookStatement extends Statement
       '');
   }
 
-  /**
-   * @return string
-   */
-  public function execute()
+  public function execute(): string
   {
     $this->findNames();
 

@@ -5,19 +5,14 @@ namespace App\Catrobat\Services;
 use App\Catrobat\Exceptions\InvalidStorageDirectoryException;
 use Symfony\Component\Finder\Finder;
 
-/**
- * Class CatrobatFileCompressor.
- */
 class CatrobatFileCompressor
 {
   /**
-   * @param $source
-   * @param $destination
-   * @param $archive_name
-   *
-   * @return string
+   * @param mixed $source
+   * @param mixed $destination
+   * @param mixed $archive_name
    */
-  public function compress($source, $destination, $archive_name)
+  public function compress($source, $destination, $archive_name): string
   {
     if (!is_dir($source))
     {

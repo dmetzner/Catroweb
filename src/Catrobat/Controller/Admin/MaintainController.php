@@ -195,14 +195,13 @@ class MaintainController extends CRUDController
 
     $output = new NullOutput();
 
-    $is_name_defined = false;
-    if (null !== $request->get('backupName'))
+    $backup_name = $request->get('backupName');
+    if (null !== $backup_name)
     {
       $input = new ArrayInput([
         'command' => 'catrobat:backup:create',
-        'backupName' => $request->get('backupName'),
+        'backupName' => $backup_name,
       ]);
-      $is_name_defined = true;
     }
 
     try
@@ -210,14 +209,7 @@ class MaintainController extends CRUDController
       $return = $application->run($input, $output);
       if (0 == $return)
       {
-        if ($is_name_defined)
-        {
-          $this->addFlash('sonata_flash_success', 'Create Backup: ['.$input['backupName'].'] OK');
-        }
-        else
-        {
-          $this->addFlash('sonata_flash_success', 'Create Backup OK');
-        }
+        $this->addFlash('sonata_flash_success', 'Create Backup: '.$backup_name.' OK');
       }
     }
     catch (Exception $exception)

@@ -4,48 +4,35 @@ namespace App\Repository;
 
 use App\Entity\Program;
 use App\Entity\ScratchProgramRemixRelation;
+use App\Entity\Tag;
+use ArrayIterator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
-/**
- * Class ProgramRepository.
- */
 class ProgramRepository extends ServiceEntityRepository
 {
-  /**
-   * @var array
-   */
-  private $cached_most_remixed_programs_full_result = [];
-  /**
-   * @var array
-   */
-  private $cached_most_liked_programs_full_result = [];
-  /**
-   * @var array
-   */
-  private $cached_most_downloaded_other_programs_full_result = [];
+  private array $cached_most_remixed_programs_full_result = [];
+
+  private array $cached_most_liked_programs_full_result = [];
+
+  private array $cached_most_downloaded_other_programs_full_result = [];
 
   public function __construct(ManagerRegistry $managerRegistry)
   {
     parent::__construct($managerRegistry, Program::class);
   }
 
-  /**
-   * @param bool        $debug_build If debug builds should be included
-   * @param string|null $flavor
-   * @param int|null    $limit
-   * @param int         $offset
-   *
-   * @return Program[]
-   */
-  public function getMostDownloadedPrograms(bool $debug_build, $flavor = null, $limit = 20, $offset = 0,
-                                            string $max_version = '0')
+  public function getMostDownloadedPrograms(bool $debug_build, ?string $flavor = null, ?int $limit = 20, int $offset = 0,
+                                            string $max_version = '0'): array
   {
     $query_builder = $this->createQueryBuilder('e');
 
@@ -65,14 +52,11 @@ class ProgramRepository extends ServiceEntityRepository
   }
 
   /**
-   * @param bool        $debug_build If debug builds should be included
-   * @param string|null $flavor
-   * @param int|null    $limit
-   * @param int         $offset
+   * @param bool $debug_build If debug builds should be included
    *
    * @return Program[]
    */
-  public function getScratchRemixesPrograms(bool $debug_build, $flavor = null, $limit = 20, $offset = 0)
+  public function getScratchRemixesPrograms(bool $debug_build, ?string $flavor = null, ?int $limit = 20, int $offset = 0): array
   {
     $qb = $this->createQueryBuilder('e');
 
@@ -94,14 +78,11 @@ class ProgramRepository extends ServiceEntityRepository
   }
 
   /**
-   * @param bool        $debug_build If debug builds should be included
-   * @param string|null $flavor
-   * @param int|null    $limit
-   * @param int         $offset
+   * @param bool $debug_build If debug builds should be included
    *
    * @return Program[]
    */
-  public function getMostViewedPrograms(bool $debug_build, $flavor = null, $limit = 20, $offset = 0, string $max_version = '0')
+  public function getMostViewedPrograms(bool $debug_build, ?string $flavor = null, ?int $limit = 20, int $offset = 0, string $max_version = '0'): array
   {
     $query_builder = $this->createQueryBuilder('e');
 
@@ -122,16 +103,9 @@ class ProgramRepository extends ServiceEntityRepository
   }
 
   /**
-   * @param bool     $debug_build If debug builds should be included
-   * @param string   $flavor
-   * @param int|null $limit
-   * @param int      $offset
-   *
    * @throws DBALException
-   *
-   * @return array
    */
-  public function getMostRemixedPrograms(bool $debug_build, $flavor = 'pocketcode', $limit = 20, $offset = 0)
+  public function getMostRemixedPrograms(bool $debug_build, string $flavor = 'pocketcode', ?int $limit = 20, int $offset = 0): array
   {
     if (!isset($this->cached_most_remixed_programs_full_result[$flavor]))
     {
@@ -158,14 +132,9 @@ class ProgramRepository extends ServiceEntityRepository
   }
 
   /**
-   * @param bool   $debug_build If debug builds should be included
-   * @param string $flavor
-   *
    * @throws DBALException
-   *
-   * @return int
    */
-  public function getTotalRemixedProgramsCount(bool $debug_build, $flavor = 'pocketcode')
+  public function getTotalRemixedProgramsCount(bool $debug_build, string $flavor = 'pocketcode'): int
   {
     if (isset($this->cached_most_remixed_programs_full_result[$flavor]))
     {
@@ -183,14 +152,9 @@ class ProgramRepository extends ServiceEntityRepository
   }
 
   /**
-   * @param bool     $debug_build If debug builds should be included
-   * @param string   $flavor
-   * @param int|null $limit
-   * @param int      $offset
-   *
    * @return Program[]
    */
-  public function getMostLikedPrograms(bool $debug_build, $flavor = 'pocketcode', $limit = 20, $offset = 0)
+  public function getMostLikedPrograms(bool $debug_build, string $flavor = 'pocketcode', ?int $limit = 20, int $offset = 0): array
   {
     if (isset($this->cached_most_liked_programs_full_result[$flavor]))
     {
@@ -232,13 +196,7 @@ class ProgramRepository extends ServiceEntityRepository
     }, $results);
   }
 
-  /**
-   * @param bool   $debug_build If debug builds should be included
-   * @param string $flavor
-   *
-   * @return int
-   */
-  public function getTotalLikedProgramsCount(bool $debug_build, $flavor = 'pocketcode')
+  public function getTotalLikedProgramsCount(bool $debug_build, string $flavor = 'pocketcode'): int
   {
     if (isset($this->cached_most_liked_programs_full_result[$flavor]))
     {
@@ -251,16 +209,10 @@ class ProgramRepository extends ServiceEntityRepository
     return count($this->cached_most_liked_programs_full_result[$flavor]);
   }
 
-  /**
-   * @param bool     $debug_build If debug builds should be included
-   * @param int|null $limit
-   *
-   * @return array
-   */
   public function getOtherMostDownloadedProgramsOfUsersThatAlsoDownloadedGivenProgram(
-    bool $debug_build, string $flavor, Program $program, $limit, int $offset,
-    bool $is_test_environment
-  ) {
+    bool $debug_build, string $flavor, Program $program, ?int $limit, int $offset,
+    bool $is_test_environment): array
+  {
     $cache_key = $flavor.'_'.$program->getId();
     if (isset($this->cached_most_downloaded_other_programs_full_result[$cache_key]))
     {
@@ -326,14 +278,9 @@ class ProgramRepository extends ServiceEntityRepository
     }, $results);
   }
 
-  /**
-   * @param bool $debug_build If debug builds should be included
-   *
-   * @return int
-   */
   public function getOtherMostDownloadedProgramsOfUsersThatAlsoDownloadedGivenProgramCount(
-    bool $debug_build, string $flavor, Program $program, bool $is_test_environment
-  ) {
+    bool $debug_build, string $flavor, Program $program, bool $is_test_environment): int
+  {
     $cache_key = $flavor.'_'.$program->getId();
     if (isset($this->cached_most_downloaded_other_programs_full_result[$cache_key]))
     {
@@ -349,14 +296,9 @@ class ProgramRepository extends ServiceEntityRepository
   }
 
   /**
-   * @param bool        $debug_build If debug builds should be included
-   * @param string|null $flavor
-   * @param int|null    $limit
-   * @param int         $offset
-   *
    * @return Program[]
    */
-  public function getRecentPrograms(bool $debug_build, $flavor = null, $limit = 20, $offset = 0, string $max_version = '0')
+  public function getRecentPrograms(bool $debug_build, string $flavor = null, ?int $limit = 20, int $offset = 0, string $max_version = '0'): array
   {
     $query_builder = $this->createQueryBuilder('e');
 
@@ -377,14 +319,9 @@ class ProgramRepository extends ServiceEntityRepository
   }
 
   /**
-   * @param bool        $debug_build If debug builds should be included
-   * @param string|null $flavor
-   * @param int|null    $limit
-   * @param int         $offset
-   *
-   * @return array
+   * @return Program[]
    */
-  public function getRandomPrograms(bool $debug_build, $flavor = null, $limit = 20, $offset = 0, string $max_version = '0')
+  public function getRandomPrograms(bool $debug_build, ?string $flavor = null, ?int $limit = 20, int $offset = 0, string $max_version = '0'): array
   {
     // Rand(), newid() and TABLESAMPLE() doesn't exist in the Native Query
     // therefore we have to do a workaround for random results
@@ -413,12 +350,9 @@ class ProgramRepository extends ServiceEntityRepository
   }
 
   /**
-   * @param string|null $flavor
-   * @param bool        $debug_build If debug builds should be included
-   *
    * @return mixed
    */
-  public function getVisibleProgramIds($flavor, bool $debug_build, string $max_version = '0')
+  public function getVisibleProgramIds(?string $flavor, bool $debug_build, string $max_version = '0')
   {
     $query_builder = $this->createQueryBuilder('e');
 
@@ -463,12 +397,7 @@ class ProgramRepository extends ServiceEntityRepository
     return $query_builder->getQuery()->getResult();
   }
 
-  /**
-   * @param bool $debug_build If debug builds should be included
-   *
-   * @return Program[]|array
-   */
-  public static function filterVisiblePrograms(array $programs, bool $debug_build, string $max_version = '0')
+  public static function filterVisiblePrograms(array $programs, bool $debug_build, string $max_version = '0'): array
   {
     if (!is_array($programs) || 0 === count($programs))
     {
@@ -492,14 +421,14 @@ class ProgramRepository extends ServiceEntityRepository
   }
 
   /**
-   * @param int[] $program_ids
+   * @param string[] $program_ids
    *
-   * @return int[]
+   * @return string[]
    *
    * @internal
    * ATTENTION! Internal use only! (no visible/private/debug check)
    */
-  public function filterExistingProgramIds(array $program_ids)
+  public function filterExistingProgramIds(array $program_ids): array
   {
     $query_builder = $this->createQueryBuilder('p');
 
@@ -519,19 +448,12 @@ class ProgramRepository extends ServiceEntityRepository
   }
 
   /**
-   * @param string $query       The query to search for (search terms)
-   * @param bool   $debug_build If debug builds should be included
-   * @param int    $limit
-   * @param int    $offset
-   *
    * @throws Exception
-   *
-   * @return array
    */
-  public function search(string $query, bool $debug_build, $limit = 10, $offset = 0, string $max_version = '0')
+  public function search(string $query, bool $debug_build, ?int $limit = 10, int $offset = 0, string $max_version = '0'): array
   {
     $em = $this->getEntityManager();
-    $metadata = $em->getClassMetadata('App\Entity\Tag')->getFieldNames();
+    $metadata = $em->getClassMetadata(Tag::class)->getFieldNames();
     array_shift($metadata);
 
     $debug_where = (true !== $debug_build) ? 'e.debug_build = false AND' : '';
@@ -632,7 +554,9 @@ class ProgramRepository extends ServiceEntityRepository
     }
 
     $paginator = new Paginator($final_query);
-    $result = $paginator->getIterator()->getArrayCopy();
+    /** @var ArrayIterator $iterator */
+    $iterator = $paginator->getIterator();
+    $result = $iterator->getArrayCopy();
 
     return array_map(function ($element)
     {
@@ -640,16 +564,10 @@ class ProgramRepository extends ServiceEntityRepository
     }, $result);
   }
 
-  /**
-   * @param string $query       The query to search for (search terms)
-   * @param bool   $debug_build If debug builds should be included
-   *
-   * @return int
-   */
-  public function searchCount(string $query, bool $debug_build, string $max_version = '0')
+  public function searchCount(string $query, bool $debug_build, string $max_version = '0'): int
   {
     $em = $this->getEntityManager();
-    $metadata = $em->getClassMetadata('App\Entity\Tag')->getFieldNames();
+    $metadata = $em->getClassMetadata(Tag::class)->getFieldNames();
     array_shift($metadata);
 
     $debug_where = (true !== $debug_build) ? 'e.debug_build = false AND' : '';
@@ -715,7 +633,7 @@ class ProgramRepository extends ServiceEntityRepository
    * @internal
    * ATTENTION! Internal use only! (no visible/private/debug check)
    */
-  public function markAllProgramsAsNotYetMigrated()
+  public function markAllProgramsAsNotYetMigrated(): void
   {
     $query_builder = $this->createQueryBuilder('p');
 
@@ -730,14 +648,14 @@ class ProgramRepository extends ServiceEntityRepository
 
   /**
    * @throws NonUniqueResultException
-   * @throws \Doctrine\ORM\NoResultException
+   * @throws NoResultException
    *
    * @return mixed
    *
    * @internal
    * ATTENTION! Internal use only! (no visible/private/debug check)
    */
-  public function findNext(int $previous_program_id)
+  public function findNext(string $previous_program_id)
   {
     $query_builder = $this->createQueryBuilder('p');
 
@@ -751,20 +669,8 @@ class ProgramRepository extends ServiceEntityRepository
     ;
   }
 
-  /**
-   * @param        $user_id
-   * @param bool   $debug_build If debug builds should be included
-   * @param string $max_version
-   *
-   * @return Program[]
-   */
-  public function getUserPrograms($user_id, bool $debug_build, $max_version)
+  public function getUserPrograms(string $user_id, bool $debug_build, string $max_version): array
   {
-    if (!$user_id)
-    {
-      return [];
-    }
-
     $query_builder = $this->createQueryBuilder('e');
 
     $query_builder
@@ -782,19 +688,10 @@ class ProgramRepository extends ServiceEntityRepository
     return $query_builder->getQuery()->getResult();
   }
 
-  /**
-   * @param        $username
-   * @param int    $limit
-   * @param int    $offset
-   * @param string $flavor
-   * @param bool   $debug_build If debug builds should be included
-   * @param string $max_version
-   *
-   * @return Program[]
-   */
-  public function getAuthUserPrograms($username, $limit, $offset, $flavor, $debug_build, $max_version)
+  public function getAuthUserPrograms(?string $username, ?int $limit, int $offset, ?string $flavor, bool $debug_build,
+                                      string $max_version): array
   {
-    if (!$username)
+    if (null === $username)
     {
       return [];
     }
@@ -820,15 +717,9 @@ class ProgramRepository extends ServiceEntityRepository
     return $query_builder->getQuery()->getResult();
   }
 
-  /**
-   * @param      $user_id
-   * @param bool $debug_build If debug builds should be included
-   *
-   * @return Program[]
-   */
-  public function getPublicUserPrograms($user_id, bool $debug_build, string $max_version = '0')
+  public function getPublicUserPrograms(?string $user_id, bool $debug_build, string $max_version = '0'): array
   {
-    if (!$user_id)
+    if (null === $user_id)
     {
       return [];
     }
@@ -852,15 +743,10 @@ class ProgramRepository extends ServiceEntityRepository
   }
 
   /**
-   * @param bool $debug_build If debug builds should be included
-   * @param null $flavor
-   *
    * @throws NonUniqueResultException
-   * @throws \Doctrine\ORM\NoResultException
-   *
-   * @return int
+   * @throws NoResultException
    */
-  public function getTotalPrograms(bool $debug_build, $flavor = null, string $max_version = '0')
+  public function getTotalPrograms(bool $debug_build, ?string $flavor = null, string $max_version = '0'): int
   {
     $query_builder = $this->createQueryBuilder('e');
 
@@ -875,27 +761,6 @@ class ProgramRepository extends ServiceEntityRepository
     $query_builder = $this->addMaxVersionCondition($query_builder, $max_version);
 
     return (int) $query_builder->getQuery()->getSingleScalarResult();
-  }
-
-  /**
-   * @param $apk_status
-   *
-   * @return mixed
-   *
-   * @internal
-   * ATTENTION! Internal use only! (no visible/private/debug check)
-   */
-  public function getProgramsWithApkStatus($apk_status)
-  {
-    $query_builder = $this->createQueryBuilder('e');
-
-    return $query_builder
-      ->select('e')
-      ->where($query_builder->expr()->eq('e.apk_status', ':apk_status'))
-      ->setParameter('apk_status', $apk_status)
-      ->getQuery()
-      ->getResult()
-    ;
   }
 
   /**
@@ -916,15 +781,7 @@ class ProgramRepository extends ServiceEntityRepository
     ;
   }
 
-  /**
-   * @param          $id
-   * @param bool     $debug_build If debug builds should be included
-   * @param int|null $limit
-   * @param int      $offset
-   *
-   * @return Program[]
-   */
-  public function getProgramsByTagId($id, bool $debug_build, $limit = 20, $offset = 0)
+  public function getProgramsByTagId(int $id, bool $debug_build, ?int $limit = 20, int $offset = 0): array
   {
     $query_builder = $this->createQueryBuilder('e');
 
@@ -948,12 +805,7 @@ class ProgramRepository extends ServiceEntityRepository
     ;
   }
 
-  /**
-   * @param bool $debug_build If debug builds should be included
-   *
-   * @return Program[]
-   */
-  public function getProgramDataByIds(array $program_ids, bool $debug_build)
+  public function getProgramDataByIds(array $program_ids, bool $debug_build): array
   {
     $query_builder = $this->createQueryBuilder('p');
 
@@ -976,15 +828,8 @@ class ProgramRepository extends ServiceEntityRepository
     ;
   }
 
-  /**
-   * @param bool     $debug_build If debug builds should be included
-   * @param int|null $limit
-   * @param int      $offset
-   *
-   * @return mixed
-   */
   public function getProgramsByExtensionName(string $name, bool $debug_build,
-                                             $limit = 20, $offset = 0)
+                                             ?int $limit = 20, int $offset = 0): array
   {
     $query_builder = $this->createQueryBuilder('e');
 
@@ -1008,13 +853,7 @@ class ProgramRepository extends ServiceEntityRepository
     ;
   }
 
-  /**
-   * @param string $query       The query to search for (search terms)
-   * @param bool   $debug_build If debug builds should be included
-   *
-   * @return int
-   */
-  public function searchTagCount(string $query, bool $debug_build)
+  public function searchTagCount(string $query, bool $debug_build): int
   {
     $query = str_replace('yahoo', '', $query);
 
@@ -1040,13 +879,7 @@ class ProgramRepository extends ServiceEntityRepository
     return count($result);
   }
 
-  /**
-   * @param string $query       The query to search for (search terms)
-   * @param bool   $debug_build If debug builds should be included
-   *
-   * @return int
-   */
-  public function searchExtensionCount(string $query, bool $debug_build)
+  public function searchExtensionCount(string $query, bool $debug_build): int
   {
     $query_builder = $this->createQueryBuilder('e');
 
@@ -1070,14 +903,7 @@ class ProgramRepository extends ServiceEntityRepository
     return count($result);
   }
 
-  /**
-   * @param        $id
-   * @param bool   $debug_build If debug builds should be included
-   * @param string $flavor
-   *
-   * @return int
-   */
-  public function getRecommendedProgramsCount($id, bool $debug_build, $flavor = 'pocketcode')
+  public function getRecommendedProgramsCount(string $id, bool $debug_build, string $flavor = 'pocketcode'): int
   {
     $qb_tags = $this->createQueryBuilder('e');
 
@@ -1126,24 +952,19 @@ class ProgramRepository extends ServiceEntityRepository
 
     $qb_program = $this->createQueryBuilder('e');
     $db_query = $qb_program->getEntityManager()->createQuery($dql);
-    $db_query->setParameters([
-      'id' => $id,
-      'tag_ids' => $tag_ids,
-      'extension_ids' => $extensions_id,
-      'flavor' => $flavor,
-    ]);
+
+    $parameters = new ArrayCollection();
+    $parameters->add(new Parameter('id', $id));
+    $parameters->add(new Parameter('tag_ids', $tag_ids));
+    $parameters->add(new Parameter('extension_ids', $extensions_id));
+    $parameters->add(new Parameter('flavor', $flavor));
+
+    $db_query->setParameters($parameters);
 
     return count($db_query->getResult());
   }
 
-  /**
-   * @param          $id
-   * @param bool     $debug_build If debug builds should be included
-   * @param int|null $limit
-   *
-   * @return array
-   */
-  public function getRecommendedProgramsById($id, bool $debug_build, string $flavor, $limit, int $offset = 0)
+  public function getRecommendedProgramsById($id, bool $debug_build, string $flavor, ?int $limit, int $offset = 0): array
   {
     $qb_tags = $this->createQueryBuilder('e');
 
@@ -1192,12 +1013,14 @@ class ProgramRepository extends ServiceEntityRepository
 
     $qb_program = $this->createQueryBuilder('e');
     $db_query = $qb_program->getEntityManager()->createQuery($dql);
-    $db_query->setParameters([
-      'pid' => $id,
-      'tag_ids' => $tag_ids,
-      'extension_ids' => $extensions_id,
-      'flavor' => $flavor,
-    ]);
+
+    $parameters = new ArrayCollection();
+    $parameters->add(new Parameter('pid', $id));
+    $parameters->add(new Parameter('tag_ids', $tag_ids));
+    $parameters->add(new Parameter('extension_ids', $extensions_id));
+    $parameters->add(new Parameter('flavor', $flavor));
+
+    $db_query->setParameters($parameters);
 
     $db_query->setFirstResult($offset);
     $db_query->setMaxResults($limit);
@@ -1216,14 +1039,8 @@ class ProgramRepository extends ServiceEntityRepository
     return $programs;
   }
 
-  /**
-   * @param bool     $debug_build If debug builds should be included
-   * @param int|null $limit
-   *
-   * @return string
-   */
   private function generateUnionSqlStatementForMostRemixedPrograms(bool $debug_build,
-                                                                   $limit, int $offset = 0)
+                                                                   ?int $limit, int $offset = 0): string
   {
     //---------------------------------------------------------------------------------------------
     // ATTENTION: since Doctrine does not support UNION queries,
@@ -1268,14 +1085,7 @@ class ProgramRepository extends ServiceEntityRepository
       $offset_clause.' ';
   }
 
-  /**
-   * @param      $search_terms
-   * @param      $metadata
-   * @param bool $debug_build  If debug builds should be included
-   *
-   * @return string
-   */
-  private function getAppendableSqlStringForEveryTerm($search_terms, $metadata, bool $debug_build)
+  private function getAppendableSqlStringForEveryTerm(array $search_terms, array $metadata, bool $debug_build): string
   {
     $sql = '';
     $metadata_count = count($metadata);
@@ -1316,13 +1126,7 @@ class ProgramRepository extends ServiceEntityRepository
     return $sql;
   }
 
-  /**
-   * @param string|null $flavor
-   * @param string      $alias  The QueryBuilder alias to use
-   *
-   * @return QueryBuilder
-   */
-  private function addFlavorCondition(QueryBuilder $query_builder, $flavor, string $alias = 'e')
+  private function addFlavorCondition(QueryBuilder $query_builder, ?string $flavor, string $alias = 'e'): QueryBuilder
   {
     if ($flavor)
     {
@@ -1345,12 +1149,7 @@ class ProgramRepository extends ServiceEntityRepository
     return $query_builder;
   }
 
-  /**
-   * @param bool $debug_build If debug builds should be included
-   *
-   * @return QueryBuilder
-   */
-  private function addDebugBuildCondition(QueryBuilder $query_builder, bool $debug_build, string $alias = 'e')
+  private function addDebugBuildCondition(QueryBuilder $query_builder, bool $debug_build, string $alias = 'e'): QueryBuilder
   {
     if (true !== $debug_build)
     {
@@ -1361,12 +1160,7 @@ class ProgramRepository extends ServiceEntityRepository
     return $query_builder;
   }
 
-  /**
-   * @param string $alias The QueryBuilder alias to use
-   *
-   * @return QueryBuilder
-   */
-  private function addMaxVersionCondition(QueryBuilder $query_builder, string $max_version = '0', string $alias = 'e')
+  private function addMaxVersionCondition(QueryBuilder $query_builder, string $max_version = '0', string $alias = 'e'): QueryBuilder
   {
     if ('0' !== $max_version)
     {
@@ -1379,12 +1173,7 @@ class ProgramRepository extends ServiceEntityRepository
     return $query_builder;
   }
 
-  /**
-   * @param string $alias The QueryBuilder alias to use
-   *
-   * @return QueryBuilder
-   */
-  private function addPrivacyCheckCondition(QueryBuilder $query_builder, string $alias = 'e')
+  private function addPrivacyCheckCondition(QueryBuilder $query_builder, string $alias = 'e'): QueryBuilder
   {
     $query_builder->andWhere(
       $query_builder->expr()->eq($alias.'.private', $query_builder->expr()->literal(false))

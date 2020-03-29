@@ -23,7 +23,9 @@ use PHPUnit\Framework\Assert;
 use RuntimeException;
 use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,76 +43,41 @@ class ApiContext implements KernelAwareContext
 
   /**
    * Name of the user which is used for the next requests.
-   *
-   * @var string
    */
-  private $username;
+  private ?string $username = null;
+
+  private string $method;
+
+  private string $url;
+
+  private array $request_parameters;
+
+  private array $request_files;
+
+  private array $request_server;
+
+  private ?string $request_content;
 
   /**
-   * @var string
-   */
-  private $method;
-
-  /**
-   * @var string
-   */
-  private $url;
-
-  /**
-   * @var array
-   */
-  private $request_parameters;
-
-  /**
-   * @var array
-   */
-  private $request_files;
-
-  /**
-   * @var array
-   */
-  private $request_server;
-
-  /**
-   * @var PyStringNode
-   */
-  private $request_content;
-
-  /**
-   * @var string
+   * @var Crawler|string|null and maybe even more types... (Should be refactored!)
    */
   private $last_response;
 
-  /**
-   * @var array
-   */
-  private $stored_json;
+  private array $stored_json;
 
   /**
-   * @var KernelBrowser
+   * @var KernelBrowser|null
    */
-  private $kernel_browser;
+  private ?KernelBrowser $kernel_browser = null;
 
   // to df ->function
-  /**
-   * @var array
-   */
-  private $checked_catrobat_remix_forward_ancestor_relations;
+  private array $checked_catrobat_remix_forward_ancestor_relations;
 
-  /**
-   * @var array
-   */
-  private $checked_catrobat_remix_forward_descendant_relations;
+  private array $checked_catrobat_remix_forward_descendant_relations;
 
-  /**
-   * @var array
-   */
-  private $checked_catrobat_remix_backward_relations;
+  private array $checked_catrobat_remix_backward_relations;
 
-  /**
-   * @var Program
-   */
-  private $my_program;
+  private Program $my_program;
 
   public function getKernelBrowser(): KernelBrowser
   {
@@ -175,8 +142,8 @@ class ApiContext implements KernelAwareContext
    * @When /^I request "([^"]*)" "([^"]*)"$/
    * @When /^I :method :url with these parameters$/
    *
-   * @param $method
-   * @param $uri
+   * @param mixed $method
+   * @param mixed $uri
    */
   public function iRequest($method, $uri)
   {
@@ -226,7 +193,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I search for "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iSearchFor($arg1)
   {
@@ -237,7 +204,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I search similar programs for program id "([^"]*)"$/
    *
-   * @param $id
+   * @param mixed $id
    */
   public function iSearchSimilarProgramsForProgramId($id)
   {
@@ -256,14 +223,14 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I want to download the apk file of "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    *
    * @throws Exception
    */
   public function iWantToDownloadTheApkFileOf($arg1)
   {
     $program_manager = $this->getProgramManager();
-    /** @var Program $program */
+
     $program = $program_manager->findOneByName($arg1);
     if (null === $program)
     {
@@ -277,11 +244,11 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I get the user\'s programs with "([^"]*)"$/
    *
-   * @param $url
+   * @param mixed $url
    */
   public function iGetTheUserSProgramsWith($url)
   {
-    /** @var User $user */
+    /** @var User|null $user */
     $user = $this->getUserManager()->findAll()[0];
 
     $this->iHaveAParameterWithValue('user_id', $user->getId());
@@ -304,7 +271,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I am "([^"]*)"$/
    *
-   * @param $username
+   * @param mixed $username
    */
   public function iAm($username)
   {
@@ -316,7 +283,7 @@ class ApiContext implements KernelAwareContext
    */
   public function iUploadACatrobatProgramWithTheSameName()
   {
-    /** @var User $user */
+    /** @var User|null $user */
     $user = $this->getUserManager()->findUserByUsername($this->username);
     $this->request_parameters['token'] = $user->getUploadToken();
     $this->last_response = $this->getKernelBrowser()->getResponse()->getContent()
@@ -339,7 +306,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I upload another program using token "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iUploadAnotherProgramUsingToken($arg1)
   {
@@ -369,9 +336,9 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I report program (\d+) with category "([^"]*)" and note "([^"]*)"$/
    *
-   * @param $program_id
-   * @param $category
-   * @param $note
+   * @param mixed $program_id
+   * @param mixed $category
+   * @param mixed $note
    */
   public function iReportProgramWithNote($program_id, $category, $note)
   {
@@ -387,8 +354,8 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I POST login with user "([^"]*)" and password "([^"]*)"$/
    *
-   * @param $uname
-   * @param $pwd
+   * @param mixed $uname
+   * @param mixed $pwd
    */
   public function iPostLoginUserWithPassword($uname, $pwd)
   {
@@ -417,7 +384,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I try to register without (.*)$/
    *
-   * @param $missing_parameter
+   * @param mixed $missing_parameter
    */
   public function iTryToRegisterWithout($missing_parameter)
   {
@@ -475,7 +442,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should receive a "([^"]*)" file$/
    *
-   * @param $extension
+   * @param mixed $extension
    */
   public function iShouldReceiveAFile($extension)
   {
@@ -486,7 +453,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should receive a file named "([^"]*)"$/
    *
-   * @param $name
+   * @param mixed $name
    */
   public function iShouldReceiveAFileNamed($name)
   {
@@ -551,7 +518,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the response status code should be "([^"]*)"$/
    *
-   * @param $status_code
+   * @param mixed $status_code
    */
   public function theResponseStatusCodeShouldBe($status_code)
   {
@@ -565,8 +532,8 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I have a request parameter "([^"]*)" with value "([^"]*)"$/
    *
-   * @param $name
-   * @param $value
+   * @param mixed $name
+   * @param mixed $value
    */
   public function iHaveARequestParameterWithValue($name, $value)
   {
@@ -576,8 +543,8 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I have a request header "([^"]*)" with value "([^"]*)"$/
    *
-   * @param $name
-   * @param $value
+   * @param mixed $name
+   * @param mixed $value
    */
   public function iHaveARequestHeaderWithValue($name, $value)
   {
@@ -604,7 +571,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given I use a valid JWT Bearer token for :username
    *
-   * @param $username
+   * @param mixed $username
    *
    * @throws JWTEncodeFailureException
    */
@@ -644,7 +611,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given I use an expired JWT Bearer token for :username
    *
-   * @param $username
+   * @param mixed $username
    *
    * @throws JWTEncodeFailureException
    */
@@ -667,8 +634,8 @@ class ApiContext implements KernelAwareContext
   }
 
   /**
-   * @param $file
-   * @param $user
+   * @param mixed $file
+   * @param mixed $user
    *
    * @return Response
    */
@@ -706,7 +673,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I upload a program with (.*)$/
    *
-   * @param $program_attribute
+   * @param mixed $program_attribute
    */
   public function iUploadAProgramWith($program_attribute)
   {
@@ -767,10 +734,11 @@ class ApiContext implements KernelAwareContext
    * @When /^User "([^"]*)" uploads the program$/
    * @When /^User "([^"]*)" uploads the project$/
    *
-   * @param $username
+   * @param mixed $username
    */
   public function iUploadAProject($username)
   {
+    /** @var User|null $user */
     $user = $this->getUserManager()->findUserByUsername($username);
     $this->upload(sys_get_temp_dir().'/program_generated.catrobat', $user);
   }
@@ -779,7 +747,7 @@ class ApiContext implements KernelAwareContext
    * @Given /^I upload the program with "([^"]*)" as name$/
    * @When /^I upload the program with "([^"]*)" as name again$/
    *
-   * @param $name
+   * @param mixed $name
    */
   public function iUploadTheProgramWithAsName($name)
   {
@@ -812,7 +780,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^the uploaded program should have a Scratch parent having id "([^"]*)"$/
    *
-   * @param $scratch_parent_id
+   * @param mixed $scratch_parent_id
    */
   public function theUploadedProgramShouldHaveAScratchParentHavingScratchID($scratch_parent_id)
   {
@@ -832,8 +800,8 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the uploaded program should have a Catrobat forward ancestor having id "([^"]*)" and depth "([^"]*)"$/
    *
-   * @param $id
-   * @param $depth
+   * @param mixed $id
+   * @param mixed $depth
    */
   public function theUploadedProgramShouldHaveACatrobatForwardAncestorHavingIdAndDepth($id, $depth)
   {
@@ -845,7 +813,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then the uploaded program should have a Catrobat forward ancestor having its own id and depth :depth
    *
-   * @param $depth
+   * @param mixed $depth
    */
   public function theUploadedProgramShouldHaveACatrobatForwardAncestorHavingItsOwnIdAndDepth($depth)
   {
@@ -857,7 +825,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the uploaded program should have a Catrobat backward parent having id "([^"]*)"$/
    *
-   * @param $id
+   * @param mixed $id
    */
   public function theUploadedProgramShouldHaveACatrobatBackwardParentHavingId($id)
   {
@@ -913,8 +881,8 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the uploaded program should have a Catrobat forward descendant having id "([^"]*)" and depth "([^"]*)"$/
    *
-   * @param $id
-   * @param $depth
+   * @param mixed $id
+   * @param mixed $depth
    */
   public function theUploadedProgramShouldHaveCatrobatForwardDescendantHavingIdAndDepth($id, $depth)
   {
@@ -943,7 +911,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the uploaded program should have RemixOf "([^"]*)" in the xml$/
    *
-   * @param $value
+   * @param mixed $value
    *
    * @throws ORMException
    * @throws OptimisticLockException
@@ -1065,8 +1033,8 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I GET "([^"]*)" with program id "([^"]*)"$/
    *
-   * @param $uri
    * @param mixed $id
+   * @param mixed $uri
    */
   public function iGetWithProgramID($uri, $id)
   {
@@ -1086,8 +1054,8 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I get the most recent programs with limit "([^"]*)" and offset "([^"]*)"$/
    *
-   * @param $limit
-   * @param $offset
+   * @param mixed $limit
+   * @param mixed $offset
    */
   public function iGetTheMostRecentProgramsWithLimitAndOffset($limit, $offset)
   {
@@ -1125,11 +1093,12 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should see (\d+) outgoing emails$/
    *
-   * @param $email_amount
+   * @param mixed $email_amount
    */
   public function iShouldSeeOutgoingEmailsInTheProfiler($email_amount)
   {
     $profile = $this->getSymfonyProfile();
+    /** @var MessageDataCollector $collector */
     $collector = $profile->getCollector('swiftmailer');
     Assert::assertEquals($email_amount, $collector->getMessageCount());
   }
@@ -1137,11 +1106,12 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should see a email with recipient "([^"]*)"$/
    *
-   * @param $recipient
+   * @param mixed $recipient
    */
   public function iShouldSeeAEmailWithRecipient($recipient)
   {
     $profile = $this->getSymfonyProfile();
+    /** @var MessageDataCollector $collector */
     $collector = $profile->getCollector('swiftmailer');
     foreach ($collector->getMessages() as $message)
     {
@@ -1157,7 +1127,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I am a user with role "([^"]*)"$/
    *
-   * @param $role
+   * @param mixed $role
    */
   public function iAmAUserWithRole($role)
   {
@@ -1167,7 +1137,7 @@ class ApiContext implements KernelAwareContext
     ]);
 
     $client = $this->getKernelBrowser();
-    $client->getCookieJar()->set(new Cookie(session_name(), true));
+    $client->getCookieJar()->set(new Cookie(session_name(), 'true'));
 
     $session = $client->getContainer()->get('session');
 
@@ -1186,7 +1156,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the client response should contain "([^"]*)"$/
    *
-   * @param $needle
+   * @param mixed $needle
    */
   public function theResponseShouldContain($needle)
   {
@@ -1220,7 +1190,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the client response should not contain "([^"]*)"$/
    *
-   * @param $needle
+   * @param mixed $needle
    */
   public function theResponseShouldNotContain($needle)
   {
@@ -1233,7 +1203,7 @@ class ApiContext implements KernelAwareContext
   public function iUpdateThisProgram()
   {
     $pm = $this->getProgramManager();
-    $program = $pm->find(1);
+    $program = $pm->find('1');
     if (null === $program)
     {
       throw new PendingException('last program not found');
@@ -1271,8 +1241,8 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^URI from "([^"]*)" should be "([^"]*)"$/
    *
-   * @param $arg1
-   * @param $arg2
+   * @param mixed $arg1
+   * @param mixed $arg2
    */
   public function uriFromShouldBe($arg1, $arg2)
   {
@@ -1287,8 +1257,8 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the response Header should contain the key "([^"]*)" with the value '([^']*)'$/
    *
-   * @param $headerKey
-   * @param $headerValue
+   * @param mixed $headerKey
+   * @param mixed $headerValue
    */
   public function theResponseHeadershouldContainTheKeyWithTheValue($headerKey, $headerValue)
   {
@@ -1301,7 +1271,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then the returned json object with id :id will be:
    *
-   * @param $id
+   * @param mixed $id
    */
   public function theReturnedJsonObjectWithIdWillBe($id, PyStringNode $string)
   {
@@ -1317,7 +1287,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the response code will be "([^"]*)"$/
    *
-   * @param $code
+   * @param mixed $code
    */
   public function theResponseCodeWillBe($code)
   {
@@ -1328,7 +1298,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^searching for "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function searchingFor($arg1)
   {
@@ -1341,7 +1311,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the program should get (.*)$/
    *
-   * @param $result
+   * @param mixed $result
    */
   public function theProgramShouldGet($result)
   {
@@ -1364,7 +1334,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should get a total of (\d+) projects$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iShouldGetATotalOfProjects($arg1)
   {
@@ -1409,7 +1379,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I use the limit "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iUseTheLimit($arg1)
   {
@@ -1419,7 +1389,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I use the offset "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iUseTheOffset($arg1)
   {
@@ -1450,7 +1420,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should get (\d+) programs in random order:$/
    *
-   * @param $program_count
+   * @param mixed $program_count
    */
   public function iShouldGetProgramsInRandomOrder($program_count, TableNode $table)
   {
@@ -1534,7 +1504,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^the response code should be "([^"]*)"$/
    *
-   * @param $code
+   * @param mixed $code
    */
   public function theResponseCodeShouldBe($code)
   {
@@ -1562,7 +1532,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should get (\d+) programs in the following order:$/
    *
-   * @param $program_count
+   * @param mixed $program_count
    */
   public function iShouldGetScratchProgramsInTheFollowingOrder($program_count, TableNode $table)
   {
@@ -1590,7 +1560,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I have a parameter "([^"]*)" with an invalid md5checksum of my file$/
    *
-   * @param $parameter
+   * @param mixed $parameter
    */
   public function iHaveAParameterWithAnInvalidMdchecksumOfMyFile($parameter)
   {
@@ -1600,8 +1570,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I have a parameter "([^"]*)" with the md5checksum of "([^"]*)"$/
    *
-   * @param $parameter
-   * @param $file
+   * @param mixed $parameter
    */
   public function iHaveAParameterWithTheMdChecksumOf($parameter)
   {
@@ -1631,7 +1600,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I have a parameter "([^"]*)" with the returned projectId$/
    *
-   * @param $name
+   * @param mixed $name
    */
   public function iHaveAParameterWithTheReturnedProjectid($name)
   {
@@ -1656,7 +1625,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^the upload problem "([^"]*)"$/
    *
-   * @param $problem
+   * @param mixed $problem
    */
   public function theUploadProblem($problem)
   {
@@ -1746,6 +1715,7 @@ class ApiContext implements KernelAwareContext
    */
   public function iUploadAProgram()
   {
+    /** @var User|null $user */
     $user = $this->username ? $this->getUserManager()->findUserByUsername($this->username) : null;
     $this->upload(sys_get_temp_dir().'/program_generated.catrobat', $user);
   }
@@ -1757,6 +1727,7 @@ class ApiContext implements KernelAwareContext
    */
   public function iUploadAProgramWithId($id)
   {
+    /** @var User|null $user */
     $user = $this->username ? $this->getUserManager()->findUserByUsername($this->username) : null;
     $this->upload(sys_get_temp_dir().'/program_generated.catrobat', $user, $id);
   }
@@ -1769,11 +1740,12 @@ class ApiContext implements KernelAwareContext
    */
   public function iUploadAProgramWithIdAndName($id, $name)
   {
+    /** @var User|null $user */
     $user = $this->username ? $this->getUserManager()->findUserByUsername($this->username) : null;
     $this->upload(sys_get_temp_dir().'/program_generated.catrobat', $user, $id);
 
     /** @var Program $project */
-    $project = $this->getProgramManager()->find(['id' => $id]);
+    $project = $this->getProgramManager()->find($id);
     $project->setName($name);
   }
 
@@ -1789,8 +1761,8 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I upload another program with name set to "([^"]*)" and url set to "([^"]*)"$/
    *
-   * @param $name
-   * @param $url
+   * @param mixed $name
+   * @param mixed $url
    */
   public function iUploadAnotherProgramWithNameSetToAndUrlSetTo($name, $url)
   {
@@ -1802,9 +1774,9 @@ class ApiContext implements KernelAwareContext
    * @When I upload another program with name set to :arg1, url set to :arg2 \
    *       and catrobatLanguageVersion set to :arg3
    *
-   * @param $name
-   * @param $url
-   * @param $catrobat_language_version
+   * @param mixed $name
+   * @param mixed $url
+   * @param mixed $catrobat_language_version
    */
   public function iUploadAnotherProgramWithNameSetToUrlSetToAndCatrobatLanguageVersionSetTo(
     $name, $url, $catrobat_language_version
@@ -1817,7 +1789,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I upload this program again with the tags "([^"]*)"$/
    *
-   * @param $tags
+   * @param mixed $tags
    */
   public function iUploadThisProgramAgainWithTheTags($tags)
   {
@@ -1831,8 +1803,8 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I have a parameter "([^"]*)" with value "([^"]*)"$/
    *
-   * @param $name
-   * @param $value
+   * @param mixed $name
+   * @param mixed $value
    */
   public function iHaveAParameterWithValue($name, $value)
   {
@@ -1852,7 +1824,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^the POST parameter "([^"]*)" contains the MD5 sum of the attached file$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function thePostParameterContainsTheMdSumOfTheGivenFile($arg1)
   {
@@ -1863,7 +1835,7 @@ class ApiContext implements KernelAwareContext
    * @Given /^the registration problem "([^"]*)"$/
    * @Given /^there is a registration problem ([^"]*)$/
    *
-   * @param $problem
+   * @param mixed $problem
    */
   public function thereIsARegistrationProblem($problem)
   {
@@ -1884,7 +1856,7 @@ class ApiContext implements KernelAwareContext
    * @Given /^the check token problem "([^"]*)"$/
    * @When /^there is a check token problem ([^"]*)$/
    *
-   * @param $problem
+   * @param mixed $problem
    */
   public function thereIsACheckTokenProblem($problem)
   {
@@ -1904,8 +1876,8 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I have a parameter "([^"]*)" with the tag id "([^"]*)"$/
    *
-   * @param $name
-   * @param $value
+   * @param mixed $name
+   * @param mixed $value
    */
   public function iHaveAParameterWithTheTagId($name, $value)
   {
@@ -1915,7 +1887,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I use the "([^"]*)" app$/
    *
-   * @param $language
+   * @param mixed $language
    */
   public function iUseTheApp($language)
   {
@@ -1968,7 +1940,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^the server name is "([^"]*)"$/
    *
-   * @param $name
+   * @param mixed $name
    */
   public function theServerNameIs($name)
   {
@@ -1986,10 +1958,10 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I have a program with "([^"]*)" set to "([^"]*)" and "([^"]*)" set to "([^"]*)"$/
    *
-   * @param $key1
-   * @param $value1
-   * @param $key2
-   * @param $value2
+   * @param mixed $key1
+   * @param mixed $value1
+   * @param mixed $key2
+   * @param mixed $value2
    */
   public function iHaveAProjectWithAsTwoHeaderFields($key1, $value1, $key2, $value2)
   {
@@ -2002,12 +1974,12 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given I have a program with :key1 set to :value1, :key2 set to :value2 and :key3 set to :value3
    *
-   * @param $key1
-   * @param $value1
-   * @param $key2
-   * @param $value2
-   * @param $key3
-   * @param $value3
+   * @param mixed $key1
+   * @param mixed $value1
+   * @param mixed $key2
+   * @param mixed $value2
+   * @param mixed $key3
+   * @param mixed $value3
    */
   public function iHaveAProjectWithAsMultipleHeaderFields($key1, $value1, $key2, $value2, $key3, $value3)
   {
@@ -2021,7 +1993,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I have a file "([^"]*)"$/
    *
-   * @param $filename
+   * @param mixed $filename
    */
   public function iHaveAFile($filename)
   {
@@ -2053,8 +2025,8 @@ class ApiContext implements KernelAwareContext
    * @Given /^I have a project with "([^"]*)" set to "([^"]*)"$/
    * @Given /^I have a program with "([^"]*)" set to "([^"]*)"$/
    *
-   * @param $key
-   * @param $value
+   * @param mixed $key
+   * @param mixed $value
    */
   public function iHaveAProjectWithAs($key, $value)
   {
@@ -2082,7 +2054,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then The total number of found projects should be :arg1
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function theTotalNumberOfFoundProjectsShouldBe($arg1)
   {
@@ -2115,7 +2087,7 @@ class ApiContext implements KernelAwareContext
    * @When I submit a game with id :id
    * @Given I submitted a game with id :arg1
    *
-   * @param $id
+   * @param mixed $id
    */
   public function iSubmitAGame($id)
   {
@@ -2317,7 +2289,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When I submit a game which gets the id :arg1
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iSubmitAGameWhichGetsTheId($arg1)
   {
@@ -2385,7 +2357,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given I already submitted my game with id :id
    *
-   * @param $id
+   * @param mixed $id
    */
   public function iAlreadySubmittedMyGame($id)
   {
@@ -2396,7 +2368,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given I already filled the google form with id :id
    *
-   * @param $id
+   * @param mixed $id
    */
   public function iAlreadyFilledTheGoogleForm($id)
   {
@@ -2429,7 +2401,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should see the message "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iShouldSeeAMessage($arg1)
   {
@@ -2439,7 +2411,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should see the hashtag "([^"]*)" in the program description$/
    *
-   * @param $hashtag
+   * @param mixed $hashtag
    */
   public function iShouldSeeTheHashtagInTheProgramDescription($hashtag)
   {
@@ -2453,7 +2425,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the program "([^"]*)" should be a remix root$/
    *
-   * @param $program_id
+   * @param mixed $program_id
    */
   public function theProgramShouldBeARemixRoot($program_id)
   {
@@ -2465,14 +2437,12 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the program "([^"]*)" should not be a remix root$/
    *
-   * @param $program_id
+   * @param mixed $program_id
    */
   public function theProgramShouldNotBeARemixRoot($program_id)
   {
-    /**
-     * @var Program
-     */
     $program_manager = $this->getProgramManager();
+    /** @var Program $uploaded_program */
     $uploaded_program = $program_manager->find($program_id);
     Assert::assertFalse($uploaded_program->isRemixRoot());
   }
@@ -2480,8 +2450,8 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^the program "([^"]*)" should have a Scratch parent having id "([^"]*)"$/
    *
-   * @param $program_id
-   * @param $scratch_parent_id
+   * @param mixed $program_id
+   * @param mixed $scratch_parent_id
    */
   public function theProgramShouldHaveAScratchParentHavingScratchID($program_id, $scratch_parent_id)
   {
@@ -2498,7 +2468,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^the program "([^"]*)" should have no further Scratch parents$/
    *
-   * @param $program_id
+   * @param mixed $program_id
    */
   public function theProgramShouldHaveNoFurtherScratchParents($program_id)
   {
@@ -2520,9 +2490,9 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the program "([^"]*)" should have a Catrobat forward ancestor having id "([^"]*)" and depth "([^"]*)"$/
    *
-   * @param $program_id
-   * @param $ancestor_program_id
-   * @param $depth
+   * @param mixed $program_id
+   * @param mixed $ancestor_program_id
+   * @param mixed $depth
    */
   public function theProgramShouldHaveACatrobatForwardAncestorHavingIdAndDepth($program_id, $ancestor_program_id, $depth)
   {
@@ -2546,8 +2516,8 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the program "([^"]*)" should have a Catrobat backward parent having id "([^"]*)"$/
    *
-   * @param $program_id
-   * @param $backward_parent_program_id
+   * @param mixed $program_id
+   * @param mixed $backward_parent_program_id
    */
   public function theProgramShouldHaveACatrobatBackwardParentHavingId($program_id, $backward_parent_program_id)
   {
@@ -2564,7 +2534,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the program "([^"]*)" should have no Catrobat forward ancestors except self-relation$/
    *
-   * @param $program_id
+   * @param mixed $program_id
    */
   public function theProgramShouldHaveNoCatrobatForwardAncestorsExceptSelfRelation($program_id)
   {
@@ -2583,7 +2553,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the program "([^"]*)" should have no further Catrobat forward ancestors$/
    *
-   * @param $program_id
+   * @param mixed $program_id
    */
   public function theProgramShouldHaveNoFurtherCatrobatForwardAncestors($program_id)
   {
@@ -2606,7 +2576,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the program "([^"]*)" should have no Catrobat backward parents$/
    *
-   * @param $program_id
+   * @param mixed $program_id
    */
   public function theProgramShouldHaveNoCatrobatBackwardParents($program_id)
   {
@@ -2617,7 +2587,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the program "([^"]*)" should have no further Catrobat backward parents$/
    *
-   * @param $program_id
+   * @param mixed $program_id
    */
   public function theProgramShouldHaveNoFurtherCatrobatBackwardParents($program_id)
   {
@@ -2637,7 +2607,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the program "([^"]*)" should have no Catrobat ancestors except self-relation$/
    *
-   * @param $program_id
+   * @param mixed $program_id
    */
   public function theProgramShouldHaveNoCatrobatAncestors($program_id)
   {
@@ -2648,7 +2618,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the program "([^"]*)" should have no Scratch parents$/
    *
-   * @param $program_id
+   * @param mixed $program_id
    */
   public function theProgramShouldHaveNoScratchParents($program_id)
   {
@@ -2659,9 +2629,9 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the program "([^"]*)" should have a Catrobat forward descendant having id "([^"]*)" and depth "([^"]*)"$/
    *
-   * @param $program_id
-   * @param $descendant_program_id
-   * @param $depth
+   * @param mixed $program_id
+   * @param mixed $descendant_program_id
+   * @param mixed $depth
    */
   public function theProgramShouldHaveCatrobatForwardDescendantHavingIdAndDepth($program_id, $descendant_program_id, $depth)
   {
@@ -2686,7 +2656,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the program "([^"]*)" should have no Catrobat forward descendants except self-relation$/
    *
-   * @param $program_id
+   * @param mixed $program_id
    */
   public function theProgramShouldHaveNoCatrobatForwardDescendantsExceptSelfRelation($program_id)
   {
@@ -2705,7 +2675,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the program "([^"]*)" should have no further Catrobat forward descendants$/
    *
-   * @param $program_id
+   * @param mixed $program_id
    */
   public function theProgramShouldHaveNoFurtherCatrobatForwardDescendants($program_id)
   {
@@ -2728,8 +2698,8 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the program "([^"]*)" should have RemixOf "([^"]*)" in the xml$/
    *
-   * @param $program_id
-   * @param $value
+   * @param mixed $program_id
+   * @param mixed $value
    *
    * @throws ORMException
    * @throws OptimisticLockException
@@ -2779,7 +2749,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I request from a (debug|release) build of the Catroid app$/
    *
-   * @param $build_type
+   * @param mixed $build_type
    */
   public function iRequestFromASpecificBuildTypeOfCatroidApp($build_type)
   {
@@ -2800,7 +2770,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I request from a specific "([^"]*)" themed app$/
    *
-   * @param $theme
+   * @param mixed $theme
    */
   public function iUseASpecificThemedApp($theme)
   {
@@ -2815,14 +2785,11 @@ class ApiContext implements KernelAwareContext
   {
     $user = $this->insertUser();
     $program = $this->getStandardProgramFile();
-    $response = $this->upload($program, $user, 1, 'phirocode');
+    $response = $this->upload($program, $user, '1', 'phirocode');
     Assert::assertEquals(200, $response->getStatusCode(), 'Wrong response code. '.$response->getContent());
   }
 
-  /**
-   * @param $filepath
-   */
-  private function sendUploadRequest($filepath)
+  private function sendUploadRequest(?string $filepath)
   {
     Assert::assertTrue(file_exists($filepath), 'File not found');
 
@@ -2835,16 +2802,9 @@ class ApiContext implements KernelAwareContext
     $this->iPostTo('/app/api/upload/upload.json');
   }
 
-  /**
-   * @param      $file
-   * @param      $user
-   * @param null $request_param
-   *
-   * @return Response
-   */
-  private function upload($file, $user, string $desired_id = '', string $flavor = 'pocketcode', $request_param = null)
+  private function upload(string $file, ?User $user, string $desired_id = '', string $flavor = 'pocketcode', ?array $request_param = null): Response
   {
-    if (null == $user)
+    if (null === $user)
     {
       $user = $this->getUserDataFixtures()->getDefaultUser();
     }
@@ -2855,20 +2815,18 @@ class ApiContext implements KernelAwareContext
       MyUuidGenerator::setNextValue($desired_id);
     }
 
-    if (is_string($file))
+    try
     {
-      try
-      {
-        $file = new UploadedFile($file, 'uploadedFile');
-      }
-      catch (Exception $e)
-      {
-        throw new PendingException('No case defined for '.$e);
-      }
+      $file = new UploadedFile($file, 'uploadedFile');
+    }
+    catch (Exception $e)
+    {
+      throw new PendingException('No case defined for '.$e);
     }
 
     $parameters = [];
     $parameters['username'] = $user->getUsername();
+
     $parameters['token'] = $user->getUploadToken();
     $parameters['fileChecksum'] = md5_file($file->getPathname());
 

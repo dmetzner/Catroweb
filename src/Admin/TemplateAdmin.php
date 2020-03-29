@@ -11,21 +11,24 @@ use Sonata\AdminBundle\Route\RouteCollection;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-/**
- * Class TemplateAdmin.
- */
 class TemplateAdmin extends AbstractAdmin
 {
   /**
+   * @override
+   *
    * @var string
    */
   protected $baseRouteName = 'admin_catrobat_adminbundle_templateadmin';
   /**
+   * @override
+   *
    * @var string
    */
   protected $baseRoutePattern = 'template';
 
   /**
+   * @override
+   *
    * @var array
    */
   protected $datagridValues = [
@@ -45,7 +48,7 @@ class TemplateAdmin extends AbstractAdmin
   }
 
   /**
-   * @param $object Template
+   * @param Template $object
    *
    * @return string
    */

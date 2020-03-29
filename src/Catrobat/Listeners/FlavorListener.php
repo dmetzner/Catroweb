@@ -4,39 +4,20 @@ namespace App\Catrobat\Listeners;
 
 use App\Catrobat\Requests\AppRequest;
 use Liip\ThemeBundle\ActiveTheme;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Routing\RouterInterface;
 
-/**
- * Class FlavorListener.
- */
 class FlavorListener
 {
-  /**
-   * @var ParameterBag
-   */
-  private $parameter_bag;
+  private ParameterBagInterface $parameter_bag;
 
-  /**
-   * @var RouterInterface
-   */
-  private $router;
+  private RouterInterface $router;
 
-  /**
-   * @var ActiveTheme
-   */
-  private $theme;
+  private ActiveTheme $theme;
 
-  /**
-   * @var AppRequest
-   */
-  private $app_request;
+  private AppRequest $app_request;
 
-  /**
-   * FlavorListener constructor.
-   */
   public function __construct(ParameterBagInterface $parameter_bag, RouterInterface $router, ActiveTheme $theme,
                               AppRequest $app_request)
   {

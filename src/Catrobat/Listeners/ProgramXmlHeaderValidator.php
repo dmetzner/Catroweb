@@ -6,9 +6,6 @@ use App\Catrobat\Events\ProgramBeforeInsertEvent;
 use App\Catrobat\Exceptions\Upload\InvalidXmlException;
 use App\Catrobat\Services\ExtractedCatrobatFile;
 
-/**
- * Class ProgramXmlHeaderValidator.
- */
 class ProgramXmlHeaderValidator
 {
   public function onProgramBeforeInsert(ProgramBeforeInsertEvent $event)

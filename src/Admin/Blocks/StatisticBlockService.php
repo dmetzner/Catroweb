@@ -7,28 +7,19 @@ use Sonata\BlockBundle\Block\Service\AbstractBlockService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class StatisticBlockService.
- */
 class StatisticBlockService extends AbstractBlockService
 {
-  /**
-   * @var
-   */
   private $extraced_path;
 
-  /**
-   * @var
-   */
   private $apk_path;
 
   /**
    * StatisticBlockService constructor.
    *
-   * @param $name
-   * @param $templating
-   * @param $extraced_path
-   * @param $apk_path
+   * @param mixed $name
+   * @param mixed $templating
+   * @param mixed $extraced_path
+   * @param mixed $apk_path
    */
   public function __construct($name, $templating, $extraced_path, $apk_path)
   {
@@ -82,7 +73,7 @@ class StatisticBlockService extends AbstractBlockService
   }
 
   /**
-   * @param $bytes
+   * @param mixed $bytes
    *
    * @return string
    */

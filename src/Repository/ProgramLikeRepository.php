@@ -7,13 +7,11 @@ use App\Entity\ProgramLike;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class ProgramLikeRepository.
- */
 class ProgramLikeRepository extends ServiceEntityRepository
 {
   public function __construct(ManagerRegistry $managerRegistry)
@@ -21,13 +19,7 @@ class ProgramLikeRepository extends ServiceEntityRepository
     parent::__construct($managerRegistry, ProgramLike::class);
   }
 
-  /**
-   * @param int $program_id
-   * @param int $type
-   *
-   * @return int
-   */
-  public function likeTypeCount($program_id, $type)
+  public function likeTypeCount(string $program_id, int $type): int
   {
     $qb = $this->createQueryBuilder('l');
 
@@ -45,12 +37,7 @@ class ProgramLikeRepository extends ServiceEntityRepository
     return count($result);
   }
 
-  /**
-   * @param int $project_id
-   *
-   * @return array
-   */
-  public function likeTypesOfProject($project_id)
+  public function likeTypesOfProject(string $project_id): array
   {
     $qb = $this->createQueryBuilder('l');
 
@@ -66,12 +53,7 @@ class ProgramLikeRepository extends ServiceEntityRepository
     }, $qb->getQuery()->getResult());
   }
 
-  /**
-   * @param int $program_id
-   *
-   * @return int
-   */
-  public function totalLikeCount($program_id)
+  public function totalLikeCount(string $program_id): int
   {
     $qb = $this->createQueryBuilder('l');
 
@@ -88,14 +70,9 @@ class ProgramLikeRepository extends ServiceEntityRepository
   }
 
   /**
-   * @param $user_ids array
-   * @param $exclude_user_id
-   * @param $exclude_program_ids
-   * @param $flavor
-   *
    * @return ProgramLike[]
    */
-  public function getLikesOfUsers($user_ids, $exclude_user_id, $exclude_program_ids, $flavor)
+  public function getLikesOfUsers(array $user_ids, string $exclude_user_id, array $exclude_program_ids, string $flavor): array
   {
     $qb = $this->createQueryBuilder('l');
 
@@ -119,11 +96,9 @@ class ProgramLikeRepository extends ServiceEntityRepository
   }
 
   /**
-   * @param $type
-   *
    * @throws ORMException
    */
-  public function addLike(Program $project, User $user, $type)
+  public function addLike(Program $project, User $user, int $type): void
   {
     if ($this->likeExists($project, $user, $type))
     {
@@ -136,10 +111,7 @@ class ProgramLikeRepository extends ServiceEntityRepository
     $this->getEntityManager()->flush();
   }
 
-  /**
-   * @param $type
-   */
-  public function removeLike(Program $project, User $user, $type)
+  public function removeLike(Program $project, User $user, int $type): void
   {
     $qb = $this->createQueryBuilder('l');
     $qb->delete()
@@ -155,11 +127,9 @@ class ProgramLikeRepository extends ServiceEntityRepository
   }
 
   /**
-   * @param $type
-   *
-   * @return bool
+   * @throws NoResultException
    */
-  public function likeExists(Program $project, User $user, $type)
+  public function likeExists(Program $project, User $user, int $type): bool
   {
     $qb = $this->createQueryBuilder('l');
     $qb->select('count(l)')
@@ -184,13 +154,10 @@ class ProgramLikeRepository extends ServiceEntityRepository
   }
 
   /**
-   * @param $type
-   *
+   * @throws NoResultException
    * @throws NonUniqueResultException
-   *
-   * @return bool
    */
-  public function areThereOtherLikeTypes(Program $project, User $user, $type)
+  public function areThereOtherLikeTypes(Program $project, User $user, int $type): bool
   {
     $qb = $this->createQueryBuilder('l');
     $qb->select('count(l)')

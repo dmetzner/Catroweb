@@ -2,19 +2,10 @@
 
 namespace App\Catrobat\Responses;
 
-/**
- * Class ProgramListResponse.
- */
 class ProgramListResponse
 {
-  /**
-   * @var
-   */
   private $programs;
 
-  /**
-   * @var
-   */
   private $total_programs;
 
   /**
@@ -30,12 +21,10 @@ class ProgramListResponse
   /**
    * ProgramListResponse constructor.
    *
-   * @param      $programs
-   * @param      $total_programs
-   * @param bool $show_details
-   * @param bool $is_user_specific_recommendation
+   * @param mixed $programs
+   * @param mixed $total_programs
    */
-  public function __construct($programs, $total_programs, $show_details = true, $is_user_specific_recommendation = false)
+  public function __construct($programs, $total_programs, bool $show_details = true, bool $is_user_specific_recommendation = false)
   {
     $this->programs = $programs;
     $this->total_programs = $total_programs;
@@ -59,18 +48,12 @@ class ProgramListResponse
     return $this->total_programs;
   }
 
-  /**
-   * @return bool
-   */
-  public function getShowDetails()
+  public function getShowDetails(): bool
   {
     return $this->show_details;
   }
 
-  /**
-   * @return bool
-   */
-  public function isIsUserSpecificRecommendation()
+  public function isIsUserSpecificRecommendation(): bool
   {
     return $this->is_user_specific_recommendation;
   }

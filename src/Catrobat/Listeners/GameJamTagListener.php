@@ -5,9 +5,6 @@ namespace App\Catrobat\Listeners;
 use App\Catrobat\Events\ProgramBeforePersistEvent;
 use App\Entity\Program;
 
-/**
- * Class GameJamTagListener.
- */
 class GameJamTagListener
 {
   public function onEvent(ProgramBeforePersistEvent $event)

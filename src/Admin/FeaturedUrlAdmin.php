@@ -18,30 +18,25 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-/**
- * Class FeaturedUrlAdmin.
- */
 class FeaturedUrlAdmin extends AbstractAdmin
 {
   /**
+   * @override
+   *
    * @var string
    */
   protected $baseRouteName = 'admin_featured_url';
 
   /**
+   * @override
+   *
    * @var string
    */
   protected $baseRoutePattern = 'featured_url';
 
-  /**
-   * @var FeaturedImageRepository
-   */
-  private $featured_image_repository;
+  private FeaturedImageRepository $featured_image_repository;
 
-  /**
-   * @var ParameterBagInterface
-   */
-  private $parameter_bag;
+  private ParameterBagInterface $parameter_bag;
 
   public function __construct($code, $class, $baseControllerName, FeaturedImageRepository $featured_image_repository,
                               ParameterBagInterface $parameter_bag)
@@ -58,9 +53,7 @@ class FeaturedUrlAdmin extends AbstractAdmin
    */
   public function createQuery($context = 'list')
   {
-    /**
-     * @var QueryBuilder
-     */
+    /** @var QueryBuilder $query */
     $query = parent::createQuery();
     $query->andWhere(
       $query->expr()->isNull($query->getRootAliases()[0].'.program')
@@ -70,45 +63,36 @@ class FeaturedUrlAdmin extends AbstractAdmin
   }
 
   /**
-   * @param $object
+   * @param FeaturedProgram $object
    *
    * @return string
    */
   public function getFeaturedImageUrl($object)
   {
-    /*
-     * @var $object FeaturedProgram
-     */
-
     return '../../'.$this->featured_image_repository->getWebPath($object->getId(), $object->getImageType());
   }
 
   /**
-   * @param $object
+   * @param FeaturedProgram $object
    *
    * @return Metadata
    */
   public function getObjectMetadata($object)
   {
-    /*
-     * @var $object FeaturedProgram
-     */
-
     return new Metadata($object->getUrl(), '', $this->getFeaturedImageUrl($object));
   }
 
   /**
-   * @param $image FeaturedProgram
+   * @param FeaturedProgram $image
    */
   public function preUpdate($image)
   {
     $image->old_image_type = $image->getImageType();
-    $image->setImageType(null);
     $this->checkFlavor();
   }
 
   /**
-   * @param $object
+   * @param mixed $object
    */
   public function prePersist($object)
   {
@@ -122,14 +106,18 @@ class FeaturedUrlAdmin extends AbstractAdmin
    */
   protected function configureFormFields(FormMapper $formMapper)
   {
+    /** @var FeaturedProgram $featured_project */
+    $featured_project = $this->getSubject();
+
     $file_options = [
-      'required' => (null === $this->getSubject()->getId()),
+      'required' => (null === $featured_project->getId()),
       'constraints' => [
         new FeaturedImageConstraint(),
       ], ];
+
     if (null != $this->getSubject()->getId())
     {
-      $file_options['help'] = '<img src="../'.$this->getFeaturedImageUrl($this->getSubject()).'">';
+      $file_options['help'] = '<img src="../'.$this->getFeaturedImageUrl($featured_project).'">';
     }
 
     $formMapper

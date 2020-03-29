@@ -32,14 +32,12 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use DateTime;
 use DateTimeZone;
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 use ImagickException;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\HttpFoundation\File\File;
 
-/**
- * Class DataFixturesContext.
- */
 class DataFixturesContext implements KernelAwareContext
 {
   use SymfonySupport;
@@ -47,7 +45,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Given the next Uuid Value will be :id
    *
-   * @param $id
+   * @param mixed $id
    */
   public function theNextUuidValueWillBe($id)
   {
@@ -87,7 +85,7 @@ class DataFixturesContext implements KernelAwareContext
    * @Given /^there are (\d+) additional users$/
    * @Given /^there are (\d+) users$/
    *
-   * @param $user_count
+   * @param mixed $user_count
    */
   public function thereAreManyUsers($user_count)
   {
@@ -115,7 +113,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Then /^the user "([^"]*)" should not exist$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function theUserShouldNotExist($arg1)
   {
@@ -126,17 +124,17 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Then /^the user "([^"]*)" with email "([^"]*)" should exist and be enabled$/
    *
-   * @param $arg1
    * @param mixed $arg2
+   * @param mixed $arg1
    */
   public function theUserWithUsernameAndEmailShouldExistAndBeEnabled($arg1, $arg2)
   {
-    $em = $this->kernel->getContainer()->get('doctrine')->getManager();
-    $user = $em->getRepository('App\Entity\User')->findOneBy([
+    $em = $this->getManager();
+    $user = $em->getRepository(User::class)->findOneBy([
       'username' => $arg1,
     ]);
 
-    Assert::assertInstanceOf('App\\Entity\\User', $user);
+    Assert::assertInstanceOf(User::class, $user);
     Assert::assertEquals($arg2, $user->getEmail());
     Assert::assertTrue($user->IsEnabled());
   }
@@ -164,17 +162,18 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @When /^User "([^"]*)" is followed by "([^"]*)"$/
    *
-   * @param $user_id
-   * @param $follow_ids
+   * @param mixed $user_id
+   * @param mixed $follow_ids
    */
   public function userIsFollowed($user_id, $follow_ids)
   {
-    /** @var User $user */
+    /** @var User|null $user */
     $user = $this->getUserManager()->find($user_id);
 
     $ids = explode(',', $follow_ids);
     foreach ($ids as $id)
     {
+      /** @var User|null $followUser */
       $followUser = $this->getUserManager()->find($id);
       $user->addFollowing($followUser);
       $this->getUserManager()->updateUser($user);
@@ -212,7 +211,7 @@ class DataFixturesContext implements KernelAwareContext
     foreach ($table->getHash() as $config)
     {
       $program = $this->insertProject($config, false);
-      $file_repo->saveProgramfile(new File($this->FIXTURES_DIR.'test.catrobat'), $program->getId());
+      $file_repo->saveProgramFile(new File($this->FIXTURES_DIR.'test.catrobat'), $program->getId());
     }
     $this->getManager()->flush();
   }
@@ -276,8 +275,8 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Given /^I have a program "([^"]*)" with id "([^"]*)"$/
    *
-   * @param $name
-   * @param $id
+   * @param mixed $name
+   * @param mixed $id
    *
    * @throws Exception
    */
@@ -288,7 +287,7 @@ class DataFixturesContext implements KernelAwareContext
       'name' => $name,
     ];
     $this->insertProject($config);
-    $this->getFileRepository()->saveProgramfile(
+    $this->getFileRepository()->saveProgramFile(
       new File($this->FIXTURES_DIR.'test.catrobat'), $id
     );
   }
@@ -296,7 +295,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Given /^program "([^"]*)" is not visible$/
    *
-   * @param $program_name
+   * @param mixed $program_name
    */
   public function programIsNotVisible($program_name)
   {
@@ -310,7 +309,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Then /^there should be "([^"]*)" programs in the database$/
    *
-   * @param $number_of_projects
+   * @param mixed $number_of_projects
    */
   public function thereShouldBeProgramsInTheDatabase($number_of_projects)
   {
@@ -330,7 +329,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Then /^the program should be tagged with "([^"]*)" in the database$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function theProgramShouldBeTaggedWithInTheDatabase($arg1)
   {
@@ -340,11 +339,11 @@ class DataFixturesContext implements KernelAwareContext
 
     foreach ($program_tags as $program_tag)
     {
-      /** @var Tag $program_tag */
-      if (!(in_array($program_tag->getDe(), $tags, true) || in_array($program_tag->getEn(), $tags, true)))
-      {
-        Assert::assertTrue(false, 'The tag is not found!');
-      }
+      /* @var Tag $program_tag */
+      Assert::assertTrue(
+        in_array($program_tag->getDe(), $tags, true) || in_array($program_tag->getEn(), $tags, true),
+        'The tag is not found!'
+      );
     }
   }
 
@@ -355,7 +354,7 @@ class DataFixturesContext implements KernelAwareContext
   {
     /** @var Program $program */
     $program = $this->getProgramManager()->findAll()[0];
-    Assert::assertEmpty($program->getExtensions());
+    Assert::assertNotNull($program->getExtensions());
   }
 
   /**
@@ -366,6 +365,9 @@ class DataFixturesContext implements KernelAwareContext
   public function theEmbroideryProgramShouldHaveTheExtension($extension)
   {
     $program_extensions = $this->getProgramManager()->findOneByName('ZigZag Stich')->getExtensions();
+
+    Assert::assertNotNull($program_extensions);
+
     foreach ($program_extensions as $program_extension)
     {
       /* @var $program_extension Extension */
@@ -380,16 +382,15 @@ class DataFixturesContext implements KernelAwareContext
   {
     $program_extensions = $this->getProgramManager()->findOneByName('extensions')->getExtensions();
 
-    Assert::assertEquals(count($program_extensions), 3, 'Too much or too less tags found!');
+    Assert::assertNotNull($program_extensions);
+
+    Assert::assertCount(3, $program_extensions, 'Too much or too less tags found!');
 
     $ext = ['Arduino', 'Lego', 'Phiro'];
     foreach ($program_extensions as $program_extension)
     {
-      /** @var Extension $program_extension */
-      if (!(in_array($program_extension->getName(), $ext, true)))
-      {
-        Assert::assertTrue(false, 'The Extension is not found!');
-      }
+      /* @var Extension $program_extension */
+      Assert::assertContains($program_extension->getName(), $ext, 'The Extension is not found!');
     }
   }
 
@@ -402,16 +403,15 @@ class DataFixturesContext implements KernelAwareContext
   {
     $program_extensions = $this->getProgramManager()->find($id)->getExtensions();
 
-    Assert::assertEquals(count($program_extensions), 0, 'Too much or too less tags found!');
+    Assert::assertNotNull($program_extensions);
+
+    Assert::assertCount(0, $program_extensions, 'Too much or too less tags found!');
 
     $ext = ['Arduino', 'Lego', 'Phiro'];
     foreach ($program_extensions as $program_extension)
     {
-      /** @var Extension $program_extension */
-      if (!(in_array($program_extension->getName(), $ext, true)))
-      {
-        Assert::assertTrue(false, 'The Extension is not found!');
-      }
+      /* @var Extension $program_extension */
+      Assert::assertContains($program_extension->getName(), $ext, 'The Extension is not found!');
     }
   }
 
@@ -421,7 +421,7 @@ class DataFixturesContext implements KernelAwareContext
   public function theProgramShouldBeFlaggedAsPhiroPro()
   {
     $program_manager = $this->getProgramManager();
-    $program = $program_manager->find(1);
+    $program = $program_manager->find('1');
     Assert::assertNotNull($program, 'No program added');
     Assert::assertEquals('phirocode', $program->getFlavor(), 'Program is NOT flagged aa a phiro');
   }
@@ -432,7 +432,7 @@ class DataFixturesContext implements KernelAwareContext
   public function theProgramShouldNotBeFlaggedAsPhiroPro()
   {
     $program_manager = $this->getProgramManager();
-    $program = $program_manager->find(1);
+    $program = $program_manager->find('1');
     Assert::assertNotNull($program, 'No program added');
     Assert::assertNotEquals('phirocode', $program->getFlavor(), 'Program is flagged as a phiro');
   }
@@ -440,8 +440,8 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Given /^I have a program "([^"]*)" with id "([^"]*)" and a vibrator brick$/
    *
-   * @param $name
-   * @param $id
+   * @param mixed $name
+   * @param mixed $id
    *
    * @throws Exception
    */
@@ -453,7 +453,7 @@ class DataFixturesContext implements KernelAwareContext
     ];
     $program = $this->insertProject($config);
 
-    $this->getFileRepository()->saveProgramfile(
+    $this->getFileRepository()->saveProgramFile(
       new File($this->FIXTURES_DIR.'GeneratedFixtures/phiro.catrobat'), $program->getId()
     );
   }
@@ -513,15 +513,15 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Given /^there is a notification that "([^"]*)" follows "([^"]*)"$/
    *
-   * @param $user
-   * @param $user_to_follow
+   * @param mixed $user
+   * @param mixed $user_to_follow
    */
   public function thereAreFollowNotifications($user, $user_to_follow)
   {
     /** @var User $user_to_follow */
     $user_to_follow = $this->getUserManager()->findUserByUsername($user_to_follow);
 
-    /** @var User $user */
+    /** @var User|null $user */
     $user = $this->getUserManager()->findUserByUsername($user);
 
     Assert::assertNotNull($user, 'user is null');
@@ -564,15 +564,15 @@ class DataFixturesContext implements KernelAwareContext
     {
       $new_category = new MediaPackageCategory();
       $new_category->setName($category['name']);
-      $package = $em->getRepository('App\Entity\MediaPackage')->findOneBy(['name' => $category['package']]);
-      if (null == $package)
-      {
-        Assert::assertTrue(false, 'Fatal error package not found');
-      }
-      $new_category->setPackage([$package]);
+
+      /** @var MediaPackage|null $package */
+      $package = $em->getRepository(MediaPackage::class)->findOneBy(['name' => $category['package']]);
+      Assert::assertNotNull($package, 'Fatal error package not found');
+
+      $new_category->setPackage(new ArrayCollection([$package]));
       $current_categories = $package->getCategories();
       $current_categories = null == $current_categories ? [] : $current_categories;
-      array_push($current_categories, $new_category);
+      $current_categories->add($new_category);
       $package->setCategories($current_categories);
       $em->persist($new_category);
     }
@@ -596,15 +596,14 @@ class DataFixturesContext implements KernelAwareContext
       $new_file->setDownloads(0);
       $new_file->setExtension($file['extension']);
       $new_file->setActive($file['active']);
+
+      /** @var MediaPackageCategory|null $category */
       $category = $em->getRepository(MediaPackageCategory::class)->findOneBy(['name' => $file['category']]);
-      if (null == $category)
-      {
-        Assert::assertTrue(false, 'Fatal error category not found');
-      }
+      Assert::assertNotNull($category, 'Fatal error category not found');
       $new_file->setCategory($category);
       $old_files = $category->getFiles();
       $old_files = null == $old_files ? [] : $old_files;
-      array_push($old_files, $new_file);
+      $old_files->add($new_file);
       $category->setFiles($old_files);
       if (!empty($file['flavor']))
       {
@@ -659,8 +658,8 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Then /^There should be one homepage click database entry with type is "([^"]*)" and program id is "([^"]*)"$/
    *
-   * @param $type_name
-   * @param $id
+   * @param mixed $type_name
+   * @param mixed $id
    */
   public function thereShouldBeOneHomepageClickDatabaseEntryWithTypeIsAndIs($type_name, $id)
   {
@@ -695,7 +694,6 @@ class DataFixturesContext implements KernelAwareContext
       }
       $program_id = $statistics[$i]['program_id'];
 
-      /** @var ProgramDownloads */
       $repository = $this->getManager()->getRepository(ProgramDownloads::class);
       $program_download_statistics = $repository->find(1);
 
@@ -844,14 +842,13 @@ class DataFixturesContext implements KernelAwareContext
 
     foreach ($table->getHash() as $data)
     {
-      /** @var Program $project */
       $project = $this->getProgramManager()->find($data['project']);
       if (null === $project)
       {
         throw new Exception('Project with id '.$data['project'].' does not exist.');
       }
 
-      /** @var User $user */
+      /** @var User|null $user */
       $user = $this->getUserManager()->findUserByUsername($data['user']);
       if (null === $user)
       {
@@ -898,13 +895,11 @@ class DataFixturesContext implements KernelAwareContext
 
     foreach ($notifications as $notification)
     {
-      /** @var User $user */
+      /** @var User|null $user */
       $user = $this->getUserManager()->findUserByUsername($notification['user']);
 
-      if (null === $user)
-      {
-        Assert::assertTrue(false, 'user is null');
-      }
+      Assert::assertNotNull($user, 'user is null');
+
       switch ($notification['type'])
       {
         case 'comment':
@@ -920,7 +915,7 @@ class DataFixturesContext implements KernelAwareContext
         case 'like':
           /** @var User $liker */
           $liker = $this->getUserManager()->find($notification['like_from']);
-          /** @var Program $program */
+
           $program = $this->getProgramManager()->find($notification['program_id']);
           $to_create = new LikeNotification($user, $liker, $program);
           break;
@@ -949,115 +944,93 @@ class DataFixturesContext implements KernelAwareContext
           break;
       }
 
-      if ($to_create)
+      // Some specific id desired?
+      if (isset($notification['id']))
       {
-        // Some specific id desired?
-        if (isset($notification['id']))
-        {
-          $to_create->setId($notification['id']);
-        }
-
-        $em->persist($to_create);
-        $em->flush();
+        $to_create->setId($notification['id']);
       }
+
+      $em->persist($to_create);
+      $em->flush();
     }
   }
 
   /**
    * @Given /^there are "([^"]*)"\+ notifications for "([^"]*)"$/
    *
-   * @param $arg1
-   * @param $username
+   * @param mixed $arg1
+   * @param mixed $username
    */
   public function thereAreNotificationsFor($arg1, $username)
   {
-    try
-    {
-      $em = $this->getManager();
+    $em = $this->getManager();
 
-      for ($i = 0; $i < $arg1; ++$i)
-      {
-        /** @var User $user */
-        $user = $this->getUserManager()->findUserByUsername($username);
-
-        if (null === $user)
-        {
-          Assert::assertTrue(false, 'user is null');
-        }
-        $to_create = new CatroNotification($user, 'Random Title', 'Random Text');
-        $em->persist($to_create);
-      }
-      $em->flush();
-    }
-    catch (Exception $e)
+    for ($i = 0; $i < $arg1; ++$i)
     {
-      Assert::assertTrue(false, 'database error');
+      /** @var User|null $user */
+      $user = $this->getUserManager()->findUserByUsername($username);
+
+      Assert::assertNotNull($user, 'user is null');
+
+      $to_create = new CatroNotification($user, 'Random Title', 'Random Text');
+      $em->persist($to_create);
     }
+    $em->flush();
   }
 
   /**
    * @Given /^there are "([^"]*)" "([^"]*)" notifications for program "([^"]*)" from "([^"]*)"$/
    *
-   * @param $amount
-   * @param $type
-   * @param $program_name
-   * @param $user
+   * @param mixed $amount
+   * @param mixed $type
+   * @param mixed $program_name
+   * @param mixed $user
    */
   public function thereAreSpecificNotificationsFor($amount, $type, $program_name, $user)
   {
-    try
+    $em = $this->getManager();
+
+    /** @var User|null $user */
+    $user = $this->getUserManager()->findUserByUsername($user);
+
+    $program = $this->getProgramManager()->findOneByName($program_name);
+
+    Assert::assertNotNull($user, 'user is null');
+
+    for ($i = 0; $i < $amount; ++$i)
     {
-      $em = $this->getManager();
-
-      /** @var User $user */
-      $user = $this->getUserManager()->findUserByUsername($user);
-
-      /** @var Program $program */
-      $program = $this->getProgramManager()->findOneByName($program_name);
-
-      if (null === $user)
+      switch ($type)
       {
-        Assert::assertTrue(false, 'user is null');
-      }
-      for ($i = 0; $i < $amount; ++$i)
-      {
-        switch ($type)
-        {
-          case 'comment':
-            $temp_comment = new UserComment();
-            $temp_comment->setUsername($user->getUsername());
-            $temp_comment->setUser($user);
-            $temp_comment->setText('This is a comment');
-            $temp_comment->setProgram($program);
-            $temp_comment->setUploadDate(date_create());
-            $temp_comment->setIsReported(false);
-            $em->persist($temp_comment);
-            $to_create = new CommentNotification($program->getUser(), $temp_comment);
-            $em->persist($to_create);
-            break;
+        case 'comment':
+          $temp_comment = new UserComment();
+          $temp_comment->setUsername($user->getUsername());
+          $temp_comment->setUser($user);
+          $temp_comment->setText('This is a comment');
+          $temp_comment->setProgram($program);
+          $temp_comment->setUploadDate(date_create());
+          $temp_comment->setIsReported(false);
+          $em->persist($temp_comment);
+          $to_create = new CommentNotification($program->getUser(), $temp_comment);
+          $em->persist($to_create);
+          break;
 
-          case 'like':
-            $to_create = new LikeNotification($program->getUser(), $user, $program);
-            $em->persist($to_create);
-            break;
-          case 'remix':
-            $to_create = new RemixNotification($program->getUser(), $program->getUser(), $program, $program);
-            $em->persist($to_create);
-            break;
-          case 'catro notifications':
-            $to_create = new CatroNotification($user, 'Random Title', 'Random Text');
-            $em->persist($to_create);
-            break;
-          case 'default':
-            Assert::assertTrue(false);
-        }
+        case 'like':
+          $to_create = new LikeNotification($program->getUser(), $user, $program);
+          $em->persist($to_create);
+          break;
+        case 'remix':
+          $to_create = new RemixNotification($program->getUser(), $program->getUser(), $program, $program);
+          $em->persist($to_create);
+          break;
+        case 'catro notifications':
+          $to_create = new CatroNotification($user, 'Random Title', 'Random Text');
+          $em->persist($to_create);
+          break;
+        case 'default':
+          Assert::assertTrue(false);
       }
-      $em->flush();
     }
-    catch (Exception $e)
-    {
-      Assert::assertTrue(false, 'database error');
-    }
+    $em->flush();
   }
 
   /**

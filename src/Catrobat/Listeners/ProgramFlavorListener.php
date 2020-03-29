@@ -6,9 +6,6 @@ use App\Catrobat\Events\ProgramBeforePersistEvent;
 use App\Entity\Program;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-/**
- * Class ProgramFlavorListener.
- */
 class ProgramFlavorListener
 {
   /**
@@ -16,9 +13,6 @@ class ProgramFlavorListener
    */
   private $request_stack;
 
-  /**
-   * ProgramFlavorListener constructor.
-   */
   public function __construct(RequestStack $stack)
   {
     $this->request_stack = $stack;

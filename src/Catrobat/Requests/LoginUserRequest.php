@@ -5,9 +5,6 @@ namespace App\Catrobat\Requests;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Class LoginUserRequest.
- */
 class LoginUserRequest
 {
   /**
@@ -22,9 +19,6 @@ class LoginUserRequest
    */
   public $password;
 
-  /**
-   * LoginUserRequest constructor.
-   */
   public function __construct(Request $request)
   {
     $this->username = $request->request->get('registrationUsername');

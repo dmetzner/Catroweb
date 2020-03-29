@@ -5,9 +5,6 @@ namespace App\Admin;
 use Sonata\Form\Validator\ErrorElement;
 use Sonata\UserBundle\Admin\Model\UserAdmin as BaseUserAdmin;
 
-/**
- * Class UserAdmin.
- */
 class UserAdmin extends BaseUserAdmin
 {
   /**
@@ -31,9 +28,9 @@ class UserAdmin extends BaseUserAdmin
   }
 
   /**
-   * @param $object
+   * rewrite validation.
    *
-   * rewrite validation
+   * @param mixed $object
    */
   public function validate(ErrorElement $errorElement, $object)
   {

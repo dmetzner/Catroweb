@@ -22,11 +22,9 @@ class Tag
   protected $id;
 
   /**
-   * @var Collection|Program[]
-   *
    * @ORM\ManyToMany(targetEntity="\App\Entity\Program", mappedBy="tags")
    */
-  protected $programs;
+  protected Collection $programs;
 
   /**
    * @ORM\Column(type="string", nullable=true)
@@ -48,9 +46,6 @@ class Tag
    */
   protected $fr;
 
-  /**
-   * Default constructor, initializes collections.
-   */
   public function __construct()
   {
     $this->programs = new ArrayCollection();
@@ -89,10 +84,7 @@ class Tag
     $program->removeTag($this);
   }
 
-  /**
-   * @return Program[]|Collection
-   */
-  public function getPrograms()
+  public function getPrograms(): Collection
   {
     return $this->programs;
   }

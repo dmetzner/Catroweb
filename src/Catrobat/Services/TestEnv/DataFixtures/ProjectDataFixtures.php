@@ -62,8 +62,8 @@ class ProjectDataFixtures
   {
     ++ProjectDataFixtures::$number_of_projects;
 
-    /** @var User $user */
     // get user before setting the fixing the next id, else it might get used for the default user
+    /** @var User|null $user */
     $user = isset($config['owned by']) ?
       $this->user_manager->findUserByUsername($config['owned by']) : $this->user_data_fixtures->getDefaultUser();
 
@@ -149,7 +149,7 @@ class ProjectDataFixtures
       $temp_path = tempnam(sys_get_temp_dir(), 'apktest');
       copy($this->FIXTURE_DIR.'test.catrobat', $temp_path);
       $this->apk_repository->save(new File($temp_path), $project->getId());
-      $this->project_file_repository->saveProgramfile(
+      $this->project_file_repository->saveProgramFile(
         new File($this->FIXTURE_DIR.'test.catrobat'), $project->getId()
       );
     }

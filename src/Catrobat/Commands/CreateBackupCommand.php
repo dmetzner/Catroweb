@@ -11,18 +11,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-/**
- * Class CreateBackupCommand.
- */
 class CreateBackupCommand extends Command
 {
   public OutputInterface $output;
 
   private ParameterBagInterface $parameter_bag;
 
-  /**
-   * CreateBackupCommand constructor.
-   */
   public function __construct(ParameterBagInterface $parameter_bag)
   {
     parent::__construct();
@@ -40,7 +34,7 @@ class CreateBackupCommand extends Command
   /**
    * @throws Exception
    */
-  protected function execute(InputInterface $input, OutputInterface $output): void
+  protected function execute(InputInterface $input, OutputInterface $output): int
   {
     $this->output = $output;
 
@@ -117,5 +111,7 @@ class CreateBackupCommand extends Command
     unlink($sql_path);
     $progress->setMessage("Temp sql file deleted. Finished!\n Backupfile created at ".$zip_path."\n");
     $progress->finish();
+
+    return 0;
   }
 }

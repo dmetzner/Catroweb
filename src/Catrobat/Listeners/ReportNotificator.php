@@ -6,9 +6,6 @@ use App\Catrobat\Events\ReportInsertEvent;
 use App\Entity\Notification;
 use App\Repository\NotificationRepository;
 
-/**
- * Class ReportNotificator.
- */
 class ReportNotificator
 {
   /**
@@ -20,9 +17,6 @@ class ReportNotificator
    */
   private $notification_repo;
 
-  /**
-   * ReportNotificator constructor.
-   */
   public function __construct(\Swift_Mailer $mailer, NotificationRepository $repository)
   {
     $this->mailer = $mailer;

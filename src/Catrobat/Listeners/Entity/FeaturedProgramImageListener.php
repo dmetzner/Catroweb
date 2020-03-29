@@ -6,9 +6,6 @@ use App\Catrobat\Services\FeaturedImageRepository;
 use App\Entity\FeaturedProgram;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
-/**
- * Class FeaturedProgramImageListener.
- */
 class FeaturedProgramImageListener
 {
   /**
@@ -16,9 +13,6 @@ class FeaturedProgramImageListener
    */
   private $repository;
 
-  /**
-   * FeaturedProgramImageListener constructor.
-   */
   public function __construct(FeaturedImageRepository $repository)
   {
     $this->repository = $repository;

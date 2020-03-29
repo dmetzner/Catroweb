@@ -12,9 +12,6 @@ use Sonata\AdminBundle\Route\RouteCollection;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-/**
- * Class ReportedProgramsAdmin.
- */
 class ReportedProgramsAdmin extends AbstractAdmin
 {
   /**

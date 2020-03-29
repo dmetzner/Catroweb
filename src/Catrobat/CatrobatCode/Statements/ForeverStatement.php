@@ -4,9 +4,6 @@ namespace App\Catrobat\CatrobatCode\Statements;
 
 use App\Catrobat\CatrobatCode\SyntaxHighlightingConstants;
 
-/**
- * Class ForeverStatement.
- */
 class ForeverStatement extends Statement
 {
   const BEGIN_STRING = 'forever';
@@ -15,9 +12,9 @@ class ForeverStatement extends Statement
   /**
    * ForeverStatement constructor.
    *
-   * @param $statementFactory
-   * @param $xmlTree
-   * @param $spaces
+   * @param mixed $statementFactory
+   * @param mixed $xmlTree
+   * @param mixed $spaces
    */
   public function __construct($statementFactory, $xmlTree, $spaces)
   {
@@ -27,26 +24,17 @@ class ForeverStatement extends Statement
       self::END_STRING);
   }
 
-  /**
-   * @return int
-   */
-  public function getSpacesForNextBrick()
+  public function getSpacesForNextBrick(): int
   {
     return $this->spaces + 1;
   }
 
-  /**
-   * @return string
-   */
-  public function getBrickText()
+  public function getBrickText(): string
   {
     return 'Forever';
   }
 
-  /**
-   * @return string
-   */
-  public function getBrickColor()
+  public function getBrickColor(): string
   {
     return '1h_brick_orange.png';
   }

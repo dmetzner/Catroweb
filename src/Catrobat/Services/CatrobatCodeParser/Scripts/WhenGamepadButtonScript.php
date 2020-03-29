@@ -4,9 +4,6 @@ namespace App\Catrobat\Services\CatrobatCodeParser\Scripts;
 
 use App\Catrobat\Services\CatrobatCodeParser\Constants;
 
-/**
- * Class WhenGamepadButtonScript.
- */
 class WhenGamepadButtonScript extends Script
 {
   protected function create()

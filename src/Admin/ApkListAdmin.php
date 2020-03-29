@@ -11,9 +11,6 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-/**
- * Class ApkListAdmin.
- */
 class ApkListAdmin extends AbstractAdmin
 {
   /**
@@ -41,9 +38,9 @@ class ApkListAdmin extends AbstractAdmin
   /**
    * ApkListAdmin constructor.
    *
-   * @param $code
-   * @param $class
-   * @param $baseControllerName
+   * @param mixed $code
+   * @param mixed $class
+   * @param mixed $baseControllerName
    */
   public function __construct($code, $class, $baseControllerName, ScreenshotRepository $screenshot_repository)
   {
@@ -71,7 +68,7 @@ class ApkListAdmin extends AbstractAdmin
   }
 
   /**
-   * @param $object
+   * @param mixed $object
    *
    * @return string
    */

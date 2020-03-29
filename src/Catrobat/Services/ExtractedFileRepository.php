@@ -6,26 +6,19 @@ use App\Catrobat\Exceptions\InvalidCatrobatFileException;
 use App\Catrobat\Exceptions\InvalidStorageDirectoryException;
 use App\Entity\Program;
 use App\Entity\ProgramManager;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Finder\Finder;
 
-/**
- * Class ExtractedFileRepository.
- */
 class ExtractedFileRepository
 {
-  /**
-   * @var
-   */
   private $local_path;
-  /**
-   * @var
-   */
+
   private $webpath;
-  /**
-   * @var
-   */
+
   private $local_storage_path;
   /**
    * @var CatrobatFileExtractor
@@ -44,9 +37,6 @@ class ExtractedFileRepository
    */
   private $l;
 
-  /**
-   * ExtractedFileRepository constructor.
-   */
   public function __construct(ParameterBagInterface $parameter_bag, CatrobatFileExtractor $file_extractor,
                               ProgramManager $program_manager, ProgramFileRepository $prog_file_rep,
                               LoggerInterface $l)
@@ -68,13 +58,7 @@ class ExtractedFileRepository
     $this->l = $l;
   }
 
-  /**
-   * @throws \Doctrine\ORM\ORMException
-   * @throws \Doctrine\ORM\OptimisticLockException
-   *
-   * @return ExtractedCatrobatFile
-   */
-  public function loadProgramExtractedFile(Program $program)
+  public function loadProgramExtractedFile(Program $program): ?ExtractedCatrobatFile
   {
     try
     {
@@ -97,15 +81,15 @@ class ExtractedFileRepository
 
       return $extracted_file;
     }
-    catch (\Exception $e)
+    catch (Exception $e)
     {
       return null;
     }
   }
 
   /**
-   * @throws \Doctrine\ORM\ORMException
-   * @throws \Doctrine\ORM\OptimisticLockException
+   * @throws ORMException
+   * @throws OptimisticLockException
    */
   public function removeProgramExtractedFile(Program $program)
   {

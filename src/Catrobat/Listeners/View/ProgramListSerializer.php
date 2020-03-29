@@ -10,36 +10,18 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
-use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
 
-/**
- * Class ProgramListSerializer.
- */
 class ProgramListSerializer
 {
-  /**
-   * @var RequestStack
-   */
-  private $request_stack;
-  /**
-   * @var Router
-   */
-  private $router;
-  /**
-   * @var ScreenshotRepository
-   */
-  private $screenshot_repository;
-  /**
-   * @var ElapsedTimeStringFormatter
-   */
-  private $time_formatter;
+  private RequestStack $request_stack;
 
-  /**
-   * ProgramListSerializer constructor.
-   *
-   * @param Router $router
-   */
+  private RouterInterface $router;
+
+  private ScreenshotRepository $screenshot_repository;
+
+  private ElapsedTimeStringFormatter $time_formatter;
+
   public function __construct(ScreenshotRepository $screenshot_repository, RequestStack $request_stack,
                               RouterInterface $router, ElapsedTimeStringFormatter $time_formatter)
   {
@@ -51,9 +33,6 @@ class ProgramListSerializer
 
   public function onKernelView(ViewEvent $event)
   {
-    /**
-     * @var Program
-     */
     $result = $event->getControllerResult();
     if (!($result instanceof ProgramListResponse))
     {
@@ -66,8 +45,9 @@ class ProgramListSerializer
 
     $retArray = [];
     $retArray['CatrobatProjects'] = [];
-    if (null != $programs)
+    if (null !== $programs)
     {
+      /** @var Program $program */
       foreach ($programs as $program)
       {
         $new_program = [];
@@ -119,12 +99,9 @@ class ProgramListSerializer
   }
 
   /**
-   * @param       $route
-   * @param array $parameters
-   *
-   * @return string
+   * @param mixed $route
    */
-  public function generateUrl($route, $parameters = [])
+  public function generateUrl($route, array $parameters = []): string
   {
     return $this->router->generate($route, $parameters);
   }

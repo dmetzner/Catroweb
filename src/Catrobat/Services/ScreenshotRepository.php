@@ -9,9 +9,6 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
 
-/**
- * Class ScreenshotRepository.
- */
 class ScreenshotRepository
 {
   const DEFAULT_SCREENSHOT = 'images/default/screenshot.png';
@@ -32,9 +29,7 @@ class ScreenshotRepository
    * @var string|string[]|null
    */
   private $screenshot_path;
-  /**
-   * @var
-   */
+
   private $imagick;
   /**
    * @var string|string[]|null
@@ -48,12 +43,12 @@ class ScreenshotRepository
   /**
    * ScreenshotRepository constructor.
    *
-   * @param $screenshot_dir
-   * @param $screenshot_path
-   * @param $thumbnail_dir
-   * @param $thumbnail_path
-   * @param $tmp_dir
-   * @param $tmp_path
+   * @param mixed $screenshot_dir
+   * @param mixed $screenshot_path
+   * @param mixed $thumbnail_dir
+   * @param mixed $thumbnail_path
+   * @param mixed $tmp_dir
+   * @param mixed $tmp_path
    */
   public function __construct($screenshot_dir, $screenshot_path, $thumbnail_dir, $thumbnail_path, $tmp_dir, $tmp_path)
   {
@@ -88,8 +83,8 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $screenshot_filepath
-   * @param $id
+   * @param mixed $screenshot_filepath
+   * @param mixed $id
    *
    * @throws ImagickException
    */
@@ -100,8 +95,8 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $image
-   * @param $id
+   * @param mixed $image
+   * @param mixed $id
    */
   public function storeImageInTmp($image, $id)
   {
@@ -115,8 +110,8 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $image
-   * @param $id
+   * @param mixed $image
+   * @param mixed $id
    *
    * @throws ImagickException
    */
@@ -129,8 +124,8 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $filepath
-   * @param $id
+   * @param mixed $filepath
+   * @param mixed $id
    *
    * @throws ImagickException
    */
@@ -150,11 +145,9 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $id
-   *
-   * @return string
+   * @param mixed $id
    */
-  public function getScreenshotWebPath($id)
+  public function getScreenshotWebPath($id): string
   {
     if (file_exists($this->screenshot_dir.$this->generateFileNameFromId($id)))
     {
@@ -165,11 +158,9 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $id
-   *
-   * @return string
+   * @param mixed $id
    */
-  public function getThumbnailWebPath($id)
+  public function getThumbnailWebPath($id): string
   {
     if (file_exists($this->thumbnail_dir.$this->generateFileNameFromId($id)))
     {
@@ -180,9 +171,9 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $screenshot_filepath
-   * @param $thumbnail_filepath
-   * @param $id
+   * @param mixed $screenshot_filepath
+   * @param mixed $thumbnail_filepath
+   * @param mixed $id
    */
   public function importProgramAssets($screenshot_filepath, $thumbnail_filepath, $id)
   {
@@ -193,10 +184,8 @@ class ScreenshotRepository
 
   /**
    * @throws ImagickException
-   *
-   * @return Imagick
    */
-  public function getImagick()
+  public function getImagick(): Imagick
   {
     if (null == $this->imagick)
     {
@@ -207,7 +196,7 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $id
+   * @param mixed $id
    */
   public function deleteThumbnail($id)
   {
@@ -215,7 +204,7 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $id
+   * @param mixed $id
    */
   public function deleteScreenshot($id)
   {
@@ -223,8 +212,8 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $screenshot_filepath
-   * @param $id
+   * @param mixed $screenshot_filepath
+   * @param mixed $id
    *
    * @throws ImagickException
    */
@@ -235,7 +224,7 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $id
+   * @param mixed $id
    */
   public function makeTempProgramAssetsPerm($id)
   {
@@ -244,7 +233,7 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $id
+   * @param mixed $id
    */
   public function makeScreenshotPerm($id)
   {
@@ -254,7 +243,7 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $id
+   * @param mixed $id
    */
   public function makeThumbnailPerm($id)
   {
@@ -264,8 +253,8 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $filepath
-   * @param $id
+   * @param mixed $filepath
+   * @param mixed $id
    *
    * @throws ImagickException
    */
@@ -285,9 +274,9 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $id
-   *
    * @desc
+   *
+   * @param mixed $id
    */
   public function deleteTempFilesForProgram($id)
   {
@@ -301,7 +290,7 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $id
+   * @param mixed $id
    */
   public function deletePermProgramAssets($id)
   {
@@ -322,12 +311,9 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $filepath
-   * @param $id
-   *
    * @throws ImagickException
    */
-  private function saveThumbnail($filepath, $id)
+  private function saveThumbnail(string $filepath, string $id)
   {
     $thumb = $this->getImagick();
     $thumb->readImage($filepath);
@@ -342,21 +328,12 @@ class ScreenshotRepository
     $thumb->destroy();
   }
 
-  /**
-   * @param $id
-   *
-   * @return string
-   */
-  private function generateFileNameFromId($id)
+  private function generateFileNameFromId(string $id): string
   {
     return 'screen_'.$id.'.png';
   }
 
-  /**
-   * @param $directory
-   * @param $id
-   */
-  private function deleteFiles($directory, $id)
+  private function deleteFiles(string $directory, string $id): void
   {
     try
     {
@@ -369,8 +346,8 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $filepath
-   * @param $id
+   * @param mixed $filepath
+   * @param mixed $id
    *
    * @throws ImagickException
    */
@@ -390,7 +367,7 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $directory
+   * @param mixed $directory
    */
   private function removeDirectory($directory)
   {
@@ -408,7 +385,7 @@ class ScreenshotRepository
   }
 
   /**
-   * @param $directory
+   * @param mixed $directory
    */
   private function recursiveRemoveDirectory($directory)
   {

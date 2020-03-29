@@ -3,9 +3,12 @@
 namespace App\Catrobat\Commands;
 
 use App\Catrobat\Commands\Helpers\RemixManipulationProgramManager;
-use App\Catrobat\Commands\Helpers\ResetController;
+use App\Entity\Program;
+use App\Entity\ProgramDownloads;
 use App\Entity\User;
 use App\Entity\UserManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,32 +16,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CreateDownloadsCommand extends Command
 {
-  /**
-   * @var UserManager
-   */
-  private $user_manager;
+  private UserManager $user_manager;
 
-  /**
-   * @var RemixManipulationProgramManager
-   */
-  private $remix_manipulation_program_manager;
+  private RemixManipulationProgramManager $remix_manipulation_program_manager;
 
-  /**
-   * @var ResetController
-   */
-  private $reset_controller;
+  private EntityManagerInterface $entity_manager;
 
-  /**
-   * CreateDownloadsCommand constructor.
-   */
-  public function __construct(UserManager $user_manager,
-                              RemixManipulationProgramManager $program_manager,
-                              ResetController $reset_controller)
+  public function __construct(UserManager $user_manager, EntityManagerInterface $entity_manager,
+                              RemixManipulationProgramManager $program_manager)
   {
     parent::__construct();
     $this->user_manager = $user_manager;
     $this->remix_manipulation_program_manager = $program_manager;
-    $this->reset_controller = $reset_controller;
+    $this->entity_manager = $entity_manager;
   }
 
   protected function configure()
@@ -50,35 +40,47 @@ class CreateDownloadsCommand extends Command
     ;
   }
 
-  /**
-   * @throws \Exception
-   *
-   * @return int|void|null
-   */
-  protected function execute(InputInterface $input, OutputInterface $output)
+  protected function execute(InputInterface $input, OutputInterface $output): int
   {
     $program_name = $input->getArgument('program_name');
     $user_name = $input->getArgument('user_name');
 
     $program = $this->remix_manipulation_program_manager->findOneByName($program_name);
 
-    /** @var User */
+    /** @var User|null $user */
     $user = $this->user_manager->findUserByUsername($user_name);
 
-    if (null == $program || null == $user || null == $this->reset_controller)
+    if (null === $program || null === $user)
     {
-      return;
+      return -1;
     }
 
     try
     {
-      /* @var User $user */
-      $this->reset_controller->downloadProgram($program, $user);
+      $this->downloadProgram($program, $user);
     }
-    catch (\Exception $e)
+    catch (Exception $e)
     {
-      return;
+      return -1;
     }
     $output->writeln('Downloading '.$program->getName().' with user '.$user->getUsername());
+
+    return 0;
+  }
+
+  private function downloadProgram(Program $program, User $user)
+  {
+    $download = new ProgramDownloads();
+    $download->setUser($user);
+    $download->setProgram($program);
+    $download->setDownloadedAt(date_create());
+    $download->setIp('127.0.0.1');
+    $download->setUserAgent('TestBrowser/5.0');
+    $download->setLocale('de_at');
+    $program->setDownloads($program->getDownloads() + 1);
+
+    $this->entity_manager->persist($program);
+    $this->entity_manager->persist($download);
+    $this->entity_manager->flush();
   }
 }

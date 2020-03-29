@@ -18,8 +18,8 @@ class BroadcastNotification extends CatroNotification
   /**
    * BroadcastNotification constructor.
    *
-   * @param $title
-   * @param $message
+   * @param mixed $title
+   * @param mixed $message
    */
   public function __construct(User $user, $title, $message)
   {

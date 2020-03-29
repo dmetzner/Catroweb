@@ -5,9 +5,6 @@ namespace App\Catrobat\Listeners;
 use App\Catrobat\Events\ProgramBeforeInsertEvent;
 use App\Catrobat\Services\ExtractedCatrobatFile;
 
-/**
- * Class LicenseUpdater.
- */
 class LicenseUpdater
 {
   const MEDIALICENSE = 'https://developer.catrobat.org/ccbysa_v4';

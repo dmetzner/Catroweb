@@ -11,9 +11,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-/**
- * Class ResetCommand.
- */
 class ResetCommand extends Command
 {
   const DOWNLOAD_PROGRAMS_DEFAULT_AMOUNT = 30;
@@ -22,9 +19,6 @@ class ResetCommand extends Command
 
   private ParameterBagInterface $parameter_bag;
 
-  /**
-   * ResetCommand constructor.
-   */
   public function __construct(ParameterBagInterface $parameter_bag)
   {
     parent::__construct();
@@ -48,13 +42,13 @@ class ResetCommand extends Command
   /**
    * @throws Exception
    */
-  protected function execute(InputInterface $input, OutputInterface $output): void
+  protected function execute(InputInterface $input, OutputInterface $output): int
   {
     if (!$input->getOption('hard'))
     {
       $output->writeln("This command will reset everything, use with caution! Use '--hard' option if you are sure.");
 
-      return;
+      return -1;
     }
 
     // Setting up the project permissions
@@ -184,6 +178,8 @@ class ResetCommand extends Command
     $this->downloadProjects($program_names, $user_array, $output);
 
     //https://share.catrob.at/app/project/remixgraph/{id_of_project} to get remixes
+
+    return 0;
   }
 
   private function downloadPrograms(string $dir, int $amount, OutputInterface $output, array $user_array = null): array

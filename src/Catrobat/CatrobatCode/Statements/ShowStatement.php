@@ -2,9 +2,6 @@
 
 namespace App\Catrobat\CatrobatCode\Statements;
 
-/**
- * Class ShowStatement.
- */
 class ShowStatement extends Statement
 {
   const BEGIN_STRING = 'show';
@@ -13,9 +10,9 @@ class ShowStatement extends Statement
   /**
    * ShowStatement constructor.
    *
-   * @param $statementFactory
-   * @param $xmlTree
-   * @param $spaces
+   * @param mixed $statementFactory
+   * @param mixed $xmlTree
+   * @param mixed $spaces
    */
   public function __construct($statementFactory, $xmlTree, $spaces)
   {
@@ -24,18 +21,12 @@ class ShowStatement extends Statement
       self::END_STRING);
   }
 
-  /**
-   * @return string
-   */
-  public function getBrickText()
+  public function getBrickText(): string
   {
     return 'Show';
   }
 
-  /**
-   * @return string
-   */
-  public function getBrickColor()
+  public function getBrickColor(): string
   {
     return '1h_brick_green.png';
   }

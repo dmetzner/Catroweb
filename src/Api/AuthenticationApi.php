@@ -3,6 +3,7 @@
 namespace App\Api;
 
 use OpenAPI\Server\Api\AuthenticationApiInterface;
+use OpenAPI\Server\Model\JWTTokenResponse;
 use OpenAPI\Server\Model\Login;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -37,5 +38,7 @@ class AuthenticationApi implements AuthenticationApiInterface
     // Successful requests are NOT passed to this method. This method will never be called.
     // The AuthenticationController:authenticatePostAction will only be used when Request was invalid.
     $responseCode = Response::HTTP_OK;
+
+    return new JWTTokenResponse();
   }
 }

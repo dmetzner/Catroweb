@@ -3,6 +3,7 @@
 namespace App\Api;
 
 use App\Catrobat\Services\TokenGenerator;
+use App\Entity\User;
 use App\Entity\UserManager;
 use OpenAPI\Server\Api\UserApiInterface;
 use OpenAPI\Server\Model\Register;
@@ -15,29 +16,14 @@ class UserApi implements UserApiInterface
 {
   private string $token;
 
-  /**
-   * @var ValidatorInterface
-   */
-  private $validator;
+  private ValidatorInterface $validator;
 
-  /**
-   * @var UserManager
-   */
-  private $user_manager;
+  private UserManager $user_manager;
 
-  /**
-   * @var TokenGenerator
-   */
-  private $token_generator;
+  private TokenGenerator $token_generator;
 
-  /**
-   * @var TranslatorInterface
-   */
-  private $translator;
+  private TranslatorInterface $translator;
 
-  /**
-   * UserApi constructor.
-   */
   public function __construct(ValidatorInterface $validator, UserManager $user_manager, TokenGenerator $token_generator,
                               TranslatorInterface $translator)
   {
@@ -58,7 +44,7 @@ class UserApi implements UserApiInterface
   /**
    * {@inheritdoc}
    */
-  public function userPost(Register $register, ?string $acceptLanguage = null, &$responseCode, array &$responseHeaders)
+  public function userPost(Register $register, string $accept_language = null, &$responseCode, array &$responseHeaders)
   {
     $validation_schema = $this->validate($register);
 
@@ -74,6 +60,7 @@ class UserApi implements UserApiInterface
     else
     {
       // Validation successful, no dry-run requested => we can actually register the user
+      /** @var User $user */
       $user = $this->user_manager->createUser();
       $user->setUsername($register->getUsername());
       $user->setEmail($register->getEmail());
@@ -83,6 +70,8 @@ class UserApi implements UserApiInterface
       $this->user_manager->updateUser($user);
       $responseCode = 201; // 201 => User successfully registered
     }
+
+    return null;
   }
 
   /**
@@ -90,11 +79,11 @@ class UserApi implements UserApiInterface
    * will be used cause non standard validations (e.g. validation if a username doesn't exist already) must be
    * used here.
    *
-   * @param string $accept_language The language used for translating the validation error messages
+   * $accept_language -> The language used for translating the validation error messages
    *
    * @return ValidationSchema The ValidationSchema containing possible validation errors
    */
-  public function validate(Register $register)
+  public function validate(Register $register): ValidationSchema
   {
     $validation_schema = new ValidationSchema();
 

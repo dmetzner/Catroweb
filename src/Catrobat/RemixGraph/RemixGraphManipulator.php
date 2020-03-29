@@ -7,44 +7,22 @@ use App\Entity\ScratchProgramRemixRelation;
 use App\Repository\ProgramRemixBackwardRepository;
 use App\Repository\ProgramRemixRepository;
 use App\Repository\ScratchProgramRemixRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 
-/**
- * Class RemixGraphManipulator.
- */
 class RemixGraphManipulator
 {
-  /**
-   * @var EntityManager the entity manager
-   */
-  private $entity_manager;
+  private EntityManagerInterface $entity_manager;
 
-  /**
-   * @var RemixSubgraphManipulator the remix subgraph program manipulator
-   */
-  private $remix_subgraph_manipulator;
+  private RemixSubgraphManipulator $remix_subgraph_manipulator;
 
-  /**
-   * @var ProgramRemixRepository the program remix repository
-   */
-  private $program_remix_repository;
+  private ProgramRemixRepository $program_remix_repository;
 
-  /**
-   * @var ProgramRemixBackwardRepository the program remix backward repository
-   */
-  private $program_remix_backward_repository;
+  private ProgramRemixBackwardRepository $program_remix_backward_repository;
 
-  /**
-   * @var ScratchProgramRemixRepository the scratch program remix repository
-   */
-  private $scratch_program_remix_repository;
+  private ScratchProgramRemixRepository $scratch_program_remix_repository;
 
-  /**
-   * RemixManager constructor.
-   */
   public function __construct(EntityManagerInterface $entity_manager,
                               RemixSubgraphManipulator $remix_subgraph_manipulator,
                               ProgramRemixRepository $program_remix_repository,
@@ -106,10 +84,10 @@ class RemixGraphManipulator
   }
 
   /**
-   * @param int[] $all_catrobat_forward_parent_ids
+   * @param string[] $all_catrobat_forward_parent_ids
    *
-   * @throws \Doctrine\ORM\ORMException
-   * @throws \Doctrine\ORM\OptimisticLockException
+   * @throws ORMException
+   * @throws OptimisticLockException
    */
   public function unlinkFromAllCatrobatForwardParents(Program $program, array $all_catrobat_forward_parent_ids)
   {
@@ -143,9 +121,6 @@ class RemixGraphManipulator
     }
   }
 
-  /**
-   * @param int[] $catrobat_backward_parent_ids_to_be_removed
-   */
   public function unlinkFromCatrobatBackwardParents(Program $program, array $catrobat_backward_parent_ids_to_be_removed)
   {
     $this
@@ -154,10 +129,7 @@ class RemixGraphManipulator
     ;
   }
 
-  /**
-   * @param int[] $scratch_parent_ids_to_be_removed
-   */
-  public function unlinkFromScratchParents(Program $program, $scratch_parent_ids_to_be_removed)
+  public function unlinkFromScratchParents(Program $program, array $scratch_parent_ids_to_be_removed)
   {
     $this
       ->scratch_program_remix_repository
@@ -165,17 +137,11 @@ class RemixGraphManipulator
     ;
   }
 
-  /**
-   * @param $scratch_parent_ids_to_be_added
-   *
-   * @throws ORMException
-   * @throws OptimisticLockException
-   */
-  public function linkToScratchParents(Program $program, $scratch_parent_ids_to_be_added)
+  public function linkToScratchParents(Program $program, array $scratch_parent_ids_to_be_added)
   {
     foreach ($scratch_parent_ids_to_be_added as $scratch_parent_id)
     {
-      $scratch_remix_relation = new ScratchProgramRemixRelation($scratch_parent_id, $program);
+      $scratch_remix_relation = new ScratchProgramRemixRelation((string) $scratch_parent_id, $program);
       $this->entity_manager->detach($scratch_remix_relation);
       $this->entity_manager->persist($scratch_remix_relation);
       $this->entity_manager->flush();
@@ -183,8 +149,6 @@ class RemixGraphManipulator
   }
 
   /**
-   * @param int[] $ids_of_new_parents
-   *
    * @throws ORMException
    * @throws OptimisticLockException
    */

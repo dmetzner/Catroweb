@@ -6,9 +6,6 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
-/**
- * Class GameJamSubmittedProgramsAdmin.
- */
 class GameJamSubmittedProgramsAdmin extends AbstractAdmin
 {
   /**

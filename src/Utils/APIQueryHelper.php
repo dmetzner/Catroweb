@@ -7,9 +7,9 @@ use Doctrine\ORM\QueryBuilder;
 
 class APIQueryHelper
 {
-  public static function addMaxVersionCondition(QueryBuilder $query_builder, ?string $max_version = null, string $alias = 'e')
+  public static function addMaxVersionCondition(QueryBuilder $query_builder, ?string $max_version = null, string $alias = 'e'): QueryBuilder
   {
-    if ($max_version)
+    if (null !== $max_version)
     {
       $query_builder
         ->innerJoin('App\Entity\Program', 'p', Join::WITH, $query_builder->expr()->eq('e.program', 'p'))
@@ -23,9 +23,9 @@ class APIQueryHelper
     return $query_builder;
   }
 
-  public static function addFlavorCondition(QueryBuilder $query_builder, ?string $flavor = null, string $alias = 'e')
+  public static function addFlavorCondition(QueryBuilder $query_builder, ?string $flavor = null, string $alias = 'e'): QueryBuilder
   {
-    if ($flavor)
+    if (null !== $flavor)
     {
       $query_builder
         ->andWhere($query_builder->expr()->eq($alias.'.flavor', ':flavor'))
@@ -36,11 +36,11 @@ class APIQueryHelper
     return $query_builder;
   }
 
-  public static function addPlatformCondition(QueryBuilder $query_builder, ?string $platform = null)
+  public static function addPlatformCondition(QueryBuilder $query_builder, ?string $platform = null): QueryBuilder
   {
-    if ($platform)
+    if (null !== $platform)
     {
-      if ('android' == $platform)
+      if ('android' === $platform)
       {
         $query_builder
           ->andWhere($query_builder->expr()->eq('e.for_ios', ':for_ios'))

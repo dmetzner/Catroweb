@@ -52,7 +52,7 @@ class LikeNotification extends CatroNotification
    * @param User    $like_from the User which "like action" to another user triggered this LikeNotification
    * @param Program $program   the Program to which the ProgramLike and this LikeNotification is notifying, belongs to
    */
-  public function __construct(User $user, $like_from, $program)
+  public function __construct(User $user, User $like_from, Program $program)
   {
     parent::__construct($user);
     $this->like_from = $like_from;
@@ -64,7 +64,7 @@ class LikeNotification extends CatroNotification
    *
    * @return User the User which "like action" to another user triggered this LikeNotification
    */
-  public function getLikeFrom()
+  public function getLikeFrom(): User
   {
     return $this->like_from;
   }
@@ -74,7 +74,7 @@ class LikeNotification extends CatroNotification
    *
    * @param User $like_from the User which "like action" to another user triggered this LikeNotification
    */
-  public function setLikeFrom($like_from)
+  public function setLikeFrom(User $like_from)
   {
     $this->like_from = $like_from;
   }
@@ -95,7 +95,7 @@ class LikeNotification extends CatroNotification
    *
    * @return Program the Program to which the ProgramLike and this LikeNotification is notifying, belongs to
    */
-  public function getProgram()
+  public function getProgram(): Program
   {
     return $this->program;
   }
@@ -105,7 +105,7 @@ class LikeNotification extends CatroNotification
    *
    * @param Program $program the Program to which the ProgramLike and this LikeNotification is notifying, belongs to
    */
-  public function setProgram($program)
+  public function setProgram(Program $program)
   {
     $this->program = $program;
   }

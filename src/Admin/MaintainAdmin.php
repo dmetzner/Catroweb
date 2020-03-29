@@ -5,9 +5,6 @@ namespace App\Admin;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Route\RouteCollection;
 
-/**
- * Class MaintainAdmin.
- */
 class MaintainAdmin extends AbstractAdmin
 {
   /**

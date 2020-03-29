@@ -6,8 +6,6 @@ use App\Catrobat\Services\FeaturedImageRepository;
 use App\Catrobat\Services\StatisticsService;
 use App\Entity\FeaturedProgram;
 use App\Repository\FeaturedRepository;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -107,8 +105,7 @@ class DefaultController extends AbstractController
   /**
    * @Route("/click-statistic", name="click_stats", methods={"POST"})
    *
-   * @throws ORMException
-   * @throws OptimisticLockException
+   * @throws Exception
    */
   public function makeClickStatisticAction(Request $request): Response
   {

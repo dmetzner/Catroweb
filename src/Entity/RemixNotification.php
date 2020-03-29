@@ -79,7 +79,7 @@ class RemixNotification extends CatroNotification
    *
    * @return User the owner of the parent Program
    */
-  public function getRemixFrom()
+  public function getRemixFrom(): User
   {
     return $this->remix_from;
   }
@@ -107,10 +107,8 @@ class RemixNotification extends CatroNotification
 
   /**
    * Returns the parent Program.
-   *
-   * @return Program
    */
-  public function getProgram()
+  public function getProgram(): Program
   {
     return $this->program;
   }
@@ -120,17 +118,15 @@ class RemixNotification extends CatroNotification
    *
    * @param Program $program the parent Program
    */
-  public function setProgram($program)
+  public function setProgram(Program $program)
   {
     $this->program = $program;
   }
 
   /**
    * Returns the child Program.
-   *
-   * @return Program
    */
-  public function getRemixProgram()
+  public function getRemixProgram(): Program
   {
     return $this->remix_program;
   }
@@ -140,7 +136,7 @@ class RemixNotification extends CatroNotification
    *
    * @param Program $remix_program the child Program
    */
-  public function setRemixProgram($remix_program)
+  public function setRemixProgram(Program $remix_program)
   {
     $this->remix_program = $remix_program;
   }

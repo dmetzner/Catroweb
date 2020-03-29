@@ -30,7 +30,7 @@ class Group extends BaseGroup
    *
    * @return int $id
    */
-  public function getId()
+  public function getId(): int
   {
     return $this->id;
   }

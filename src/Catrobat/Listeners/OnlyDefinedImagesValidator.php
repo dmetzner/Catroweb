@@ -9,9 +9,6 @@ use App\Catrobat\Services\ExtractedCatrobatFile;
 use App\Catrobat\StatusCode;
 use Symfony\Component\Finder\Finder;
 
-/**
- * Class OnlyDefinedImagesValidator.
- */
 class OnlyDefinedImagesValidator
 {
   public function onProgramBeforeInsert(ProgramBeforeInsertEvent $event)
@@ -37,11 +34,9 @@ class OnlyDefinedImagesValidator
   }
 
   /**
-   * @param $base_path
-   *
-   * @return array
+   * @param mixed $base_path
    */
-  protected static function getImagesFromImageDirectory($base_path)
+  protected static function getImagesFromImageDirectory($base_path): array
   {
     $images = [];
     $finder = new Finder();
@@ -55,11 +50,9 @@ class OnlyDefinedImagesValidator
   }
 
   /**
-   * @param $xml
-   *
-   * @return array
+   * @param mixed $xml
    */
-  protected static function getImagesFromXml($xml)
+  protected static function getImagesFromXml($xml): array
   {
     $defined_file_nodes = $xml->xpath('/program/objectList/object/lookList/look/fileName');
     $defined_files = [];

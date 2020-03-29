@@ -23,9 +23,9 @@ class AchievementNotification extends CatroNotification
   /**
    * AchievementNotification constructor.
    *
-   * @param $title
-   * @param $message
-   * @param $image_path
+   * @param mixed $title
+   * @param mixed $message
+   * @param mixed $image_path
    */
   public function __construct(User $user, $title, $message, $image_path)
   {
@@ -45,7 +45,7 @@ class AchievementNotification extends CatroNotification
   }
 
   /**
-   * @param $image_path
+   * @param mixed $image_path
    */
   public function setImagePath($image_path)
   {

@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Catrobat\Services\ExtractedCatrobatFile;
 use App\Catrobat\Services\ExtractedFileRepository;
 use App\Catrobat\Services\ScreenshotRepository;
 use App\Entity\Program;
@@ -18,9 +19,6 @@ use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-/**
- * Class ApproveProgramsAdmin.
- */
 class ApproveProgramsAdmin extends AbstractAdmin
 {
   /**
@@ -33,32 +31,20 @@ class ApproveProgramsAdmin extends AbstractAdmin
    */
   protected $baseRoutePattern = 'approve';
 
-  /**
-   * @var null
-   */
-  private $extractedProgram;
+  private ?ExtractedCatrobatFile $extractedProgram = null;
 
-  /**
-   * @var ScreenshotRepository
-   */
-  private $screenshot_repository;
+  private ScreenshotRepository $screenshot_repository;
 
-  /**
-   * @var ProgramManager
-   */
-  private $program_manager;
+  private ProgramManager $program_manager;
 
-  /**
-   * @var ExtractedFileRepository
-   */
-  private $extracted_file_repository;
+  private ExtractedFileRepository $extracted_file_repository;
 
   /**
    * ApproveProgramsAdmin constructor.
    *
-   * @param $code
-   * @param $class
-   * @param $baseControllerName
+   * @param mixed $code
+   * @param mixed $class
+   * @param mixed $baseControllerName
    */
   public function __construct($code, $class, $baseControllerName, ScreenshotRepository $screenshot_repository,
                               ProgramManager $program_manager, ExtractedFileRepository $extracted_file_repository)
@@ -76,9 +62,7 @@ class ApproveProgramsAdmin extends AbstractAdmin
    */
   public function createQuery($context = 'list')
   {
-    /**
-     * @var QueryBuilder
-     */
+    /** @var QueryBuilder $query */
     $query = parent::createQuery();
     $query->andWhere(
       $query->expr()->eq($query->getRootAliases()[0].'.approved', $query->expr()->literal(false))
@@ -91,16 +75,13 @@ class ApproveProgramsAdmin extends AbstractAdmin
   }
 
   /**
-   * @param $program
+   * @param mixed|Program $program
    *
    * @throws \Sonata\AdminBundle\Exception\ModelManagerException
    */
   public function preUpdate($program)
   {
-    /**
-     * @var Program
-     * @var ModelManager $model_manager
-     */
+    /** @var ModelManager $model_manager */
     $model_manager = $this->getModelManager();
     $old_program = $model_manager->getEntityManager($this->getClass())->getUnitOfWork()
       ->getOriginalEntityData($program)
@@ -120,24 +101,17 @@ class ApproveProgramsAdmin extends AbstractAdmin
   }
 
   /**
-   * @param $object
+   * @param mixed|Program $object
    *
    * @return string
    */
   public function getThumbnailImageUrl($object)
   {
-    /*
-     * @var $object Program
-     */
-
     return '/'.$this->screenshot_repository->getThumbnailWebPath($object->getId());
   }
 
   /**
-   * @param $object
-   *
-   * @throws \Doctrine\ORM\ORMException
-   * @throws \Doctrine\ORM\OptimisticLockException
+   * @param mixed $object
    *
    * @return array
    */
@@ -162,10 +136,7 @@ class ApproveProgramsAdmin extends AbstractAdmin
   }
 
   /**
-   * @param $object
-   *
-   * @throws \Doctrine\ORM\ORMException
-   * @throws \Doctrine\ORM\OptimisticLockException
+   * @param mixed $object
    *
    * @return array
    */
@@ -188,19 +159,12 @@ class ApproveProgramsAdmin extends AbstractAdmin
   }
 
   /**
-   * @param $object
-   *
-   * @throws \Doctrine\ORM\ORMException
-   * @throws \Doctrine\ORM\OptimisticLockException
+   * @param mixed|Program $object
    *
    * @return array
    */
   public function getContainingStrings($object)
   {
-    /*
-     * @var $object Program
-     */
-
     if (null == $this->extractedProgram)
     {
       $this->extractedProgram = $this->extracted_file_repository->loadProgramExtractedFile(
@@ -212,19 +176,12 @@ class ApproveProgramsAdmin extends AbstractAdmin
   }
 
   /**
-   * @param $object
-   *
-   * @throws \Doctrine\ORM\ORMException
-   * @throws \Doctrine\ORM\OptimisticLockException
+   * @param mixed|Program $object
    *
    * @return array
    */
   public function getContainingCodeObjects($object)
   {
-    /*
-     * @var $object Program
-     */
-
     if (null == $this->extractedProgram)
     {
       $this->extractedProgram = $this->extracted_file_repository->loadProgramExtractedFile(
@@ -318,7 +275,7 @@ class ApproveProgramsAdmin extends AbstractAdmin
   }
 
   /**
-   * @param $paths
+   * @param mixed $paths
    *
    * @return array
    */

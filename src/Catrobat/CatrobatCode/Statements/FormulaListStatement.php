@@ -2,30 +2,22 @@
 
 namespace App\Catrobat\CatrobatCode\Statements;
 
-/**
- * Class FormulaListStatement.
- */
 class FormulaListStatement extends Statement
 {
   const X_POSITION = 'X_POSITION';
 
   const Y_POSITION = 'Y_POSITION';
 
-  /**
-   * @var
-   */
   private $xPosition;
-  /**
-   * @var
-   */
+
   private $yPosition;
 
   /**
    * FormulaListStatement constructor.
    *
-   * @param $statementFactory
-   * @param $xmlTree
-   * @param $spaces
+   * @param mixed $statementFactory
+   * @param mixed $xmlTree
+   * @param mixed $spaces
    */
   public function __construct($statementFactory, $xmlTree, $spaces)
   {
@@ -33,10 +25,7 @@ class FormulaListStatement extends Statement
       '', '');
   }
 
-  /**
-   * @return string
-   */
-  public function executeChildren()
+  public function executeChildren(): string
   {
     $code = '';
     $counter = 0;
@@ -56,10 +45,7 @@ class FormulaListStatement extends Statement
     return $code;
   }
 
-  /**
-   * @return string
-   */
-  public function executePlaceAtFormula()
+  public function executePlaceAtFormula(): string
   {
     $code = '';
     $endCode = '';

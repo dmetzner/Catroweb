@@ -30,24 +30,12 @@ class WebviewAuthenticator extends AbstractGuardAuthenticator
    */
   const COOKIE_TOKEN_KEY = 'CATRO_LOGIN_TOKEN';
 
-  /**
-   * @var TranslatorInterface
-   */
-  protected $translator;
+  protected TranslatorInterface $translator;
 
-  /**
-   * @var SessionInterface
-   */
-  protected $session;
+  protected SessionInterface $session;
 
-  /**
-   * @var EntityManagerInterface
-   */
-  private $em;
+  private EntityManagerInterface $em;
 
-  /**
-   * WebviewAuthenticator constructor.
-   */
   public function __construct(EntityManagerInterface $em, TranslatorInterface $translator, SessionInterface $session)
   {
     $this->em = $em;

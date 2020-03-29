@@ -16,9 +16,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-/**
- * Class AllProgramsAdmin.
- */
 class AllProgramsAdmin extends AbstractAdmin
 {
   /**
@@ -47,9 +44,9 @@ class AllProgramsAdmin extends AbstractAdmin
   /**
    * AllProgramsAdmin constructor.
    *
-   * @param $code
-   * @param $class
-   * @param $baseControllerName
+   * @param mixed $code
+   * @param mixed $class
+   * @param mixed $baseControllerName
    */
   public function __construct($code, $class, $baseControllerName, ScreenshotRepository $screenshot_repository)
   {
@@ -59,16 +56,14 @@ class AllProgramsAdmin extends AbstractAdmin
   }
 
   /**
-   * @param $program
+   * @param mixed $program
    *
    * @throws \Sonata\AdminBundle\Exception\ModelManagerException
    */
   public function preUpdate($program)
   {
-    /**
-     * @var Program
-     * @var ModelManager $model_manager
-     */
+    /** @var Program $program */
+    /** @var ModelManager $model_manager */
     $model_manager = $this->getModelManager();
     $old_program = $model_manager->getEntityManager($this->getClass())
       ->getUnitOfWork()->getOriginalEntityData($program);
@@ -87,37 +82,28 @@ class AllProgramsAdmin extends AbstractAdmin
     $this->checkFlavor();
   }
 
-  /**
-   * @param $object
-   */
   public function prePersist($object)
   {
     $this->checkFlavor();
   }
 
   /**
-   * @param $object
+   * @param mixed $object
    *
    * @return Metadata
    */
   public function getObjectMetadata($object)
   {
-    /*
-     * @var $object object
-     */
     return new Metadata($object->getName(), $object->getDescription(), $this->getThumbnailImageUrl($object));
   }
 
   /**
-   * @param $object
+   * @param mixed $object
    *
    * @return string
    */
   public function getThumbnailImageUrl($object)
   {
-    /*
-     * @var $object object
-     */
     return '/'.$this->screenshot_repository->getThumbnailWebPath($object->getId());
   }
 

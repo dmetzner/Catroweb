@@ -27,6 +27,7 @@ use App\Entity\UserComment;
 use App\Entity\UserLikeSimilarityRelation;
 use App\Entity\UserManager;
 use App\Entity\UserRemixSimilarityRelation;
+use App\Kernel;
 use App\Repository\CatroNotificationRepository;
 use App\Repository\ExtensionRepository;
 use App\Repository\ProgramRemixBackwardRepository;
@@ -42,7 +43,7 @@ use Behat\Symfony2Extension\Context\KernelDictionary;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
-use Doctrine\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManager;
@@ -187,7 +188,7 @@ trait SymfonySupport
     return $this->kernel->getContainer()->get(CatroNotificationRepository::class);
   }
 
-  public function getManager(): ObjectManager
+  public function getManager(): EntityManagerInterface
   {
     return $this->kernel->getContainer()->get('doctrine')->getManager();
   }
@@ -205,18 +206,12 @@ trait SymfonySupport
     return $this->kernel->getContainer()->getParameter($param);
   }
 
-  /**
-   * @return object
-   */
-  public function getSymfonyService(string $service_name)
+  public function getSymfonyService(string $service_name): object
   {
     return $this->kernel->getContainer()->get($service_name);
   }
 
-  /**
-   * @return string
-   */
-  public function getDefaultProgramFile()
+  public function getDefaultProgramFile(): string
   {
     $file = $this->FIXTURES_DIR.'/test.catrobat';
     Assert::assertTrue(is_file($file));
@@ -225,7 +220,7 @@ trait SymfonySupport
   }
 
   /**
-   * @param $directory
+   * @param mixed $directory
    */
   public function emptyDirectory($directory)
   {
@@ -244,13 +239,9 @@ trait SymfonySupport
   }
 
   /**
-   * @param array $config
-   *
    * @throws Exception
-   *
-   * @return GameJam
    */
-  public function insertDefaultGameJam($config = [])
+  public function insertDefaultGameJam(array $config = []): GameJam
   {
     $game_jam = new GameJam();
     $game_jam->setName(isset($config['name']) ? $config['name'] : 'pocketalice');
@@ -341,10 +332,9 @@ trait SymfonySupport
     $user_manager = $this->getUserManager();
     $program_manager = $this->getProgramManager();
 
-    /** @var User $user */
+    /** @var User|null $user */
     $user = $user_manager->findUserByUsername($config['username']);
 
-    /** @var Program $program */
     $program = $program_manager->find($config['program_id']);
 
     $program_like = new ProgramLike($program, $user, $config['type']);
@@ -359,9 +349,6 @@ trait SymfonySupport
     return $program_like;
   }
 
-  /**
-   * @param $config
-   */
   public function insertTag(array $config = [], bool $andFlush = true): Tag
   {
     $tag = new Tag();
@@ -377,9 +364,6 @@ trait SymfonySupport
     return $tag;
   }
 
-  /**
-   * @param $config
-   */
   public function insertExtension(array $config = [], bool $andFlush = true): Extension
   {
     $extension = new Extension();
@@ -414,9 +398,6 @@ trait SymfonySupport
     return $forward_relation;
   }
 
-  /**
-   * @param $config
-   */
   public function insertBackwardRemixRelation(array $config = [], bool $andFlush = true): ProgramRemixBackwardRelation
   {
     /** @var Program $parent */
@@ -436,9 +417,6 @@ trait SymfonySupport
     return $backward_relation;
   }
 
-  /**
-   * @param $config
-   */
   public function insertScratchRemixRelation(array $config = [], bool $andFlush = true): ScratchProgramRemixRelation
   {
     /** @var Program $catrobat_child */
@@ -506,7 +484,7 @@ trait SymfonySupport
     /** @var Program $project */
     $project = $this->getProgramManager()->find($config['program_id']);
 
-    /** @var User $user */
+    /** @var User|null $user */
     $user = $this->getUserManager()->find($config['user_id']);
 
     $new_comment = new UserComment();
@@ -542,7 +520,7 @@ trait SymfonySupport
     /** @var Program $project */
     $project = $this->getProgramManager()->find($config['program_id']);
 
-    /** @var User $user */
+    /** @var User|null $user */
     $user = $this->getUserManager()->find($config['user_id']);
 
     $new_report = new ProgramInappropriateReport();
@@ -571,7 +549,7 @@ trait SymfonySupport
 
     $program_statistics = new ProgramDownloads();
     $program_statistics->setProgram($project);
-    $program_statistics->setDownloadedAt(new DateTime($config['downloaded_at']) ?: TimeUtils::getDateTime());
+    $program_statistics->setDownloadedAt(isset($config['downloaded_at']) ? new DateTime($config['downloaded_at']) : TimeUtils::getDateTime());
     $program_statistics->setIp(isset($config['ip']) ? $config['ip'] : '88.116.169.222');
     $program_statistics->setCountryCode(isset($config['country_code']) ? $config['country_code'] : 'AT');
     $program_statistics->setCountryName(isset($config['country_name']) ? $config['country_name'] : 'Austria');
@@ -581,6 +559,7 @@ trait SymfonySupport
     if (isset($config['username']))
     {
       $user_manager = $this->getUserManager();
+      /** @var User|null $user */
       $user = $user_manager->findUserByUsername($config['username']);
       if (null === $user)
       {
@@ -603,7 +582,7 @@ trait SymfonySupport
 
   public function insertNotification(array $config, bool $andFlush = true): Notification
   {
-    /** @var User $user */
+    /** @var User|null $user */
     $user = $this->getUserManager()->findUserByUsername($config['user']);
 
     $notification = new Notification();
@@ -622,12 +601,10 @@ trait SymfonySupport
   }
 
   /**
-   * @param $parameters
    * @param mixed $is_embroidery
-   *
-   * @return string
+   * @param mixed $parameters
    */
-  public function generateProgramFileWith($parameters, $is_embroidery = false)
+  public function generateProgramFileWith($parameters, $is_embroidery = false): string
   {
     $filesystem = new Filesystem();
     $this->emptyDirectory(sys_get_temp_dir().'/program_generated/');
@@ -682,10 +659,7 @@ trait SymfonySupport
     return $compressor->compress($new_program_dir, sys_get_temp_dir().'/', 'program_generated');
   }
 
-  /**
-   * @return UploadedFile
-   */
-  public function getStandardProgramFile()
+  public function getStandardProgramFile(): UploadedFile
   {
     $filepath = $this->FIXTURES_DIR.'test.catrobat';
     Assert::assertTrue(file_exists($filepath), 'File not found');
@@ -718,7 +692,7 @@ trait SymfonySupport
   }
 
   /**
-   * @param $path
+   * @param mixed $path
    *
    * @return bool|string
    */

@@ -4,14 +4,8 @@ namespace App\Catrobat\Services\TestEnv;
 
 use App\Catrobat\Services\Ci\JenkinsDispatcher;
 
-/**
- * Class FakeJenkinsDispatcher.
- */
 class FakeJenkinsDispatcher extends JenkinsDispatcher
 {
-  /**
-   * @var
-   */
   protected $last_params;
 
   /**
@@ -23,11 +17,9 @@ class FakeJenkinsDispatcher extends JenkinsDispatcher
   }
 
   /**
-   * @param $params
-   *
-   * @return string
+   * @param mixed $params
    */
-  protected function dispatch($params)
+  protected function dispatch($params): string
   {
     $this->last_params = $params;
 

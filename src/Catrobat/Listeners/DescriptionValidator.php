@@ -9,9 +9,6 @@ use App\Catrobat\Services\ExtractedCatrobatFile;
 use App\Catrobat\Services\RudeWordFilter;
 use Doctrine\ORM\NonUniqueResultException;
 
-/**
- * Class DescriptionValidator.
- */
 class DescriptionValidator
 {
   /**
@@ -23,9 +20,6 @@ class DescriptionValidator
    */
   private $max_description_size;
 
-  /**
-   * DescriptionValidator constructor.
-   */
   public function __construct(RudeWordFilter $rudeWordFilter)
   {
     $this->rudeWordFilter = $rudeWordFilter;

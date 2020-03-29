@@ -23,9 +23,9 @@ class AnniversaryNotification extends CatroNotification
   /**
    * AnniversaryNotification constructor.
    *
-   * @param $title
-   * @param $message
-   * @param $prize
+   * @param mixed $title
+   * @param mixed $message
+   * @param mixed $prize
    */
   public function __construct(User $user, $title, $message, $prize)
   {

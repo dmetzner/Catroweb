@@ -4,9 +4,11 @@ namespace App\Api;
 
 use App\Catrobat\Services\FeaturedImageRepository;
 use App\Catrobat\Services\Formatter\ElapsedTimeStringFormatter;
+use App\Entity\FeaturedProgram;
 use App\Entity\Program;
 use App\Entity\ProgramManager;
 use App\Repository\FeaturedRepository;
+use Exception;
 use OpenAPI\Server\Api\ProjectsApiInterface;
 use OpenAPI\Server\Model\FeaturedProject;
 use OpenAPI\Server\Model\Project;
@@ -66,6 +68,8 @@ class ProjectsApi extends AbstractController implements ProjectsApiInterface
     $responseCode = Response::HTTP_OK;
 
     $featured_programs = [];
+
+    /** @var FeaturedProgram $featured_program */
     foreach ($programs as &$featured_program)
     {
       $result = [
@@ -158,11 +162,9 @@ class ProjectsApi extends AbstractController implements ProjectsApiInterface
   }
 
   /**
-   * @param Program[] $programs
-   *
-   * @return Project[]
+   * @throws Exception
    */
-  private function getProjectsResponseData($programs)
+  private function getProjectsResponseData(array $programs): array
   {
     $projects = [];
     foreach ($programs as &$program)

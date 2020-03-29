@@ -20,9 +20,6 @@ define('HOURS', 24);
 define('MINUTES', 60);
 define('SECONDS', 60);
 
-/**
- * Class CleanOldApkCommand.
- */
 class CleanOldApkCommand extends Command
 {
   /**
@@ -35,9 +32,6 @@ class CleanOldApkCommand extends Command
    */
   private $parameter_bag;
 
-  /**
-   * CleanOldApkCommand constructor.
-   */
   public function __construct(EntityManagerInterface $entity_manager, ParameterBagInterface $parameter_bag)
   {
     parent::__construct();
@@ -106,11 +100,9 @@ class CleanOldApkCommand extends Command
   }
 
   /**
-   * @param $removed_apk_ids
-   *
-   * @return Query
+   * @param mixed $removed_apk_ids
    */
-  private function createQueryToUpdateTheStatusOfRemovedApks($removed_apk_ids)
+  private function createQueryToUpdateTheStatusOfRemovedApks($removed_apk_ids): Query
   {
     $id_query_part = '';
     $i = 0;

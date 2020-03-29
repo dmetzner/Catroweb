@@ -10,9 +10,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-/**
- * Class CategoriesAdmin.
- */
 class CategoriesAdmin extends AbstractAdmin
 {
   /**

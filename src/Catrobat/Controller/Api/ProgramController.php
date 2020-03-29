@@ -52,7 +52,6 @@ class ProgramController extends AbstractController
    */
   public function projectLikesAction(string $id, ProgramManager $program_manager): JsonResponse
   {
-    /** @var Program $program */
     $program = $program_manager->find($id);
     if (!$program || !$program_manager->isProjectVisibleForCurrentUser($program))
     {
@@ -96,7 +95,6 @@ class ProgramController extends AbstractController
   public function projectLikesCountAction(Request $request, string $id, ProgramManager $program_manager,
                                           TranslatorInterface $translator): JsonResponse
   {
-    /** @var Program $program */
     $program = $program_manager->find($id);
     if (!$program || !$program_manager->isProjectVisibleForCurrentUser($program))
     {

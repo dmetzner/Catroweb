@@ -9,9 +9,6 @@ use App\Catrobat\Exceptions\Upload\OldCatrobatLanguageVersionException;
 use App\Catrobat\StatusCode;
 use SimpleXMLElement;
 
-/**
- * Class VersionValidator.
- */
 class VersionValidator
 {
   const MIN_LANGUAGE_VERSION = '0.92';

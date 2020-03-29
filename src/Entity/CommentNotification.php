@@ -37,7 +37,7 @@ class CommentNotification extends CatroNotification
    * @param User        $user    the user to which this CommentNotification should be shown
    * @param UserComment $comment the UserComment which triggered this CommentNotification
    */
-  public function __construct(User $user, $comment)
+  public function __construct(User $user, UserComment $comment)
   {
     parent::__construct($user);
     $this->comment = $comment;
@@ -48,7 +48,7 @@ class CommentNotification extends CatroNotification
    *
    * @return UserComment the UserComment which triggered this CommentNotification
    */
-  public function getComment()
+  public function getComment(): UserComment
   {
     return $this->comment;
   }
@@ -58,7 +58,7 @@ class CommentNotification extends CatroNotification
    *
    * @param UserComment $comment the UserComment which triggered this CommentNotification
    */
-  public function setComment($comment)
+  public function setComment(UserComment $comment)
   {
     $this->comment = $comment;
   }

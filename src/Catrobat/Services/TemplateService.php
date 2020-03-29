@@ -4,27 +4,19 @@ namespace App\Catrobat\Services;
 
 use App\Entity\Template;
 use App\Entity\TemplateManager;
+use ImagickException;
 
-/**
- * Class TemplateService.
- */
 class TemplateService
 {
-  /**
-   * @var TemplateManager
-   */
-  private $templateManager;
+  private TemplateManager $templateManager;
 
-  /**
-   * TemplateService constructor.
-   */
   public function __construct(TemplateManager $templateManager)
   {
     $this->templateManager = $templateManager;
   }
 
   /**
-   * @throws \ImagickException
+   * @throws ImagickException
    */
   public function saveFiles(Template $template)
   {
@@ -32,7 +24,7 @@ class TemplateService
   }
 
   /**
-   * @param $id
+   * @param mixed $id
    */
   public function deleteTemplateFiles($id)
   {

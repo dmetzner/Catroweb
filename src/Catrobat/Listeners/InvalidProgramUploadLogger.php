@@ -5,9 +5,6 @@ namespace App\Catrobat\Listeners;
 use App\Catrobat\Events\InvalidProgramUploadedEvent;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class InvalidProgramUploadLogger.
- */
 class InvalidProgramUploadLogger
 {
   /**
@@ -15,9 +12,6 @@ class InvalidProgramUploadLogger
    */
   private $logger;
 
-  /**
-   * InvalidProgramUploadLogger constructor.
-   */
   public function __construct(LoggerInterface $logger)
   {
     $this->logger = $logger;

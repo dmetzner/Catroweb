@@ -12,39 +12,20 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\Routing\RouterInterface;
 
-/**
- * Class RemixUpdater.
- */
 class RemixUpdater
 {
   const MIGRATION_LOCK_FILE_NAME = 'CatrobatRemixMigration.lock';
-  /**
-   * @var RemixManager the remix manager
-   */
-  private $remix_manager;
 
-  /**
-   * @var AsyncHttpClient
-   */
-  private $async_http_client;
+  private RemixManager $remix_manager;
 
-  /**
-   * @var RouterInterface the router
-   */
-  private $router;
+  private AsyncHttpClient $async_http_client;
 
-  /**
-   * @var string
-   */
-  private $migration_lock_file_path;
+  private RouterInterface $router;
 
-  /**
-   * RemixUpdater constructor.
-   *
-   * @param $kernel_root_dir
-   */
+  private string $migration_lock_file_path;
+
   public function __construct(RemixManager $remix_manager, AsyncHttpClient $async_http_client, RouterInterface $router,
-                              $kernel_root_dir)
+                              string $kernel_root_dir)
   {
     $this->remix_manager = $remix_manager;
     $this->async_http_client = $async_http_client;
@@ -66,7 +47,7 @@ class RemixUpdater
    * @throws ORMException
    * @throws OptimisticLockException
    */
-  public function update(ExtractedCatrobatFile $file, Program $program)
+  public function update(ExtractedCatrobatFile $file, Program $program): void
   {
     $remixes_data = $file->getRemixesData(
       $program->getId(),

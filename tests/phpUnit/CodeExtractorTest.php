@@ -124,15 +124,15 @@ class CodeExtractorTest extends TestCase
     return str_replace(SyntaxHighlightingConstants::VARIABLES, '', $code);
   }
 
-  /**
-   * @param mixed $path
-   *
-   * @return string|bool
-   */
-  private function readReferenceOutputFile($path)
+  private function readReferenceOutputFile(string $path): string
   {
     $absolutePath = __DIR__.$path.'reference.output';
-    ($referenceOutputFile = fopen($absolutePath, 'r')) || die('Unable to open file!');
+    $referenceOutputFile = fopen($absolutePath, 'r');
+
+    if (false === $referenceOutputFile)
+    {
+      die('Unable to open file!');
+    }
     $referenceOutput = fread($referenceOutputFile, filesize($absolutePath));
     fclose($referenceOutputFile);
 

@@ -10,9 +10,6 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
 
-/**
- * Class CommandHelper.
- */
 class CommandHelper
 {
   public static function emptyDirectory(string $directory, string $description = '', OutputInterface $output = null): bool

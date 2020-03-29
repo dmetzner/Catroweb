@@ -4,15 +4,12 @@ namespace App\Catrobat\CatrobatCode\Statements;
 
 use App\Catrobat\CatrobatCode\StatementFactory;
 
-/**
- * Class ShowTextStatement.
- */
 class ShowTextStatement extends Statement
 {
   const BEGIN_STRING = 'show variable ';
   const END_STRING = ')<br/>';
 
-  public function __construct(StatementFactory $statementFactory, $xmlTree, string $spaces)
+  public function __construct(StatementFactory $statementFactory, $xmlTree, int $spaces)
   {
     parent::__construct($statementFactory, $xmlTree, $spaces,
       self::BEGIN_STRING,
@@ -47,10 +44,7 @@ class ShowTextStatement extends Statement
     return 'Show variable '.$variable_name.' at X: '.$formula_x_pos_no_markup.' Y: '.$formula_y_pos_no_markup;
   }
 
-  /**
-   * @return string
-   */
-  public function getBrickColor()
+  public function getBrickColor(): string
   {
     return '1h_brick_red.png';
   }

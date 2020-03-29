@@ -2,9 +2,6 @@
 
 namespace App\Catrobat\Services;
 
-/**
- * Class TokenGenerator.
- */
 class TokenGenerator
 {
   /**
@@ -16,11 +13,8 @@ class TokenGenerator
   {
   }
 
-  /**
-   * @return string
-   */
-  public function generateToken()
+  public function generateToken(): string
   {
-    return md5(uniqid(rand(), false));
+    return md5(uniqid((string) rand(), false));
   }
 }

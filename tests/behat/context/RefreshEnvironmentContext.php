@@ -12,9 +12,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
 
-/**
- * Class RefreshEnvironmentContext.
- */
 class RefreshEnvironmentContext implements KernelAwareContext
 {
   use SymfonySupport;
@@ -54,7 +51,6 @@ class RefreshEnvironmentContext implements KernelAwareContext
    */
   public function databaseRollback()
   {
-    /* @var EntityManagerInterface $em */
     $em = $this->getManager();
 
     $em->getConnection()->query('SET FOREIGN_KEY_CHECKS=0');

@@ -2,9 +2,6 @@
 
 namespace App\Catrobat;
 
-/**
- * Class StatusCode.
- */
 class StatusCode
 {
   const OK = 200;

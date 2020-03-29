@@ -10,9 +10,6 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-/**
- * Class MediaPackageCategoriesAdmin.
- */
 class MediaPackageCategoriesAdmin extends AbstractAdmin
 {
   /**

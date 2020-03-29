@@ -4,9 +4,6 @@ namespace App\Catrobat\Services\CatrobatCodeParser\Bricks;
 
 use App\Catrobat\Services\CatrobatCodeParser\Constants;
 
-/**
- * Class StopRunningStitchBrick.
- */
 class StopRunningStitchBrick extends Brick
 {
   /**

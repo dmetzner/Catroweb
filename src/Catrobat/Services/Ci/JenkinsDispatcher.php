@@ -2,46 +2,36 @@
 
 namespace App\Catrobat\Services\Ci;
 
+use Exception;
 use Symfony\Component\Routing\RouterInterface;
 
-/**
- * Class JenkinsDispatcher.
- */
 class JenkinsDispatcher
 {
-  /**
-   * @var RouterInterface
-   */
-  protected $router;
-  /**
-   * @var
-   */
+  protected RouterInterface $router;
+
   protected $config;
 
   /**
    * JenkinsDispatcher constructor.
    *
-   * @param $router
-   * @param $config
+   * @param mixed $config
    *
-   * @throws \Exception
+   * @throws Exception
    */
   public function __construct($config, RouterInterface $router)
   {
     if (!isset($config['url']))
     {
-      throw new \Exception();
+      throw new Exception();
     }
     $this->config = $config;
     $this->router = $router;
   }
 
   /**
-   * @param $id
-   *
-   * @return string
+   * @param mixed $id
    */
-  public function sendBuildRequest($id)
+  public function sendBuildRequest($id): string
   {
     $params = [
       'job' => $this->config['job'],
@@ -56,11 +46,9 @@ class JenkinsDispatcher
   }
 
   /**
-   * @param $params
-   *
-   * @return string
+   * @param mixed $params
    */
-  protected function dispatch($params)
+  protected function dispatch($params): string
   {
     $url = $this->config['url'].'?'.http_build_query($params);
     file_get_contents($url);

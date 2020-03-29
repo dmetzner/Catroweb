@@ -6,30 +6,20 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Promise\EachPromise;
 use Psr\Http\Message\ResponseInterface;
 
-/**
- * Class AsyncHttpClient.
- */
 class AsyncHttpClient
 {
   private array $config;
 
   private Client $async_http_client;
 
-  private ?array $scratch_info_data;
+  private ?array $scratch_info_data = null;
 
-  /**
-   * AsyncHttpClient constructor.
-   */
   public function __construct(array $config = [])
   {
     $this->config = $config;
     $this->async_http_client = new Client($config);
-    $this->scratch_info_data = null;
   }
 
-  /**
-   * @param RemixData[] $scratch_program_ids
-   */
   public function fetchScratchProgramDetails(array $scratch_program_ids): array
   {
     if (0 === count($scratch_program_ids))
@@ -46,7 +36,7 @@ class AsyncHttpClient
 
     $promises = (function () use ($scratch_program_ids)
     {
-      /* @var Client $http_client */
+      /** @var string $scratch_program_id */
       foreach ($scratch_program_ids as $scratch_program_id)
       {
         $scratch_api_url = 'https://api.scratch.mit.edu/projects/'.$scratch_program_id.'/?format=json';

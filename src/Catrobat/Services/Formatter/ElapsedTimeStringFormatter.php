@@ -6,29 +6,21 @@ use App\Utils\TimeUtils;
 use Exception;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * Class ElapsedTimeStringFormatter.
- */
 class ElapsedTimeStringFormatter
 {
   private TranslatorInterface $translator;
 
-  /**
-   * ElapsedTimeStringFormatter constructor.
-   */
   public function __construct(TranslatorInterface $translator)
   {
     $this->translator = $translator;
   }
 
   /**
-   * @param $timestamp
+   * @param mixed $timestamp
    *
    * @throws Exception
-   *
-   * @return string
    */
-  public function getElapsedTime($timestamp)
+  public function getElapsedTime($timestamp): string
   {
     $elapsed = TimeUtils::getTimestamp() - $timestamp;
 

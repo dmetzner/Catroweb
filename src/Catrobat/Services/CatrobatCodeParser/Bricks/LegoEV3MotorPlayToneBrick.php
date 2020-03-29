@@ -4,9 +4,6 @@ namespace App\Catrobat\Services\CatrobatCodeParser\Bricks;
 
 use App\Catrobat\Services\CatrobatCodeParser\Constants;
 
-/**
- * Class LegoEV3MotorPlayToneBrick.
- */
 class LegoEV3MotorPlayToneBrick extends Brick
 {
   protected function create()

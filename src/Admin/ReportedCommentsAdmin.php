@@ -10,9 +10,6 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-/**
- * Class ReportedCommentsAdmin.
- */
 class ReportedCommentsAdmin extends AbstractAdmin
 {
   /**

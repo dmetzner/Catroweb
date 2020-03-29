@@ -8,19 +8,10 @@ use FR3D\LdapBundle\Model\LdapUserInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * Class LdapTestDriver.
- */
 class LdapTestDriver implements LdapDriverInterface
 {
-  /**
-   * @var
-   */
   protected $objects;
 
-  /**
-   * @var
-   */
   private $baseDN;
 
   /**
@@ -33,9 +24,6 @@ class LdapTestDriver implements LdapDriverInterface
    */
   private static $APC_OBJECTS = 'LdapTestDriverFixture';
 
-  /**
-   * LdapTestDriver constructor.
-   */
   public function __construct(ParameterBagInterface $parameter_bag)
   {
     $this->baseDN = $parameter_bag->get('ldap_base_dn');
@@ -153,10 +141,10 @@ class LdapTestDriver implements LdapDriverInterface
   }
 
   /**
-   * @param       $username
-   * @param       $password
    * @param array $groups
    * @param null  $mail
+   * @param mixed $username
+   * @param mixed $password
    *
    * @return bool
    */
@@ -213,7 +201,7 @@ class LdapTestDriver implements LdapDriverInterface
   }
 
   /**
-   * @param $value
+   * @param mixed $value
    */
   public function setThrowExceptionOnSearch($value)
   {
@@ -221,7 +209,7 @@ class LdapTestDriver implements LdapDriverInterface
   }
 
   /**
-   * @param $string
+   * @param mixed $string
    *
    * @return array
    */

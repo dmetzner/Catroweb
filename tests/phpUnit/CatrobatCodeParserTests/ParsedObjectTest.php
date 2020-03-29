@@ -70,16 +70,9 @@ class ParsedObjectTest extends TestCase
    * @test
    * @depends mustHaveMethod
    */
-  public function getSoundsMustReturnArrayOfParsedObjectAsset(): void
+  public function getSoundsMustReturnEmptyArrayOfParsedObjectAsset(): void
   {
-    $expected = ParsedObjectAsset::class;
-
     $this->assertTrue($this->object->getSounds() === []);
-
-    foreach ($this->object->getSounds() as $actual)
-    {
-      $this->assertInstanceOf($expected, $actual);
-    }
   }
 
   /**

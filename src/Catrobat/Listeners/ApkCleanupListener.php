@@ -6,9 +6,6 @@ use App\Catrobat\Events\ProgramBeforePersistEvent;
 use App\Catrobat\Services\ApkRepository;
 use App\Entity\Program;
 
-/**
- * Class ApkCleanupListener.
- */
 class ApkCleanupListener
 {
   /**
@@ -16,9 +13,6 @@ class ApkCleanupListener
    */
   protected $repository;
 
-  /**
-   * ApkCleanupListener constructor.
-   */
   public function __construct(ApkRepository $repository)
   {
     $this->repository = $repository;

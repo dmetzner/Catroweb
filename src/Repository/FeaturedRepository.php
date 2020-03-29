@@ -9,9 +9,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class FeaturedRepository.
- */
 class FeaturedRepository extends ServiceEntityRepository
 {
   public function __construct(ManagerRegistry $managerRegistry)
@@ -56,7 +53,7 @@ class FeaturedRepository extends ServiceEntityRepository
     return $qb->getQuery()->getSingleScalarResult();
   }
 
-  public function getFeaturedItems(string $flavor, int $limit = 20, int $offset = 0)
+  public function getFeaturedItems(string $flavor, ?int $limit = 20, int $offset = 0)
   {
     $qb = $this->createQueryBuilder('e');
 

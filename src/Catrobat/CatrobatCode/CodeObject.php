@@ -2,14 +2,8 @@
 
 namespace App\Catrobat\CatrobatCode;
 
-/**
- * Class CodeObject.
- */
 class CodeObject
 {
-  /**
-   * @var
-   */
   private $name;
 
   /**
@@ -22,9 +16,6 @@ class CodeObject
    */
   private $codeObjects;
 
-  /**
-   * CodeObject constructor.
-   */
   public function __construct()
   {
     $this->scripts = [];
@@ -40,7 +31,7 @@ class CodeObject
   }
 
   /**
-   * @param $name
+   * @param mixed $name
    */
   public function setName($name)
   {
@@ -48,7 +39,7 @@ class CodeObject
   }
 
   /**
-   * @param $scriptsToAdd
+   * @param mixed $scriptsToAdd
    */
   public function addAllScripts($scriptsToAdd)
   {
@@ -58,26 +49,20 @@ class CodeObject
     }
   }
 
-  /**
-   * @return array
-   */
-  public function getCodeObjects()
+  public function getCodeObjects(): array
   {
     return $this->codeObjects;
   }
 
   /**
-   * @param $codeObjects
+   * @param mixed $codeObjects
    */
   public function setCodeObjects($codeObjects)
   {
     $this->codeObjects = $codeObjects;
   }
 
-  /**
-   * @return array
-   */
-  public function getCodeObjectsRecursively()
+  public function getCodeObjectsRecursively(): array
   {
     $objects = [];
     $objects[] = $this;
@@ -93,17 +78,14 @@ class CodeObject
   }
 
   /**
-   * @param $codeObject
+   * @param mixed $codeObject
    */
   public function addCodeObject($codeObject)
   {
     $this->codeObjects[] = $codeObject;
   }
 
-  /**
-   * @return string
-   */
-  public function getCode()
+  public function getCode(): string
   {
     $code = '';
     foreach ($this->scripts as $script)
@@ -114,21 +96,16 @@ class CodeObject
     return $code;
   }
 
-  /**
-   * @return array
-   */
-  public function getScripts()
+  public function getScripts(): array
   {
     return $this->scripts;
   }
 
   /**
-   * @param $objects
-   * @param $objectsToAdd
-   *
-   * @return array
+   * @param mixed $objects
+   * @param mixed $objectsToAdd
    */
-  private function addObjectsToArray($objects, $objectsToAdd)
+  private function addObjectsToArray($objects, $objectsToAdd): array
   {
     foreach ($objectsToAdd as $object)
     {

@@ -10,9 +10,6 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-/**
- * Class NotificationAdmin.
- */
 class NotificationAdmin extends AbstractAdmin
 {
   /**

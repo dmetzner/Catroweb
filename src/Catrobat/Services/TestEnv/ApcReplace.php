@@ -2,15 +2,9 @@
 
 namespace App\Catrobat\Services\TestEnv;
 
-/**
- * Class ApcReplace.
- */
 final class ApcReplace
 {
-  /**
-   * @var array
-   */
-  private $store = [];
+  private array $store = [];
 
   /**
    * @var string
@@ -41,12 +35,10 @@ final class ApcReplace
   }
 
   /**
-   * @param $key
-   * @param $value
-   *
-   * @return bool
+   * @param mixed $key
+   * @param mixed $value
    */
-  public function apc_store($key, $value)
+  public function apc_store($key, $value): bool
   {
     $this->store[$key] = $value;
 
@@ -54,7 +46,7 @@ final class ApcReplace
   }
 
   /**
-   * @param $key
+   * @param mixed $key
    *
    * @return bool|mixed
    */
@@ -69,11 +61,9 @@ final class ApcReplace
   }
 
   /**
-   * @param $key
-   *
-   * @return bool
+   * @param mixed $key
    */
-  public function apc_delete($key)
+  public function apc_delete($key): bool
   {
     unset($this->store[$key]);
 

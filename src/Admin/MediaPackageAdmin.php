@@ -8,9 +8,6 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-/**
- * Class MediaPackageAdmin.
- */
 class MediaPackageAdmin extends AbstractAdmin
 {
   /**

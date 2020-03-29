@@ -2,9 +2,6 @@
 
 namespace App\Catrobat\CatrobatCode\Statements;
 
-/**
- * Class FormulaStatement.
- */
 class FormulaStatement extends Statement
 {
   /**
@@ -19,18 +16,16 @@ class FormulaStatement extends Statement
    * @var Statement
    */
   private $type;
-  /**
-   * @var
-   */
+
   private $category;
 
   /**
    * FormulaStatement constructor.
    *
-   * @param $statementFactory
-   * @param $xmlTree
-   * @param $spaces
-   * @param $category
+   * @param mixed $statementFactory
+   * @param mixed $xmlTree
+   * @param mixed $spaces
+   * @param mixed $category
    */
   public function __construct($statementFactory, $xmlTree, $spaces, $category)
   {
@@ -39,18 +34,12 @@ class FormulaStatement extends Statement
     $this->category = $category;
   }
 
-  /**
-   * @return string
-   */
-  public function execute()
+  public function execute(): string
   {
     return $this->executeChildren();
   }
 
-  /**
-   * @return string
-   */
-  public function executeChildren()
+  public function executeChildren(): string
   {
     $code = '';
     $endCode = '';

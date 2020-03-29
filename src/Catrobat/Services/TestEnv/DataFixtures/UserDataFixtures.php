@@ -36,6 +36,8 @@ class UserDataFixtures
     }
 
     ++UserDataFixtures::$number_of_users;
+
+    /** @var User $user */
     $user = $this->user_manager->createUser();
     $user->setUsername(isset($config['name']) ? $config['name'] : 'User'.UserDataFixtures::$number_of_users);
     $user->setEmail(isset($config['email']) ? $config['email'] : $user->getUsername().'@catrobat.at');
@@ -53,7 +55,7 @@ class UserDataFixtures
 
   public function assertUser(array $config = [])
   {
-    /** @var User $user */
+    /** @var User|null $user */
     $user = $this->user_manager->findUserByUsername($config['name']);
 
     Assert::assertNotNull($user);
@@ -113,6 +115,7 @@ class UserDataFixtures
 
   public function setCurrentUserByUsername(string $current_username)
   {
+    /** @var User $current_user */
     $current_user = $this->user_manager->findUserByUsername($current_username);
     UserDataFixtures::$current_user = $current_user;
   }

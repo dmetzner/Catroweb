@@ -2,9 +2,6 @@
 
 namespace App\Catrobat\RemixGraph;
 
-/**
- * Class RemixGraphLayout.
- */
 class RemixGraphLayout
 {
   /**

@@ -4,39 +4,27 @@ namespace App\Catrobat\CatrobatCode\Statements;
 
 use App\Catrobat\CatrobatCode\StatementFactory;
 
-/**
- * Class Statement.
- */
 class Statement
 {
-  /**
-   * @var
-   */
   protected $xmlTree;
   /**
    * @var array
    */
   protected $statements;
-  /**
-   * @var
-   */
+
   protected $spaces;
-  /**
-   * @var
-   */
+
   private $beginString;
-  /**
-   * @var
-   */
+
   private $endString;
 
   /**
    * Statement constructor.
    *
-   * @param $xmlTree
-   * @param $spaces
-   * @param $beginString
-   * @param $endString
+   * @param mixed $xmlTree
+   * @param mixed $spaces
+   * @param mixed $beginString
+   * @param mixed $endString
    */
   public function __construct(StatementFactory $statementFactory, $xmlTree, $spaces, $beginString, $endString)
   {
@@ -49,18 +37,12 @@ class Statement
     $this->createChildren($statementFactory);
   }
 
-  /**
-   * @return string
-   */
-  public function execute()
+  public function execute(): string
   {
     return $this->addSpaces().$this->beginString.$this->executeChildren().$this->endString;
   }
 
-  /**
-   * @return string
-   */
-  public function executeChildren()
+  public function executeChildren(): string
   {
     $code = '';
 
@@ -80,10 +62,7 @@ class Statement
     return $this->spaces;
   }
 
-  /**
-   * @return array
-   */
-  public function getStatements()
+  public function getStatements(): array
   {
     return $this->statements;
   }
@@ -112,10 +91,7 @@ class Statement
     return $this->xmlTree;
   }
 
-  /**
-   * @return string
-   */
-  public function getClassName()
+  public function getClassName(): string
   {
     return static::class;
   }
@@ -129,7 +105,7 @@ class Statement
   }
 
   /**
-   * @param $statementsToAdd
+   * @param mixed $statementsToAdd
    */
   protected function addAllScripts($statementsToAdd)
   {
@@ -139,12 +115,7 @@ class Statement
     }
   }
 
-  /**
-   * @param int $offset
-   *
-   * @return string
-   */
-  protected function addSpaces($offset = 0)
+  protected function addSpaces(int $offset = 0): string
   {
     $stringSpaces = '';
     for ($i = 0; $i < ($this->spaces + $offset) * 4; ++$i)

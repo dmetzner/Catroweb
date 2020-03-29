@@ -4,9 +4,6 @@ namespace App\Catrobat\Services\CatrobatCodeParser\Bricks;
 
 use App\Catrobat\Services\CatrobatCodeParser\Constants;
 
-/**
- * Class PhiroRgbLightBrick.
- */
 class PhiroRgbLightBrick extends Brick
 {
   protected function create()

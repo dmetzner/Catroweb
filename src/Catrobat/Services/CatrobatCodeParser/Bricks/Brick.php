@@ -5,31 +5,19 @@ namespace App\Catrobat\Services\CatrobatCodeParser\Bricks;
 use App\Catrobat\Services\CatrobatCodeParser\Constants;
 use SimpleXMLElement;
 
-/**
- * Class Brick.
- */
 abstract class Brick
 {
   /**
    * @var SimpleXMLElement
    */
   protected $brick_xml_properties;
-  /**
-   * @var
-   */
+
   protected $type;
-  /**
-   * @var
-   */
+
   protected $caption;
-  /**
-   * @var
-   */
+
   private $img_file;
 
-  /**
-   * Brick constructor.
-   */
   public function __construct(SimpleXMLElement $brick_xml_properties)
   {
     $this->brick_xml_properties = $brick_xml_properties;
@@ -71,7 +59,7 @@ abstract class Brick
   abstract protected function create();
 
   /**
-   * @param $img_file
+   * @param mixed $img_file
    */
   protected function setImgFile($img_file)
   {
@@ -85,19 +73,13 @@ abstract class Brick
     }
   }
 
-  /**
-   * @return bool
-   */
-  private function isCommentedOut()
+  private function isCommentedOut(): bool
   {
     return null != $this->brick_xml_properties->commentedOut
       and 'true' == $this->brick_xml_properties->commentedOut;
   }
 
-  /**
-   * @return bool
-   */
-  private function hasCommentedOutParentScript()
+  private function hasCommentedOutParentScript(): bool
   {
     $xpath_query_result = $this->brick_xml_properties->xpath('../../commentedOut');
 

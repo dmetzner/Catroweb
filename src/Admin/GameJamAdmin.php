@@ -4,6 +4,7 @@ namespace App\Admin;
 
 use App\Entity\Program;
 use App\Utils\TimeUtils;
+use Exception;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -11,13 +12,10 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-/**
- * Class GameJamAdmin.
- */
 class GameJamAdmin extends AbstractAdmin
 {
   /**
-   * @throws \Exception
+   * @throws Exception
    *
    * @return mixed
    */

@@ -2,31 +2,21 @@
 
 namespace App\Catrobat\CatrobatCode\Statements;
 
-/**
- * Class SoundStatement.
- */
 class SoundStatement extends Statement
 {
-  /**
-   * @var
-   */
   private $value;
-  /**
-   * @var
-   */
+
   private $fileName;
-  /**
-   * @var
-   */
+
   private $name;
 
   /**
    * SoundStatement constructor.
    *
-   * @param $statementFactory
-   * @param $xmlTree
-   * @param $spaces
-   * @param $value
+   * @param mixed $statementFactory
+   * @param mixed $xmlTree
+   * @param mixed $spaces
+   * @param mixed $value
    */
   public function __construct($statementFactory, $xmlTree, $spaces, $value)
   {
@@ -36,10 +26,7 @@ class SoundStatement extends Statement
       '');
   }
 
-  /**
-   * @return string
-   */
-  public function execute()
+  public function execute(): string
   {
     $code = $this->value;
     $this->findNames();

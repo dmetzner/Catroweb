@@ -17,7 +17,7 @@ class StoredUserDataController extends CRUDController
                                   EntityManagerInterface $entity_manager): Response
   {
     $user = $user_manager->find($id);
-    $catro_user_notifications = $notification_repo->findByUser($user, ['id' => 'DESC']);
+    $catro_user_notifications = $notification_repo->findBy(['user' => $user], ['id' => 'DESC']);
     $query = $entity_manager->createQuery(sprintf('SELECT cs FROM App\Entity\ClickStatistic cs WHERE cs.user=\'%s\'', $id));
     $click_statistics = $query->getResult();
     $query = $entity_manager->createQuery(sprintf('SELECT hcs FROM App\Entity\HomepageClickStatistic hcs WHERE hcs.user=\'%s\'', $id));

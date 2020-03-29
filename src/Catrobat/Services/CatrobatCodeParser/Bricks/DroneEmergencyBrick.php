@@ -4,9 +4,6 @@ namespace App\Catrobat\Services\CatrobatCodeParser\Bricks;
 
 use App\Catrobat\Services\CatrobatCodeParser\Constants;
 
-/**
- * Class DroneEmergencyBrick.
- */
 class DroneEmergencyBrick extends Brick
 {
   protected function create()

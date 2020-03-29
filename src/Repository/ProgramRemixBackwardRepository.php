@@ -7,9 +7,6 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class ProgramRemixBackwardRepository.
- */
 class ProgramRemixBackwardRepository extends ServiceEntityRepository
 {
   public function __construct(ManagerRegistry $managerRegistry)
@@ -18,11 +15,11 @@ class ProgramRemixBackwardRepository extends ServiceEntityRepository
   }
 
   /**
-   * @param int[] $program_ids
+   * @param string[] $program_ids
    *
    * @return ProgramRemixBackwardRelation[]
    */
-  public function getParentRelations(array $program_ids)
+  public function getParentRelations(array $program_ids): array
   {
     $qb = $this->createQueryBuilder('b');
 
@@ -39,7 +36,7 @@ class ProgramRemixBackwardRepository extends ServiceEntityRepository
   /**
    * @return ProgramRemixBackwardRelation[]
    */
-  public function getDirectEdgeRelations(array $edge_start_program_ids, array $edge_end_program_ids)
+  public function getDirectEdgeRelations(array $edge_start_program_ids, array $edge_end_program_ids): array
   {
     $qb = $this->createQueryBuilder('b');
 
@@ -56,7 +53,7 @@ class ProgramRemixBackwardRepository extends ServiceEntityRepository
   }
 
   /**
-   * @param int[] $parent_program_ids
+   * @param string[] $parent_program_ids
    */
   public function removeParentRelations(string $program_id, array $parent_program_ids)
   {
@@ -87,7 +84,7 @@ class ProgramRemixBackwardRepository extends ServiceEntityRepository
   /**
    * @return ProgramRemixBackwardRelation[]
    */
-  public function getUnseenChildRelationsOfUser(User $user)
+  public function getUnseenChildRelationsOfUser(User $user): array
   {
     $qb = $this->createQueryBuilder('b');
 
@@ -119,12 +116,7 @@ class ProgramRemixBackwardRepository extends ServiceEntityRepository
     ;
   }
 
-  /**
-   * @param int $program_id
-   *
-   * @return int
-   */
-  public function remixCount($program_id)
+  public function remixCount(string $program_id): int
   {
     $qb = $this->createQueryBuilder('b');
 

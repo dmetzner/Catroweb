@@ -8,9 +8,6 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
-/**
- * Class EmailUserMessageAdmin.
- */
 class EmailUserMessageAdmin extends AbstractAdmin
 {
   /**

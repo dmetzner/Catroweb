@@ -7,55 +7,31 @@ use App\Catrobat\Commands\Helpers\RecommenderFileLock;
 use App\Catrobat\RecommenderSystem\RecommenderManager;
 use App\Entity\UserManager;
 use App\Utils\TimeUtils;
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class RecommenderUserSimilaritiesCommand.
- */
 class RecommenderUserSimilaritiesCommand extends Command
 {
-  /**
-   * @var UserManager
-   */
-  private $user_manager;
+  private UserManager $user_manager;
 
-  /**
-   * @var RecommenderManager
-   */
-  private $recommender_manager;
+  private RecommenderManager $recommender_manager;
 
-  /**
-   * @var EntityManagerInterface
-   */
-  private $entity_manager;
+  private EntityManagerInterface $entity_manager;
 
-  /**
-   * @var string
-   */
-  private $app_root_dir;
+  private string $app_root_dir;
 
-  /**
-   * @var OutputInterface
-   */
-  private $output;
+  private ?OutputInterface $output;
 
-  /**
-   * @var RecommenderFileLock
-   */
-  private $migration_file_lock;
+  private ?RecommenderFileLock $migration_file_lock;
 
-  /**
-   * RecommenderUserSimilaritiesCommand constructor.
-   *
-   * @param $kernel_root_dir
-   */
   public function __construct(UserManager $user_manager, RecommenderManager $recommender_manager,
-                              EntityManagerInterface $entity_manager, $kernel_root_dir)
+                              EntityManagerInterface $entity_manager, string $kernel_root_dir)
   {
     parent::__construct();
     $this->user_manager = $user_manager;
@@ -67,7 +43,7 @@ class RecommenderUserSimilaritiesCommand extends Command
   }
 
   /**
-   * @param $signal_number
+   * @param mixed $signal_number
    */
   public function signalHandler($signal_number)
   {
@@ -104,14 +80,9 @@ class RecommenderUserSimilaritiesCommand extends Command
   }
 
   /**
-   * @throws \Doctrine\Common\Persistence\Mapping\MappingException
-   * @throws \Doctrine\DBAL\DBALException
-   * @throws \Doctrine\ORM\ORMException
-   * @throws \Doctrine\ORM\OptimisticLockException
-   *
-   * @return int|void|null
+   * @throws DBALException
    */
-  protected function execute(InputInterface $input, OutputInterface $output)
+  protected function execute(InputInterface $input, OutputInterface $output): int
   {
     declare(ticks=1);
     $this->migration_file_lock = new RecommenderFileLock($this->app_root_dir, $output);
@@ -122,17 +93,16 @@ class RecommenderUserSimilaritiesCommand extends Command
     pcntl_signal(SIGUSR1, [$this, 'signalHandler']);
 
     $this->computeUserSimilarities($output, $input->getArgument('type'), $input->getOption('cronjob'));
+
+    return 0;
   }
 
   /**
-   * @param $type
-   * @param $is_cronjob
+   * @param mixed $type
+   * @param mixed $is_cronjob
    *
-   * @throws \Doctrine\Common\Persistence\Mapping\MappingException
-   * @throws \Doctrine\DBAL\DBALException
-   * @throws \Doctrine\ORM\ORMException
-   * @throws \Doctrine\ORM\OptimisticLockException
-   * @throws \Exception
+   * @throws DBALException
+   * @throws Exception
    */
   private function computeUserSimilarities(OutputInterface $output, $type, $is_cronjob)
   {

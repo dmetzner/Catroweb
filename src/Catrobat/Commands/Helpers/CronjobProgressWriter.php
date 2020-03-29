@@ -39,7 +39,7 @@ class CronjobProgressWriter //extends ProgressBar
   }
 
   /**
-   * @param $format
+   * @param mixed $format
    */
   public function setFormat($format)
   {

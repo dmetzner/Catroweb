@@ -7,9 +7,6 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
-/**
- * Class LimitedUsersAdmin.
- */
 class LimitedUsersAdmin extends AbstractAdmin
 {
   /**

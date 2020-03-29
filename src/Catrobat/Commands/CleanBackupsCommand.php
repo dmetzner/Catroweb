@@ -10,24 +10,12 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-/**
- * Class CleanBackupsCommand.
- */
 class CleanBackupsCommand extends Command
 {
-  /**
-   * @var
-   */
-  private $output;
+  private OutputInterface $output;
 
-  /**
-   * @var ParameterBagInterface
-   */
-  private $parameter_bag;
+  private ParameterBagInterface $parameter_bag;
 
-  /**
-   * CleanBackupsCommand constructor.
-   */
   public function __construct(ParameterBagInterface $parameter_bag)
   {
     parent::__construct();
@@ -44,11 +32,9 @@ class CleanBackupsCommand extends Command
   }
 
   /**
-   * @throws \Exception
-   *
-   * @return int|null
+   * @throws Exception
    */
-  protected function execute(InputInterface $input, OutputInterface $output)
+  protected function execute(InputInterface $input, OutputInterface $output): int
   {
     $this->output = $output;
 

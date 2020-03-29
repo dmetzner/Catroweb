@@ -3,12 +3,12 @@
 namespace App\Catrobat\Commands;
 
 use App\Catrobat\Commands\Helpers\RemixManipulationProgramManager;
-use App\Catrobat\Commands\Helpers\ResetController;
 use App\Catrobat\Services\CatroNotificationService;
 use App\Catrobat\Services\RemixData;
 use App\Entity\RemixManager;
 use App\Entity\RemixNotification;
 use App\Entity\UserManager;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,44 +16,22 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CreateRemixCommand extends Command
 {
-  /**
-   * @var UserManager
-   */
-  private $user_manager;
+  private UserManager $user_manager;
 
-  /**
-   * @var RemixManipulationProgramManager
-   */
-  private $remix_manipulation_program_manager;
+  private RemixManipulationProgramManager $remix_manipulation_program_manager;
 
-  /**
-   * @var ResetController
-   */
-  private $reset_controller;
+  private RemixManager $remix_manager;
 
-  /**
-   * @var RemixManager
-   */
-  private $remix_manager;
+  private CatroNotificationService $notification_service;
 
-  /**
-   * @var CatroNotificationService
-   */
-  private $notification_service;
-
-  /**
-   * CreateDownloadsCommand constructor.
-   */
   public function __construct(UserManager $user_manager,
                               RemixManipulationProgramManager $program_manager,
-                              ResetController $reset_controller,
                               RemixManager $remix_manager,
                               CatroNotificationService $notification_service)
   {
     parent::__construct();
     $this->user_manager = $user_manager;
     $this->remix_manipulation_program_manager = $program_manager;
-    $this->reset_controller = $reset_controller;
     $this->remix_manager = $remix_manager;
     $this->notification_service = $notification_service;
   }
@@ -68,7 +46,7 @@ class CreateRemixCommand extends Command
   }
 
   /**
-   * @throws \Exception
+   * @throws Exception
    *
    * @return int|void|null
    */
@@ -89,7 +67,7 @@ class CreateRemixCommand extends Command
     $notification = new RemixNotification($program_original->getUser(), $program_remix->getUser(), $program_original, $program_remix);
     $this->notification_service->addNotification($notification);
 
-    if (null == $program_original || 0 == sizeof($program_remixes_of_original) || null == $this->reset_controller)
+    if (null == $program_original || 0 == sizeof($program_remixes_of_original))
     {
       return;
     }
@@ -98,7 +76,7 @@ class CreateRemixCommand extends Command
     {
       $this->remix_manager->addRemixes($program_remix, $program_remixes_of_original);
     }
-    catch (\Exception $e)
+    catch (Exception $e)
     {
       return;
     }

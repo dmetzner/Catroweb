@@ -9,9 +9,6 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-/**
- * Class AllExtensionsAdmin.
- */
 class AllExtensionsAdmin extends AbstractAdmin
 {
   /**

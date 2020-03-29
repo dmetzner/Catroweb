@@ -7,24 +7,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-/**
- * Class CleanLogsCommand.
- */
 class CleanLogsCommand extends Command
 {
-  /**
-   * @var OutputInterface
-   */
-  private $output;
+  private OutputInterface $output;
 
-  /**
-   * @var ParameterBagInterface
-   */
-  private $parameter_bag;
+  private ParameterBagInterface $parameter_bag;
 
-  /**
-   * CleanApkCommand constructor.
-   */
   public function __construct(ParameterBagInterface $parameter_bag)
   {
     parent::__construct();
@@ -38,10 +26,7 @@ class CleanLogsCommand extends Command
     ;
   }
 
-  /**
-   * @return int|void|null
-   */
-  protected function execute(InputInterface $input, OutputInterface $output)
+  protected function execute(InputInterface $input, OutputInterface $output): int
   {
     $this->output = $output;
     $this->output->writeln('Deleting log files');

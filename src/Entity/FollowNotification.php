@@ -36,7 +36,7 @@ class FollowNotification extends CatroNotification
    * @param User $user    the User to which this FollowNotification should be shown
    * @param User $profile the User which "follow action" to another user triggered this FollowNotification
    */
-  public function __construct(User $user, $profile)
+  public function __construct(User $user, User $profile)
   {
     parent::__construct($user);
     $this->follower = $profile;
@@ -47,7 +47,7 @@ class FollowNotification extends CatroNotification
    *
    * @return User the User which "follow action" to another user triggered this FollowNotification
    */
-  public function getFollower()
+  public function getFollower(): User
   {
     return $this->follower;
   }
@@ -57,7 +57,7 @@ class FollowNotification extends CatroNotification
    *
    * @param User $follower the User which "follow action" to another user triggered this FollowNotification
    */
-  public function setFollower($follower)
+  public function setFollower(User $follower)
   {
     $this->follower = $follower;
   }

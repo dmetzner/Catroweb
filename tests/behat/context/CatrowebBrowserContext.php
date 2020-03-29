@@ -67,10 +67,7 @@ class CatrowebBrowserContext extends BrowserContext
     setlocale(LC_ALL, 'en');
   }
 
-  /**
-   * @return string
-   */
-  public static function getAcceptedSnippetType()
+  public static function getAcceptedSnippetType(): string
   {
     return 'regex';
   }
@@ -155,9 +152,9 @@ class CatrowebBrowserContext extends BrowserContext
    * @Given /^I( [^"]*)? log in as "([^"]*)" with the password "([^"]*)"$/
    * @Given /^I( [^"]*)? log in as "([^"]*)"$/
    *
-   * @param $try_to
-   * @param $username
-   * @param $password
+   * @param mixed $try_to
+   * @param mixed $username
+   * @param mixed $password
    */
   public function iAmLoggedInAsWithThePassword($try_to, $username, $password = '123456')
   {
@@ -196,7 +193,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I should be logged (in|out)$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iShouldBeLoggedIn($arg1)
   {
@@ -240,7 +237,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given /^I use a (debug|release) build of the Catroid app$/
    *
-   * @param $build_type
+   * @param mixed $build_type
    */
   public function iUseASpecificBuildTypeOfCatroidApp($build_type)
   {
@@ -261,7 +258,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given /^I use a specific "([^"]*)" themed app$/
    *
-   * @param $theme
+   * @param mixed $theme
    */
   public function iUseASpecificThemedApp($theme)
   {
@@ -276,7 +273,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then the logos src should be :logo_src
    *
-   * @param $logo_src
+   * @param mixed $logo_src
    */
   public function theLogosSrcShouldBe($logo_src)
   {
@@ -288,7 +285,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then the logos src should not be :logo_src
    *
-   * @param $logo_src
+   * @param mixed $logo_src
    */
   public function theLogosSrcShouldNotBe($logo_src)
   {
@@ -299,11 +296,8 @@ class CatrowebBrowserContext extends BrowserContext
 
   /**
    * @Given /^I set the cookie "([^"]+)" to "([^"]*)"$/
-   *
-   * @param string $cookie_name
-   * @param string $cookie_value
    */
-  public function iSetTheCookie($cookie_name, $cookie_value)
+  public function iSetTheCookie(string $cookie_name, string $cookie_value)
   {
     if ('NULL' === $cookie_value)
     {
@@ -328,8 +322,8 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I should see (\d+) "([^"]*)"$/
    *
-   * @param $element_count
-   * @param $css_selector
+   * @param mixed $element_count
+   * @param mixed $css_selector
    */
   public function iShouldSeeNumberOfElements($element_count, $css_selector)
   {
@@ -348,9 +342,9 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I should see a node with id "([^"]*)" having name "([^"]*)" and username "([^"]*)"$/
    *
-   * @param $node_id
-   * @param $expected_node_name
-   * @param $expected_username
+   * @param mixed $node_id
+   * @param mixed $expected_node_name
+   * @param mixed $expected_username
    */
   public function iShouldSeeANodeWithNameAndUsername($node_id, $expected_node_name, $expected_username)
   {
@@ -368,7 +362,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I should see an unavailable node with id "([^"]*)"$/
    *
-   * @param $node_id
+   * @param mixed $node_id
    */
   public function iShouldSeeAnUnavailableNodeWithId($node_id)
   {
@@ -386,8 +380,8 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I should see an edge from "([^"]*)" to "([^"]*)"$/
    *
-   * @param $from_id
-   * @param $to_id
+   * @param mixed $from_id
+   * @param mixed $to_id
    */
   public function iShouldSeeAnEdgeFromTo($from_id, $to_id)
   {
@@ -432,7 +426,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I should see ([^"]*) programs$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    *
    * @throws ElementNotFoundException
    * @throws ExpectationException
@@ -490,7 +484,7 @@ class CatrowebBrowserContext extends BrowserContext
    * @Then /^the selected language should be "([^"]*)"$/
    * @Given /^the selected language is "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    *
    * @throws ExpectationException
    */
@@ -518,7 +512,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I switch the language to "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iSwitchTheLanguageTo($arg1)
   {
@@ -545,8 +539,8 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I should see a( [^"]*)? help image "([^"]*)"$/
    *
-   * @param $arg1
-   * @param $arg2
+   * @param mixed $arg1
+   * @param mixed $arg2
    *
    * @throws ExpectationException
    */
@@ -689,7 +683,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I click on the first "([^"]*)" button$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    *
    * @throws ElementNotFoundException
    */
@@ -709,7 +703,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given /^I write "([^"]*)" in textbox$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iWriteInTextbox($arg1)
   {
@@ -721,7 +715,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given /^I write "([^"]*)" in textarea$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iWriteInTextarea($arg1)
   {
@@ -733,7 +727,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I click the "([^"]*)" RadioButton$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iClickTheRadiobutton($arg1)
   {
@@ -744,8 +738,6 @@ class CatrowebBrowserContext extends BrowserContext
 
   /**
    * @Then /^comments or catro notifications should not exist$/
-   *
-   * @param $arg1
    */
   public function commentsOrCatroNotificationsShouldNotExist()
   {
@@ -758,8 +750,8 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^"([^"]*)" must be selected in "([^"]*)"$/
    *
-   * @param $country
-   * @param $select
+   * @param mixed $country
+   * @param mixed $select
    */
   public function mustBeSelectedIn($country, $select)
   {
@@ -770,8 +762,8 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @When /^(?:|I )attach the avatar "(?P<path>[^"]*)" to "(?P<field>(?:[^"]|\\")*)"$/
    *
-   * @param $field
-   * @param $path
+   * @param mixed $field
+   * @param mixed $path
    *
    * @throws ElementNotFoundException
    */
@@ -784,8 +776,8 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^the avatar img tag should( [^"]*)? have the "([^"]*)" data url$/
    *
-   * @param $not
-   * @param $name
+   * @param mixed $not
+   * @param mixed $name
    */
   public function theAvatarImgTagShouldHaveTheDataUrl($not, $name)
   {
@@ -826,8 +818,8 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^the project img tag should( [^"]*)? have the "([^"]*)" data url$/
    *
-   * @param $not
-   * @param $name
+   * @param mixed $not
+   * @param mixed $name
    *
    * @throws Exception
    */
@@ -881,7 +873,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @When /^I click the "([^"]*)" button$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iClickTheButton($arg1)
   {
@@ -946,7 +938,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I should see marked "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iShouldSeeMarked($arg1)
   {
@@ -961,7 +953,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @When /^I trigger Google login with approval prompt "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iTriggerGoogleLogin($arg1)
   {
@@ -978,7 +970,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @When /^I click Google login link "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iClickGoogleLoginLink($arg1)
   {
@@ -1000,8 +992,8 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^the media file "([^"]*)" must have the download url "([^"]*)"$/
    *
-   * @param $id
-   * @param $file_url
+   * @param mixed $id
+   * @param mixed $file_url
    */
   public function theMediaFileMustHaveTheDownloadUrl($id, $file_url)
   {
@@ -1014,7 +1006,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I should see media file with id "([^"]*)"$/
    *
-   * @param $id
+   * @param mixed $id
    */
   public function iShouldSeeMediaFileWithId($id)
   {
@@ -1025,7 +1017,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I should not see media file with id "([^"]*)"$/
    *
-   * @param $id
+   * @param mixed $id
    */
   public function iShouldNotSeeMediaFileWithId($id)
   {
@@ -1036,8 +1028,8 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I should see media file with id ([0-9]+) in category "([^"]*)"$/
    *
-   * @param $id
-   * @param $category
+   * @param mixed $id
+   * @param mixed $category
    */
   public function iShouldSeeMediaFileWithIdInCategory($id, $category)
   {
@@ -1051,8 +1043,8 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I should see ([0-9]+) media files? in category "([^"]*)"$/
    *
-   * @param $count
-   * @param $category
+   * @param mixed $count
+   * @param mixed $category
    */
   public function iShouldSeeNumberOfMediaFilesInCategory($count, $category)
   {
@@ -1066,8 +1058,8 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^the link of "([^"]*)" should open "([^"]*)"$/
    *
-   * @param $identifier
-   * @param $url_type
+   * @param mixed $identifier
+   * @param mixed $url_type
    */
   public function theLinkOfShouldOpen($identifier, $url_type)
   {
@@ -1111,7 +1103,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I see the "([^"]*)" popup$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iSeeThePopup($arg1)
   {
@@ -1130,7 +1122,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I see not the "([^"]*)" popup$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iSeeNotThePopup($arg1)
   {
@@ -1189,7 +1181,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @When /^I should see the video available at "([^"]*)"$/
    *
-   * @param $url
+   * @param mixed $url
    */
   public function iShouldSeeElementWithIdWithSrc($url)
   {
@@ -1247,39 +1239,9 @@ class CatrowebBrowserContext extends BrowserContext
   }
 
   /**
-   * @Then /^I choose the username '([^']*)' and check button activations$/
-   *
-   * @param $arg1
-   *
-   * @throws ElementNotFoundException
-   */
-  public function iChooseTheUsernameTestingButtonEnabled($arg1)
-  {
-    $this->getSession()->wait(300);
-    $page = $this->getSession()->getPage();
-
-    $button = $page->findById('btn_oauth_username');
-    Assert::assertNotNull($button);
-    Assert::assertTrue($button->hasAttribute('disabled'));
-
-    $page->fillField('dialog_oauth_username_input', $arg1);
-    Assert::assertFalse($button->hasAttribute('disabled'));
-
-    $page->fillField('dialog_oauth_username_input', '');
-    Assert::assertTrue($button->hasAttribute('disabled'));
-
-    $page->fillField('dialog_oauth_username_input', $arg1);
-    $button->press();
-    if (self::ALREADY_IN_DB_USER === !$arg1)
-    {
-      $this->getSession()->wait(1000, 'window.location.href.search("login") == -1');
-    }
-  }
-
-  /**
    * @Then /^I choose the username '([^']*)'$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    *
    * @throws ElementNotFoundException
    */
@@ -1296,7 +1258,7 @@ class CatrowebBrowserContext extends BrowserContext
     Assert::assertFalse($button->hasAttribute('disabled'));
 
     $button->press();
-    if (self::ALREADY_IN_DB_USER === !$arg1)
+    if (self::ALREADY_IN_DB_USER !== $arg1)
     {
       $this->getSession()->wait(1000, 'window.location.href.search("login") == -1');
     }
@@ -1306,8 +1268,8 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I should see "([^"]*)" "([^"]*)" tutorial banners$/
    *
-   * @param $count
-   * @param $view
+   * @param mixed $count
+   * @param mixed $view
    */
   public function iShouldSeeTutorialBanners($count, $view)
   {
@@ -1344,7 +1306,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @When /^I click on the "([^"]*)" banner$/
    *
-   * @param $numb
+   * @param mixed $numb
    *
    * @throws ElementNotFoundException
    */
@@ -1379,7 +1341,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I should see the slider with the values "([^"]*)"$/
    *
-   * @param $values
+   * @param mixed $values
    */
   public function iShouldSeeTheSliderWithTheValues($values)
   {
@@ -1393,7 +1355,6 @@ class CatrowebBrowserContext extends BrowserContext
       $url = $slider_items[$index];
       if (0 !== strpos($url, 'http://'))
       {
-        /** @var Program $program */
         $program = $this->getProgramManager()->findOneByName($url);
         Assert::assertNotNull($program);
         Assert::assertNotNull($program->getId());
@@ -1409,7 +1370,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @When /^I press on the tag "([^"]*)"$/
    *
-   * @param $arg1 string  The name of the tag
+   * @param mixed $arg1
    *
    * @throws ElementNotFoundException
    */
@@ -1429,13 +1390,13 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @When /^I press on the extension "([^"]*)"$/
    *
-   * @param $arg1 string  The name of the extension
+   * @param mixed $name
    *
    * @throws ElementNotFoundException
    */
-  public function iPressOnTheExtension($arg1)
+  public function iPressOnTheExtension($name)
   {
-    $xpath = '//*[@id="extensions"]/div/a[normalize-space()="'.$arg1.'"]';
+    $xpath = '//*[@id="extensions"]/div/a[normalize-space()="'.$name.'"]';
     $this->assertSession()->elementExists('xpath', $xpath);
 
     $this
@@ -1449,7 +1410,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given /^I search for "([^"]*)" with the searchbar$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    *
    * @throws ElementNotFoundException
    */
@@ -1491,7 +1452,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^the href with id "([^"]*)" should be void$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function theHrefWithIdShouldBeVoid($arg1)
   {
@@ -1502,7 +1463,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^the href with id "([^"]*)" should not be void$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function theHrefWithIdShouldNotBeVoid($arg1)
   {
@@ -1513,9 +1474,9 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^There should be one database entry with type is "([^"]*)" and "([^"]*)" is "([^"]*)"$/
    *
-   * @param $type_name
-   * @param $name_id
-   * @param $id_or_value
+   * @param mixed $type_name
+   * @param mixed $name_id
+   * @param mixed $id_or_value
    */
   public function thereShouldBeOneDatabaseEntryWithTypeIsAndIs($type_name, $name_id, $id_or_value)
   {
@@ -1603,7 +1564,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @When /^I click on a newest homepage program having program id "([^"]*)"$/
    *
-   * @param $program_id
+   * @param mixed $program_id
    *
    * @throws ElementNotFoundException
    */
@@ -1623,7 +1584,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @When /^I click on a most downloaded homepage program having program id "([^"]*)"$/
    *
-   * @param $program_id
+   * @param mixed $program_id
    *
    * @throws ElementNotFoundException
    */
@@ -1643,7 +1604,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @When /^I click on a most viewed homepage program having program id "([^"]*)"$/
    *
-   * @param $program_id
+   * @param mixed $program_id
    *
    * @throws ElementNotFoundException
    */
@@ -1663,7 +1624,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @When /^I click on a random homepage program having program id "([^"]*)"$/
    *
-   * @param $program_id
+   * @param mixed $program_id
    *
    * @throws ElementNotFoundException
    */
@@ -1723,8 +1684,8 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I should see a recommended homepage program having ID "([^"]*)" and name "([^"]*)"$/
    *
-   * @param $program_id
-   * @param $program_name
+   * @param mixed $program_id
+   * @param mixed $program_name
    *
    * @throws ElementNotFoundException
    */
@@ -1753,7 +1714,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^I should see the image "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iShouldSeeTheImage($arg1)
   {
@@ -1814,7 +1775,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given I use a valid JWT token for :username
    *
-   * @param $username
+   * @param mixed $username
    */
   public function iUseAValidJwtTokenFor($username)
   {
@@ -1864,7 +1825,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given /^I am using pocketcode with language version "([^"]*)"$/
    *
-   * @param $version
+   * @param mixed $version
    */
   public function iAmUsingPocketcodeWithLanguageVersion($version)
   {
@@ -1884,8 +1845,8 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given /^I am using pocketcode for "([^"]*)" with version "([^"]*)"$/
    *
-   * @param $platform
-   * @param $version
+   * @param mixed $platform
+   * @param mixed $version
    */
   public function iAmUsingPocketcodeForWithVersion($platform, $version)
   {
@@ -1905,7 +1866,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given /^the token to upload an apk file is "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function theTokenToUploadAnApkFileIs($arg1)
   {
@@ -1915,7 +1876,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given /^the jenkins job id is "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function theJenkinsJobIdIs($arg1)
   {
@@ -1925,7 +1886,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given /^the jenkins token is "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function theJenkinsTokenIs($arg1)
   {
@@ -1958,13 +1919,12 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^the program apk status will.* be flagged "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function theProgramApkStatusWillBeFlagged($arg1)
   {
     $pm = $this->getProgramManager();
-    /* @var $program Program */
-    $program = $pm->find(1);
+    $program = $pm->find('1');
     switch ($arg1)
     {
       case 'pending':
@@ -2002,7 +1962,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given /^the program apk status is flagged "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    *
    * @throws ORMException
    * @throws OptimisticLockException
@@ -2010,8 +1970,7 @@ class CatrowebBrowserContext extends BrowserContext
   public function theProgramApkStatusIsFlagged($arg1)
   {
     $pm = $this->getProgramManager();
-    /* @var $program Program */
-    $program = $pm->find(1);
+    $program = $pm->find('1');
     switch ($arg1)
     {
       case 'pending':
@@ -2070,8 +2029,8 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given /^there is a file "([^"]*)" with size "([^"]*)" bytes in the APK-folder$/
    *
-   * @param $filename
-   * @param $size
+   * @param mixed $filename
+   * @param mixed $size
    */
   public function thereIsAFileWithSizeBytesInTheApkFolder($filename, $size)
   {
@@ -2081,7 +2040,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^program with id "([^"]*)" should have no apk$/
    *
-   * @param $program_id
+   * @param mixed $program_id
    */
   public function programWithIdShouldHaveNoApk($program_id)
   {
@@ -2093,8 +2052,8 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given /^there is a file "([^"]*)" with size "([^"]*)" bytes in the backup-folder$/
    *
-   * @param $filename
-   * @param $size
+   * @param mixed $filename
+   * @param mixed $size
    */
   public function thereIsAFileWithSizeBytesInTheBackupFolder($filename, $size)
   {
@@ -2105,8 +2064,8 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given /^there is a file "([^"]*)" with size "([^"]*)" bytes in the extracted-folder$/
    *
-   * @param $filename
-   * @param $size
+   * @param mixed $filename
+   * @param mixed $size
    */
   public function thereIsAFileWithSizeBytesInTheExtractedFolder($filename, $size)
   {
@@ -2135,7 +2094,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then /^program with id "([^"]*)" should have no directory_hash$/
    *
-   * @param $program_id
+   * @param mixed $program_id
    */
   public function programWithIdShouldHaveNoDirectoryHash($program_id)
   {
@@ -2176,7 +2135,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given /^we assume the next generated token will be "([^"]*)"$/
    *
-   * @param $token
+   * @param mixed $token
    */
   public function weAssumeTheNextGeneratedTokenWillBe($token)
   {
@@ -2276,7 +2235,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given /^the next generated token will be "([^"]*)"$/
    *
-   * @param $token
+   * @param mixed $token
    */
   public function theNextGeneratedTokenWillBe($token)
   {
@@ -2287,7 +2246,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given /^the current time is "([^"]*)"$/
    *
-   * @param $time
+   * @param mixed $time
    *
    * @throws Exception
    */
@@ -2356,8 +2315,7 @@ class CatrowebBrowserContext extends BrowserContext
    */
   public function iFilledOutTheGoogleForm()
   {
-    /** @var Program $project */
-    $project = $this->getProgramManager()->find(1);
+    $project = $this->getProgramManager()->find('1');
     $this->my_program = $project;
     $this->my_program->setAcceptedForGameJam(true);
     $this->getManager()->persist($this->my_program);
@@ -2384,7 +2342,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given /^I have a program named "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    *
    * @throws Exception
    */
@@ -2435,7 +2393,7 @@ class CatrowebBrowserContext extends BrowserContext
    */
   public function theGameIsNotYetAccepted()
   {
-    $program = $this->getProgramManager()->find(1);
+    $program = $this->getProgramManager()->find('1');
     Assert::assertFalse($program->isAcceptedForGameJam());
   }
 
@@ -2444,7 +2402,7 @@ class CatrowebBrowserContext extends BrowserContext
    */
   public function myGameShouldBeAccepted()
   {
-    $program = $this->getProgramManager()->find(1);
+    $program = $this->getProgramManager()->find('1');
     Assert::assertTrue($program->isAcceptedForGameJam());
   }
 
@@ -2453,7 +2411,7 @@ class CatrowebBrowserContext extends BrowserContext
    */
   public function myGameShouldStillBeAccepted()
   {
-    $program = $this->getProgramManager()->find(1);
+    $program = $this->getProgramManager()->find('1');
     Assert::assertTrue($program->isAcceptedForGameJam());
   }
 
@@ -2479,8 +2437,8 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Given I am :arg1 with email :arg2
    *
-   * @param $arg1
-   * @param $arg2
+   * @param mixed $arg1
+   * @param mixed $arg2
    */
   public function iAmWithEmail($arg1, $arg2)
   {
@@ -2580,7 +2538,7 @@ class CatrowebBrowserContext extends BrowserContext
   /**
    * @Then I see the program :arg1
    *
-   * @param $arg1
+   * @param mixed $arg1
    */
   public function iSeeTheProgram($arg1)
   {
@@ -2613,12 +2571,7 @@ class CatrowebBrowserContext extends BrowserContext
     $this->iUseTheUserAgent($user_agent);
   }
 
-  /**
-   * @param $name
-   *
-   * @return bool|string
-   */
-  private function getParameterValue($name)
+  private function getParameterValue(string $name): string
   {
     $my_file = fopen('app/config/parameters.yml', 'r') or die('Unable to open file!');
     while (!feof($my_file))
@@ -2638,7 +2591,7 @@ class CatrowebBrowserContext extends BrowserContext
   }
 
   /**
-   * @param $value
+   * @param mixed $value
    */
   private function setOauthServiceParameter($value)
   {
@@ -2657,8 +2610,8 @@ class CatrowebBrowserContext extends BrowserContext
   }
 
   /**
-   * @param $mail
-   * @param $password
+   * @param mixed $mail
+   * @param mixed $password
    *
    * @throws ElementNotFoundException
    */
@@ -2676,8 +2629,8 @@ class CatrowebBrowserContext extends BrowserContext
   }
 
   /**
-   * @param $mail
-   * @param $password
+   * @param mixed $mail
+   * @param mixed $password
    *
    * @throws ElementNotFoundException
    */
@@ -2699,7 +2652,7 @@ class CatrowebBrowserContext extends BrowserContext
   }
 
   /**
-   * @param $password
+   * @param mixed $password
    *
    * @throws ElementNotFoundException
    */
@@ -2739,9 +2692,9 @@ class CatrowebBrowserContext extends BrowserContext
   }
 
   /**
-   * @param $path
-   * @param $filename
-   * @param $size
+   * @param mixed $path
+   * @param mixed $filename
+   * @param mixed $size
    */
   private function generateFileInPath($path, $filename, $size)
   {
@@ -2758,13 +2711,11 @@ class CatrowebBrowserContext extends BrowserContext
   }
 
   /**
-   * @param $days
+   * @param mixed $days
    *
    * @throws Exception
-   *
-   * @return DateTime
    */
-  private function getDateFromNow($days)
+  private function getDateFromNow($days): DateTime
   {
     $date = TimeUtils::getDateTime();
     if ($days < 0)

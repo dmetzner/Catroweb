@@ -7,9 +7,6 @@ use App\Entity\UserLikeSimilarityRelation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class UserLikeSimilarityRelationRepository.
- */
 class UserLikeSimilarityRelationRepository extends ServiceEntityRepository
 {
   public function __construct(ManagerRegistry $managerRegistry)
@@ -31,7 +28,7 @@ class UserLikeSimilarityRelationRepository extends ServiceEntityRepository
   /**
    * @return UserLikeSimilarityRelation[]
    */
-  public function getRelationsOfSimilarUsers(User $user)
+  public function getRelationsOfSimilarUsers(User $user): array
   {
     $qb = $this->createQueryBuilder('ul');
 

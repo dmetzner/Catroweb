@@ -7,26 +7,18 @@ use App\Catrobat\Services\ExtractedCatrobatFile;
 use App\Catrobat\Services\RemixUrlIndicator;
 use Symfony\Component\HttpFoundation\File\File;
 
-/**
- * Class RemixManipulationCatrobatFileExtractor.
- */
 class RemixManipulationCatrobatFileExtractor extends CatrobatFileExtractor
 {
-  /**
-   * @var int
-   */
-  private $current_program_id;
-  /**
-   * @var
-   */
+  private int $current_program_id;
+
   private $remix_graph_mapping;
 
   /**
    * RemixManipulationCatrobatFileExtractor constructor.
    *
-   * @param $remix_graph_mapping
-   * @param $extract_dir
-   * @param $extract_path
+   * @param mixed $remix_graph_mapping
+   * @param mixed $extract_dir
+   * @param mixed $extract_path
    */
   public function __construct($remix_graph_mapping, $extract_dir, $extract_path)
   {
@@ -77,12 +69,10 @@ class RemixManipulationCatrobatFileExtractor extends CatrobatFileExtractor
   }
 
   /**
-   * @param $previous_parent_string
-   * @param $current_parent_url
-   *
-   * @return string
+   * @param mixed $previous_parent_string
+   * @param mixed $current_parent_url
    */
-  public function generateRemixUrlsStringForMergedProgram($previous_parent_string, $current_parent_url)
+  public function generateRemixUrlsStringForMergedProgram($previous_parent_string, $current_parent_url): string
   {
     if ('' == $previous_parent_string)
     {

@@ -8,19 +8,10 @@ use App\Entity\Extension;
 use App\Entity\Program;
 use App\Repository\ExtensionRepository;
 
-/**
- * Class ProgramExtensionListener.
- */
 class ProgramExtensionListener
 {
-  /**
-   * @var ExtensionRepository
-   */
-  private $extension_repository;
+  private ExtensionRepository $extension_repository;
 
-  /**
-   * ProgramExtensionListener constructor.
-   */
   public function __construct(ExtensionRepository $repo)
   {
     $this->extension_repository = $repo;
@@ -33,9 +24,6 @@ class ProgramExtensionListener
 
   public function checkExtension(ExtractedCatrobatFile $extracted_file, Program $program)
   {
-    /**
-     * @var Extension
-     */
     $xml = $extracted_file->getProgramXmlProperties();
 
     $xpath = '//@category';
@@ -56,6 +44,7 @@ class ProgramExtensionListener
 
     $extensions = $this->extension_repository->findAll();
 
+    /** @var Extension $extension */
     foreach ($extensions as $extension)
     {
       if (in_array($extension->getPrefix(), $prefixes, true))

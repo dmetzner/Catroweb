@@ -2,9 +2,6 @@
 
 namespace App\Catrobat\CatrobatCode\Statements;
 
-/**
- * Class WhenScriptStatement.
- */
 class WhenScriptStatement extends Statement
 {
   const BEGIN_STRING = 'when program started <br/>';
@@ -12,9 +9,9 @@ class WhenScriptStatement extends Statement
   /**
    * WhenScriptStatement constructor.
    *
-   * @param $statementFactory
-   * @param $xmlTree
-   * @param $spaces
+   * @param mixed $statementFactory
+   * @param mixed $xmlTree
+   * @param mixed $spaces
    */
   public function __construct($statementFactory, $xmlTree, $spaces)
   {

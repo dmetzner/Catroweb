@@ -11,39 +11,39 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-/**
- * Class PendingApkRequestsAdmin.
- */
 class PendingApkRequestsAdmin extends AbstractAdmin
 {
   /**
+   * @override
+   *
    * @var string
    */
   protected $baseRouteName = 'admin_catrobat_apk_pending_requests';
 
   /**
+   * @override
+   *
    * @var string
    */
   protected $baseRoutePattern = 'apk_pending_requests';
 
   /**
+   * @override
+   *
    * @var array
    */
   protected $datagridValues = [
     '_sort_by' => 'apk_request_time',
   ];
 
-  /**
-   * @var ScreenshotRepository
-   */
-  private $screenshot_repository;
+  private ScreenshotRepository $screenshot_repository;
 
   /**
    * PendingApkRequestsAdmin constructor.
    *
-   * @param $code
-   * @param $class
-   * @param $baseControllerName
+   * @param mixed $code
+   * @param mixed $class
+   * @param mixed $baseControllerName
    */
   public function __construct($code, $class, $baseControllerName, ScreenshotRepository $screenshot_repository)
   {
@@ -58,9 +58,7 @@ class PendingApkRequestsAdmin extends AbstractAdmin
    */
   public function createQuery($context = 'list')
   {
-    /**
-     * @var QueryBuilder
-     */
+    /** @var QueryBuilder $query */
     $query = parent::createQuery();
     $query->andWhere(
       $query->expr()->eq($query->getRootAliases()[0].'.apk_status', ':apk_status')
@@ -71,7 +69,7 @@ class PendingApkRequestsAdmin extends AbstractAdmin
   }
 
   /**
-   * @param $object Program
+   * @param Program $object
    *
    * @return string
    */

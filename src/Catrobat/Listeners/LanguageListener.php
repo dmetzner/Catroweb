@@ -4,9 +4,6 @@ namespace App\Catrobat\Listeners;
 
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
-/**
- * Class LanguageListener.
- */
 class LanguageListener
 {
   public function onKernelRequest(RequestEvent $event)

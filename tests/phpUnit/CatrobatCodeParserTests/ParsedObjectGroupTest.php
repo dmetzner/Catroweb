@@ -54,16 +54,9 @@ class ParsedObjectGroupTest extends TestCase
    * @test
    * @depends mustHaveMethod
    */
-  public function getObjectsMustReturnArrayOfParsedObject(): void
+  public function getObjectsMustReturnEmptyArrayOfParsedObject(): void
   {
-    $expected = ParsedObject::class;
-
     $this->assertTrue($this->group->getObjects() === []);
-
-    foreach ($this->group->getObjects() as $actual)
-    {
-      $this->assertInstanceOf($expected, $actual);
-    }
   }
 
   /**

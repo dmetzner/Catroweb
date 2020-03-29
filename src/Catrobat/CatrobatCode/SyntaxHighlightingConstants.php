@@ -2,9 +2,6 @@
 
 namespace App\Catrobat\CatrobatCode;
 
-/**
- * Class SyntaxHighlightingConstants.
- */
 class SyntaxHighlightingConstants
 {
   const VARIABLES = '<span style="color:blueviolet">';

@@ -20,7 +20,7 @@ class ClickStatistic
   /**
    * @ORM\Column(type="text", options={"default": ""}, nullable=false)
    */
-  protected $type;
+  protected string $type;
 
   /**
    * @ORM\ManyToOne(targetEntity="\App\Entity\Tag", inversedBy="tags")
@@ -99,66 +99,42 @@ class ClickStatistic
    */
   protected $referrer;
 
-  /**
-   * @return Program
-   */
-  public function getProgram()
+  public function getProgram(): Program
   {
     return $this->program;
   }
 
-  /**
-   * @param Program $program
-   */
-  public function setProgram($program)
+  public function setProgram(Program $program)
   {
     $this->program = $program;
   }
 
-  /**
-   * @return int
-   */
-  public function getScratchProgramId()
+  public function getScratchProgramId(): int
   {
     return $this->scratch_program_id;
   }
 
-  /**
-   * @param int $scratch_program_id
-   */
-  public function setScratchProgramId($scratch_program_id)
+  public function setScratchProgramId(int $scratch_program_id)
   {
     $this->scratch_program_id = $scratch_program_id;
   }
 
-  /**
-   * @return Program
-   */
-  public function getRecommendedFromProgram()
+  public function getRecommendedFromProgram(): Program
   {
     return $this->recommended_from_program;
   }
 
-  /**
-   * @param Program $recommended_from_program
-   */
-  public function setRecommendedFromProgram($recommended_from_program)
+  public function setRecommendedFromProgram(Program $recommended_from_program)
   {
     $this->recommended_from_program = $recommended_from_program;
   }
 
-  /**
-   * @return bool
-   */
-  public function getUserSpecificRecommendation()
+  public function getUserSpecificRecommendation(): bool
   {
     return $this->user_specific_recommendation;
   }
 
-  /**
-   * @param bool $is_user_specific_recommendation
-   */
-  public function setUserSpecificRecommendation($is_user_specific_recommendation)
+  public function setUserSpecificRecommendation(bool $is_user_specific_recommendation)
   {
     $this->user_specific_recommendation = $is_user_specific_recommendation;
   }

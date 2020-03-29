@@ -4,9 +4,6 @@ namespace App\Catrobat\Services\CatrobatCodeParser\Scripts;
 
 use App\Catrobat\Services\CatrobatCodeParser\Constants;
 
-/**
- * Class WhenBounceOffScript.
- */
 class WhenBounceOffScript extends Script
 {
   protected function create()

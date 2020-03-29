@@ -14,9 +14,6 @@ use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-/**
- * Class ReportedUsersAdmin.
- */
 class ReportedUsersAdmin extends AbstractAdmin
 {
   /**
@@ -36,7 +33,7 @@ class ReportedUsersAdmin extends AbstractAdmin
    */
   public function createQuery($context = 'list')
   {
-    /** @var ProxyQueryInterface $query */
+    /** @var ProxyQuery $query */
     $query = parent::createQuery();
 
     /** @var QueryBuilder $qb */
@@ -44,7 +41,7 @@ class ReportedUsersAdmin extends AbstractAdmin
 
     if ('list' === $context)
     {
-      $rootAlias = $query->getRootAliases()[0];
+      $rootAlias = $qb->getRootAliases()[0];
       $parameters = $this->getFilterParameters();
 
       if ('getReportedCommentsCount' === $parameters['_sort_by'])

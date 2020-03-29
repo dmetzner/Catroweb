@@ -70,8 +70,8 @@ class CatroNotification
   /**
    * CatroNotification constructor.
    *
-   * @param $title
-   * @param $message
+   * @param mixed $title
+   * @param mixed $message
    */
   public function __construct(User $user, $title = '', $message = '')
   {
@@ -80,94 +80,48 @@ class CatroNotification
     $this->message = $message;
   }
 
-  /**
-   * Get notification id.
-   *
-   * @return int
-   */
-  public function getId()
+  public function getId(): int
   {
     return $this->id;
   }
 
-  /**
-   * Set id.
-   *
-   * @param int $id
-   */
-  public function setId($id)
+  public function setId(int $id)
   {
     $this->id = $id;
   }
 
-  /**
-   * Set title.
-   *
-   * @param string $title
-   *
-   * @return CatroNotification
-   */
-  public function setTitle($title)
+  public function setTitle(string $title): CatroNotification
   {
     $this->title = $title;
 
     return $this;
   }
 
-  /**
-   * Get title.
-   *
-   * @return string
-   */
-  public function getTitle()
+  public function getTitle(): string
   {
     return $this->title;
   }
 
-  /**
-   * Set seen.
-   *
-   * @param bool $seen
-   *
-   * @return CatroNotification
-   */
-  public function setSeen($seen)
+  public function setSeen(bool $seen): CatroNotification
   {
     $this->seen = $seen;
 
     return $this;
   }
 
-  /**
-   * Get seen.
-   *
-   * @return bool
-   */
-  public function getSeen()
+  public function getSeen(): bool
   {
     return $this->seen;
   }
 
-  /**
-   * Set message.
-   *
-   * @param string $message
-   *
-   * @return CatroNotification
-   */
-  public function setMessage($message)
+  public function setMessage(string $message): CatroNotification
   {
     $this->message = $message;
 
     return $this;
   }
 
-  /**
-   * Get message.
-   *
-   * @return string
-   */
-  public function getMessage()
+  public function getMessage(): string
   {
     return $this->message;
   }
@@ -176,10 +130,8 @@ class CatroNotification
    * Sets he user to which this CatroNotification will be shown.
    *
    * @param User $user the user to which this CatroNotification will be shown
-   *
-   * @return CatroNotification
    */
-  public function setUser(User $user)
+  public function setUser(User $user): CatroNotification
   {
     $this->user = $user;
 
@@ -188,10 +140,8 @@ class CatroNotification
 
   /**
    * Returns the user to which this CatroNotification will be shown.
-   *
-   * @return User
    */
-  public function getUser()
+  public function getUser(): User
   {
     return $this->user;
   }

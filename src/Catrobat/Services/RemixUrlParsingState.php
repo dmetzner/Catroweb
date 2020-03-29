@@ -2,9 +2,6 @@
 
 namespace App\Catrobat\Services;
 
-/**
- * Class RemixUrlParsingState.
- */
 class RemixUrlParsingState
 {
   const STARTING = 0;

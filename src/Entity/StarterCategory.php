@@ -37,10 +37,7 @@ class StarterCategory
    */
   private $programs;
 
-  /**
-   * @return string
-   */
-  public function __toString()
+  public function __toString(): string
   {
     return (string) $this->alias;
   }

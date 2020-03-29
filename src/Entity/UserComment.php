@@ -86,10 +86,7 @@ class UserComment
    */
   private $program;
 
-  /**
-   * @return string
-   */
-  public function __toString()
+  public function __toString(): string
   {
     return $this->text;
   }
@@ -99,7 +96,7 @@ class UserComment
    *
    * @return Program the Program which this UserComment comments
    */
-  public function getProgram()
+  public function getProgram(): Program
   {
     return $this->program;
   }
@@ -109,7 +106,7 @@ class UserComment
    *
    * @param Program $program the Program which this UserComment comments
    */
-  public function setProgram($program)
+  public function setProgram(Program $program)
   {
     $this->program = $program;
   }
@@ -132,10 +129,8 @@ class UserComment
 
   /**
    * Returns the User who wrote this UserComment.
-   *
-   * @return User
    */
-  public function getUser()
+  public function getUser(): User
   {
     return $this->user;
   }
@@ -145,7 +140,7 @@ class UserComment
    *
    * @param User $user the User who wrote this UserComment
    */
-  public function setUser($user)
+  public function setUser(User $user)
   {
     $this->user = $user;
   }
@@ -219,7 +214,7 @@ class UserComment
    *
    * @return CommentNotification the CommentNotification triggered by creating this UserComment
    */
-  public function getNotification()
+  public function getNotification(): CommentNotification
   {
     return $this->notification;
   }
@@ -229,7 +224,7 @@ class UserComment
    *
    * @param CommentNotification $notification the CommentNotification triggered by creating this UserComment
    */
-  public function setNotification($notification)
+  public function setNotification(CommentNotification $notification)
   {
     $this->notification = $notification;
   }

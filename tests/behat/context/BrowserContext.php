@@ -113,9 +113,9 @@ class BrowserContext extends MinkContext implements KernelAwareContext
   /**
    * @Then /^the element "([^"]*)" should have attribute "([^"]*)" with value "([^"]*)"$/
    *
-   * @param $locator
-   * @param $attribute
-   * @param $value
+   * @param mixed $locator
+   * @param mixed $attribute
+   * @param mixed $value
    */
   public function theElementShouldHaveAttributeWith($locator, $attribute, $value)
   {
@@ -130,7 +130,7 @@ class BrowserContext extends MinkContext implements KernelAwareContext
   /**
    * @Then /^at least one "([^"]*)" element should be visible$/
    *
-   * @param $locator
+   * @param mixed $locator
    */
   public function atLeastOneElementShouldBeVisible($locator)
   {
@@ -149,7 +149,7 @@ class BrowserContext extends MinkContext implements KernelAwareContext
   /**
    * @Then /^no "([^"]*)" element should be visible$/
    *
-   * @param $locator
+   * @param mixed $locator
    */
   public function atLeastOneElementShouldNotBeVisible($locator)
   {
@@ -164,8 +164,8 @@ class BrowserContext extends MinkContext implements KernelAwareContext
   /**
    * @Then /^the element "([^"]*)" should have type "([^"]*)"$/
    *
-   * @param $locator
-   * @param $expected_type
+   * @param mixed $locator
+   * @param mixed $expected_type
    */
   public function theElementShouldHaveType($locator, $expected_type)
   {
@@ -177,8 +177,8 @@ class BrowserContext extends MinkContext implements KernelAwareContext
   /**
    * @Then /^the element "([^"]*)" should not have type "([^"]*)"$/
    *
-   * @param $element
-   * @param $expected_type
+   * @param mixed $element
+   * @param mixed $expected_type
    */
   public function theElementShouldNotHaveType($element, $expected_type)
   {
@@ -190,7 +190,7 @@ class BrowserContext extends MinkContext implements KernelAwareContext
   /**
    * @Given /^the element "([^"]*)" should be visible$/
    *
-   * @param $element
+   * @param mixed $element
    */
   public function theElementShouldBeVisible($element)
   {
@@ -206,7 +206,7 @@ class BrowserContext extends MinkContext implements KernelAwareContext
   /**
    * @When /^I click "([^"]*)"$/
    *
-   * @param $arg1
+   * @param mixed $arg1
    *
    * @throws ElementNotFoundException
    */
@@ -256,7 +256,7 @@ class BrowserContext extends MinkContext implements KernelAwareContext
    *
    * @When /^I wait (\d+) milliseconds$/
    *
-   * @param $milliseconds
+   * @param mixed $milliseconds
    */
   public function iWaitMilliseconds($milliseconds)
   {
@@ -289,7 +289,7 @@ class BrowserContext extends MinkContext implements KernelAwareContext
   /**
    * @Then I wait for the element :selector to be visible
    *
-   * @param $locator
+   * @param mixed $locator
    *
    * @throws ResponseTextException
    */
@@ -314,8 +314,8 @@ class BrowserContext extends MinkContext implements KernelAwareContext
   /**
    * @Then I wait for the element :selector to contain :text
    *
-   * @param $locator
-   * @param $text
+   * @param mixed $locator
+   * @param mixed $text
    *
    * @throws ResponseTextException
    */

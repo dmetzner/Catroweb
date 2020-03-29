@@ -2,24 +2,18 @@
 
 namespace App\Catrobat\CatrobatCode\Statements;
 
-/**
- * Class BroadcastScriptStatement.
- */
 class BroadcastScriptStatement extends Statement
 {
   const BEGIN_STRING = 'when receive message ';
 
-  /**
-   * @var
-   */
   private $message;
 
   /**
    * BroadcastScriptStatement constructor.
    *
-   * @param $statementFactory
-   * @param $xmlTree
-   * @param $spaces
+   * @param mixed $statementFactory
+   * @param mixed $xmlTree
+   * @param mixed $spaces
    */
   public function __construct($statementFactory, $xmlTree, $spaces)
   {
@@ -28,10 +22,7 @@ class BroadcastScriptStatement extends Statement
       '');
   }
 
-  /**
-   * @return string
-   */
-  public function execute()
+  public function execute(): string
   {
     $children = $this->executeChildren();
     $code = parent::addSpaces().self::BEGIN_STRING;
@@ -44,10 +35,7 @@ class BroadcastScriptStatement extends Statement
     return $code;
   }
 
-  /**
-   * @return string
-   */
-  public function executeChildren()
+  public function executeChildren(): string
   {
     $code = '';
     foreach ($this->statements as $value)

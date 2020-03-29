@@ -7,9 +7,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * Class UploadExceptionListener.
- */
 class UploadExceptionListener
 {
   /**
@@ -17,9 +14,6 @@ class UploadExceptionListener
    */
   private $translator;
 
-  /**
-   * UploadExceptionListener constructor.
-   */
   public function __construct(TranslatorInterface $translator)
   {
     $this->translator = $translator;

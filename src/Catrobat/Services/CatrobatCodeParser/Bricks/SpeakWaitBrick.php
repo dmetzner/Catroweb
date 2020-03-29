@@ -4,9 +4,6 @@ namespace App\Catrobat\Services\CatrobatCodeParser\Bricks;
 
 use App\Catrobat\Services\CatrobatCodeParser\Constants;
 
-/**
- * Class SpeakWaitBrick.
- */
 class SpeakWaitBrick extends Brick
 {
   protected function create()

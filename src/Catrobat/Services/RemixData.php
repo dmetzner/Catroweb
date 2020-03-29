@@ -2,47 +2,30 @@
 
 namespace App\Catrobat\Services;
 
-/**
- * Class RemixData.
- */
 class RemixData
 {
   const SCRATCH_DOMAIN = 'scratch.mit.edu';
 
-  /**
-   * @var string
-   */
-  private $remix_url;
-  /**
-   * @var mixed
-   */
+  private string $remix_url;
+
   private $remix_url_data;
 
-  /**
-   * @param string $remix_url
-   */
-  public function __construct($remix_url)
+  public function __construct(string $remix_url)
   {
     $this->remix_url = $remix_url;
     $this->remix_url_data = parse_url($this->remix_url);
   }
 
-  /**
-   * @return string
-   */
-  public function getUrl()
+  public function getUrl(): string
   {
     return $this->remix_url;
   }
 
-  /**
-   * @return string
-   */
-  public function getProgramId()
+  public function getProgramId(): string
   {
     if (!array_key_exists('path', $this->remix_url_data))
     {
-      return 0;
+      return '';
     }
 
     $remix_url_path = $this->remix_url_data['path'];
@@ -65,10 +48,7 @@ class RemixData
     return '';
   }
 
-  /**
-   * @return bool
-   */
-  public function isScratchProgram()
+  public function isScratchProgram(): bool
   {
     if (!array_key_exists('host', $this->remix_url_data))
     {
@@ -78,10 +58,7 @@ class RemixData
     return false !== strpos($this->remix_url_data['host'], self::SCRATCH_DOMAIN);
   }
 
-  /**
-   * @return bool
-   */
-  public function isAbsoluteUrl()
+  public function isAbsoluteUrl(): bool
   {
     return array_key_exists('host', $this->remix_url_data)
       && in_array($this->remix_url_data['scheme'], ['http', 'https'], true);
