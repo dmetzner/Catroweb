@@ -489,7 +489,7 @@ class RemixManager
     }
 
     $old_backward_ancestor_relations = $program->getCatrobatRemixBackwardParentRelations()->getValues();
-    $old_backward_parent_relations = array_filter($old_backward_ancestor_relations, function (ProgramRemixRelation $relation)
+    $old_backward_parent_relations = array_filter($old_backward_ancestor_relations, function (ProgramRemixBackwardRelation $relation)
     {
       return 1 === $relation->getDepth();
     });

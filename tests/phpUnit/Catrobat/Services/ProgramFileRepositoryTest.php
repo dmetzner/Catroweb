@@ -19,9 +19,6 @@ use Tests\phpUnit\Hook\ClearCacheHook;
  */
 class ProgramFileRepositoryTest extends TestCase
 {
-  /**
-   * @var string
-   */
   private string $storage_dir;
 
   private Filesystem $filesystem;

@@ -47,7 +47,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @param mixed $id
    */
-  public function theNextUuidValueWillBe($id)
+  public function theNextUuidValueWillBe($id): void
   {
     MyUuidGenerator::setNextValue($id);
   }
@@ -59,7 +59,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Given /^there are users:$/
    */
-  public function thereAreUsers(TableNode $table)
+  public function thereAreUsers(TableNode $table): void
   {
     foreach ($table->getHash() as $config)
     {
@@ -71,7 +71,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Given /^there are admins:$/
    */
-  public function thereAreAdmins(TableNode $table)
+  public function thereAreAdmins(TableNode $table): void
   {
     foreach ($table->getHash() as $user_config)
     {
@@ -87,10 +87,10 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @param mixed $user_count
    */
-  public function thereAreManyUsers($user_count)
+  public function thereAreManyUsers($user_count): void
   {
     $list = ['name'];
-    $base = pow(10, strlen(strval(intval($user_count) - 1)));
+    $base = 10 ** strlen(strval((int) $user_count - 1));
     for ($i = 0; $i < $user_count; ++$i)
     {
       $list[] = 'User'.($base + $i);
@@ -102,7 +102,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Then /^the following users exist in the database:$/
    */
-  public function theFollowingUsersExistInTheDatabase(TableNode $table)
+  public function theFollowingUsersExistInTheDatabase(TableNode $table): void
   {
     foreach ($table->getHash() as $config)
     {
@@ -115,7 +115,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @param mixed $arg1
    */
-  public function theUserShouldNotExist($arg1)
+  public function theUserShouldNotExist($arg1): void
   {
     $user = $this->getUserManager()->findUserByUsername($arg1);
     Assert::assertNull($user);
@@ -127,7 +127,7 @@ class DataFixturesContext implements KernelAwareContext
    * @param mixed $arg2
    * @param mixed $arg1
    */
-  public function theUserWithUsernameAndEmailShouldExistAndBeEnabled($arg1, $arg2)
+  public function theUserWithUsernameAndEmailShouldExistAndBeEnabled($arg1, $arg2): void
   {
     $em = $this->getManager();
     $user = $em->getRepository(User::class)->findOneBy([
@@ -144,7 +144,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @param mixed $number_of_users
    */
-  public function thereAreNUsersThatFollow($number_of_users, TableNode $table)
+  public function thereAreNUsersThatFollow($number_of_users, TableNode $table): void
   {
     $user = $table->getHash()[0];
     $followedUser = $this->insertUser($user, false);
@@ -165,7 +165,7 @@ class DataFixturesContext implements KernelAwareContext
    * @param mixed $user_id
    * @param mixed $follow_ids
    */
-  public function userIsFollowed($user_id, $follow_ids)
+  public function userIsFollowed($user_id, $follow_ids): void
   {
     /** @var User|null $user */
     $user = $this->getUserManager()->find($user_id);
@@ -190,7 +190,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @throws Exception
    */
-  public function thereArePrograms(TableNode $table)
+  public function thereArePrograms(TableNode $table): void
   {
     foreach ($table->getHash() as $config)
     {
@@ -205,7 +205,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @throws Exception
    */
-  public function thereAreDownloadablePrograms(TableNode $table)
+  public function thereAreDownloadablePrograms(TableNode $table): void
   {
     $file_repo = $this->getFileRepository();
     foreach ($table->getHash() as $config)
@@ -222,7 +222,7 @@ class DataFixturesContext implements KernelAwareContext
    * @Given /^following programs are featured:$/
    * @Given /^following projects are featured:$/
    */
-  public function thereAreFeaturedPrograms(TableNode $table)
+  public function thereAreFeaturedPrograms(TableNode $table): void
   {
     foreach ($table->getHash() as $config)
     {
@@ -237,7 +237,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @throws Exception
    */
-  public function thereAreStarterPrograms(TableNode $table)
+  public function thereAreStarterPrograms(TableNode $table): void
   {
     $em = $this->getManager();
 
@@ -262,7 +262,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @throws Exception
    */
-  public function thereAreProgramsWithALargeDescription(TableNode $table)
+  public function thereAreProgramsWithALargeDescription(TableNode $table): void
   {
     foreach ($table->getHash() as $config)
     {
@@ -280,7 +280,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @throws Exception
    */
-  public function iHaveAProgramWithId($name, $id)
+  public function iHaveAProgramWithId($name, $id): void
   {
     $config = [
       'id' => $id,
@@ -297,7 +297,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @param mixed $program_name
    */
-  public function programIsNotVisible($program_name)
+  public function programIsNotVisible($program_name): void
   {
     $program = $this->getProgramManager()->findOneByName($program_name);
     Assert::assertNotNull($program, 'There is no program named '.$program_name);
@@ -311,7 +311,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @param mixed $number_of_projects
    */
-  public function thereShouldBeProgramsInTheDatabase($number_of_projects)
+  public function thereShouldBeProgramsInTheDatabase($number_of_projects): void
   {
     $programs = $this->getProgramManager()->findAll();
     Assert::assertCount($number_of_projects, $programs);
@@ -320,7 +320,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Then /^the program should not be tagged$/
    */
-  public function theProgramShouldNotBeTagged()
+  public function theProgramShouldNotBeTagged(): void
   {
     $program_tags = $this->getProgramManager()->findAll()[0]->getTags();
     Assert::assertEmpty($program_tags, 'The program is tagged but should not be tagged');
@@ -331,11 +331,11 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @param mixed $arg1
    */
-  public function theProgramShouldBeTaggedWithInTheDatabase($arg1)
+  public function theProgramShouldBeTaggedWithInTheDatabase($arg1): void
   {
     $program_tags = $this->getProgramManager()->findAll()[0]->getTags();
     $tags = explode(',', $arg1);
-    Assert::assertEquals(count($program_tags), count($tags), 'Too much or too less tags found!');
+    Assert::assertEquals(is_countable($program_tags) ? count($program_tags) : 0, count($tags), 'Too much or too less tags found!');
 
     foreach ($program_tags as $program_tag)
     {
@@ -350,7 +350,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Then the project should have no extension
    */
-  public function theProjectShouldHaveNoExtension()
+  public function theProjectShouldHaveNoExtension(): void
   {
     /** @var Program $program */
     $program = $this->getProgramManager()->findAll()[0];
@@ -362,7 +362,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @param mixed $extension
    */
-  public function theEmbroideryProgramShouldHaveTheExtension($extension)
+  public function theEmbroideryProgramShouldHaveTheExtension($extension): void
   {
     $program_extensions = $this->getProgramManager()->findOneByName('ZigZag Stich')->getExtensions();
 
@@ -378,7 +378,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Then /^the program should be marked with extensions in the database$/
    */
-  public function theProgramShouldBeMarkedWithExtensionsInTheDatabase()
+  public function theProgramShouldBeMarkedWithExtensionsInTheDatabase(): void
   {
     $program_extensions = $this->getProgramManager()->findOneByName('extensions')->getExtensions();
 
@@ -399,7 +399,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @param mixed $id
    */
-  public function theProgramWithIdShouldBeMarkedWithNoExtensionsInTheDatabase($id)
+  public function theProgramWithIdShouldBeMarkedWithNoExtensionsInTheDatabase($id): void
   {
     $program_extensions = $this->getProgramManager()->find($id)->getExtensions();
 
@@ -418,7 +418,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Then /^the program should be flagged as phiro$/
    */
-  public function theProgramShouldBeFlaggedAsPhiroPro()
+  public function theProgramShouldBeFlaggedAsPhiroPro(): void
   {
     $program_manager = $this->getProgramManager();
     $program = $program_manager->find('1');
@@ -429,7 +429,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Then /^the program should not be flagged as phiro$/
    */
-  public function theProgramShouldNotBeFlaggedAsPhiroPro()
+  public function theProgramShouldNotBeFlaggedAsPhiroPro(): void
   {
     $program_manager = $this->getProgramManager();
     $program = $program_manager->find('1');
@@ -445,7 +445,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @throws Exception
    */
-  public function iHaveAProgramWithIdAndAVibratorBrick($name, $id)
+  public function iHaveAProgramWithIdAndAVibratorBrick($name, $id): void
   {
     MyUuidGenerator::setNextValue($id);
     $config = [
@@ -467,7 +467,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @throws Exception
    */
-  public function thereAreComments(TableNode $table)
+  public function thereAreComments(TableNode $table): void
   {
     foreach ($table->getHash() as $config)
     {
@@ -485,7 +485,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @throws Exception
    */
-  public function thereAreInappropriateReports(TableNode $table)
+  public function thereAreInappropriateReports(TableNode $table): void
   {
     foreach ($table->getHash() as $config)
     {
@@ -501,7 +501,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Given /^there are notifications:$/
    */
-  public function thereAreNotifications(TableNode $table)
+  public function thereAreNotifications(TableNode $table): void
   {
     foreach ($table->getHash() as $config)
     {
@@ -516,7 +516,7 @@ class DataFixturesContext implements KernelAwareContext
    * @param mixed $user
    * @param mixed $user_to_follow
    */
-  public function thereAreFollowNotifications($user, $user_to_follow)
+  public function thereAreFollowNotifications($user, $user_to_follow): void
   {
     /** @var User $user_to_follow */
     $user_to_follow = $this->getUserManager()->findUserByUsername($user_to_follow);
@@ -539,7 +539,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Given /^there are media packages:$/
    */
-  public function thereAreMediaPackages(TableNode $table)
+  public function thereAreMediaPackages(TableNode $table): void
   {
     $em = $this->getManager();
     $packages = $table->getHash();
@@ -556,7 +556,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Given /^there are media package categories:$/
    */
-  public function thereAreMediaPackageCategories(TableNode $table)
+  public function thereAreMediaPackageCategories(TableNode $table): void
   {
     $em = $this->getManager();
     $categories = $table->getHash();
@@ -584,7 +584,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @throws ImagickException
    */
-  public function thereAreMediaPackageFiles(TableNode $table)
+  public function thereAreMediaPackageFiles(TableNode $table): void
   {
     $em = $this->getManager();
     $file_repo = $this->getMediaPackageFileRepository();
@@ -628,7 +628,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @throws Exception
    */
-  public function thereAreProgramDownloadStatistics(TableNode $table)
+  public function thereAreProgramDownloadStatistics(TableNode $table): void
   {
     foreach ($table->getHash() as $config)
     {
@@ -640,7 +640,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Then /^There should be no recommended click statistic database entry$/
    */
-  public function thereShouldBeNoRecommendedClickStatisticDatabaseEntry()
+  public function thereShouldBeNoRecommendedClickStatisticDatabaseEntry(): void
   {
     $clicks = $this->getManager()->getRepository(ClickStatistic::class)->findAll();
     Assert::assertEquals(0, count($clicks), 'Unexpected database entry found!');
@@ -649,7 +649,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Then /^There should be no homepage click statistic database entry$/
    */
-  public function thereShouldBeNoHomepageClickStatisticDatabaseEntry()
+  public function thereShouldBeNoHomepageClickStatisticDatabaseEntry(): void
   {
     $clicks = $this->getManager()->getRepository(HomepageClickStatistic::class)->findAll();
     Assert::assertEquals(0, count($clicks), 'Unexpected database entry found!');
@@ -661,7 +661,7 @@ class DataFixturesContext implements KernelAwareContext
    * @param mixed $type_name
    * @param mixed $id
    */
-  public function thereShouldBeOneHomepageClickDatabaseEntryWithTypeIsAndIs($type_name, $id)
+  public function thereShouldBeOneHomepageClickDatabaseEntryWithTypeIsAndIs($type_name, $id): void
   {
     $clicks = $this->getManager()->getRepository(HomepageClickStatistic::class)->findAll();
     Assert::assertEquals(1, count($clicks), 'No database entry found!');
@@ -676,67 +676,61 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @throws Exception
    */
-  public function theProgramShouldHaveADownloadTimestampAndTheFollowingStatistics(TableNode $table)
+  public function theProgramShouldHaveADownloadTimestampAndTheFollowingStatistics(TableNode $table): void
   {
     $statistics = $table->getHash();
-    for ($i = 0; $i < count($statistics); ++$i)
+    foreach ($statistics as $statistic)
     {
-      $ip = $statistics[$i]['ip'];
-      $country_code = $statistics[$i]['country_code'];
+      $ip = $statistic['ip'];
+      $country_code = $statistic['country_code'];
       if ('NULL' === $country_code)
       {
         $country_code = null;
       }
-      $country_name = $statistics[$i]['country_name'];
+      $country_name = $statistic['country_name'];
       if ('NULL' === $country_name)
       {
         $country_name = null;
       }
-      $program_id = $statistics[$i]['program_id'];
-
+      $program_id = $statistic['program_id'];
       $repository = $this->getManager()->getRepository(ProgramDownloads::class);
       $program_download_statistics = $repository->find(1);
-
       Assert::assertEquals($ip, $program_download_statistics->getIp(), 'Wrong IP in download statistics');
       Assert::assertEquals(
-        $country_code, $program_download_statistics->getCountryCode(),
-        'Wrong country code in download statistics'
-      );
+          $country_code, $program_download_statistics->getCountryCode(),
+          'Wrong country code in download statistics'
+        );
       Assert::assertEquals(
-        $country_name, strtoupper($program_download_statistics->getCountryName()),
-        'Wrong country name in download statistics'
-      );
+          $country_name, strtoupper($program_download_statistics->getCountryName()),
+          'Wrong country name in download statistics'
+        );
       /** @var Program $project */
       $project = $program_download_statistics->getProgram();
       Assert::assertEquals(
-        $program_id, $project->getId(),
-        'Wrong program ID in download statistics'
-      );
+          $program_id, $project->getId(),
+          'Wrong program ID in download statistics'
+        );
       Assert::assertNull($program_download_statistics->getUser(), 'Wrong username in download statistics');
       Assert::assertNotEmpty(
-        $program_download_statistics->getUserAgent(),
-        'No user agent was written to download statistics'
-      );
-
+          $program_download_statistics->getUserAgent(),
+          'No user agent was written to download statistics'
+        );
       $limit = 5.0;
-
       /** @var DateTime $download_time */
       $download_time = $program_download_statistics->getDownloadedAt();
       $current_time = TimeUtils::getDateTime();
-
       $time_delta = $current_time->getTimestamp() - $download_time->getTimestamp();
-
       Assert::assertTrue(
-        $time_delta < $limit,
-        'Download time difference in download statistics too high'
-      );
+          $time_delta < $limit,
+          'Download time difference in download statistics too high'
+        );
     }
   }
 
   /**
    * @Given /^there are like similar users:$/
    */
-  public function thereAreLikeSimilarUsers(TableNode $table)
+  public function thereAreLikeSimilarUsers(TableNode $table): void
   {
     foreach ($table->getHash() as $config)
     {
@@ -748,7 +742,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Given /^there are remix similar users:$/
    */
-  public function thereAreRemixSimilarUsers(TableNode $table)
+  public function thereAreRemixSimilarUsers(TableNode $table): void
   {
     foreach ($table->getHash() as $config)
     {
@@ -762,7 +756,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @throws Exception
    */
-  public function thereAreLikes(TableNode $table)
+  public function thereAreLikes(TableNode $table): void
   {
     foreach ($table->getHash() as $config)
     {
@@ -774,7 +768,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Given /^there are tags:$/
    */
-  public function thereAreTags(TableNode $table)
+  public function thereAreTags(TableNode $table): void
   {
     foreach ($table->getHash() as $config)
     {
@@ -786,7 +780,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Given /^there are extensions:$/
    */
-  public function thereAreExtensions(TableNode $table)
+  public function thereAreExtensions(TableNode $table): void
   {
     foreach ($table->getHash() as $config)
     {
@@ -798,7 +792,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Given /^there are forward remix relations:$/
    */
-  public function thereAreForwardRemixRelations(TableNode $table)
+  public function thereAreForwardRemixRelations(TableNode $table): void
   {
     foreach ($table->getHash() as $config)
     {
@@ -810,7 +804,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Given /^there are backward remix relations:$/
    */
-  public function thereAreBackwardRemixRelations(TableNode $table)
+  public function thereAreBackwardRemixRelations(TableNode $table): void
   {
     foreach ($table->getHash() as $config)
     {
@@ -822,7 +816,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Given /^there are Scratch remix relations:$/
    */
-  public function thereAreScratchRemixRelations(TableNode $table)
+  public function thereAreScratchRemixRelations(TableNode $table): void
   {
     foreach ($table->getHash() as $config)
     {
@@ -836,7 +830,7 @@ class DataFixturesContext implements KernelAwareContext
    *
    * @throws Exception
    */
-  public function thereAreProjectReactions(TableNode $table)
+  public function thereAreProjectReactions(TableNode $table): void
   {
     $em = $this->getManager();
 
@@ -858,7 +852,7 @@ class DataFixturesContext implements KernelAwareContext
       $type = $data['type'];
       if (ctype_digit($type))
       {
-        $type = intval($type);
+        $type = (int) $type;
       }
       else
       {
@@ -888,7 +882,7 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Given /^there are catro notifications:$/
    */
-  public function thereAreCatroNotifications(TableNode $table)
+  public function thereAreCatroNotifications(TableNode $table): void
   {
     $em = $this->getManager();
     $notifications = $table->getHash();
@@ -961,7 +955,7 @@ class DataFixturesContext implements KernelAwareContext
    * @param mixed $arg1
    * @param mixed $username
    */
-  public function thereAreNotificationsFor($arg1, $username)
+  public function thereAreNotificationsFor($arg1, $username): void
   {
     $em = $this->getManager();
 
@@ -986,7 +980,7 @@ class DataFixturesContext implements KernelAwareContext
    * @param mixed $program_name
    * @param mixed $user
    */
-  public function thereAreSpecificNotificationsFor($amount, $type, $program_name, $user)
+  public function thereAreSpecificNotificationsFor($amount, $type, $program_name, $user): void
   {
     $em = $this->getManager();
 
@@ -1036,18 +1030,16 @@ class DataFixturesContext implements KernelAwareContext
   /**
    * @Given /^I define the following rude words:$/
    */
-  public function iDefineTheFollowingRudeWords(TableNode $table)
+  public function iDefineTheFollowingRudeWords(TableNode $table): void
   {
     $words = $table->getHash();
-
-    $word = null;
     $em = $this->getManager();
 
-    for ($i = 0; $i < count($words); ++$i)
+    foreach ($words as $word)
     {
-      $word = new RudeWord();
-      $word->setWord($words[$i]['word']);
-      $em->persist($word);
+      $rude_word = new RudeWord();
+      $rude_word->setWord($word['word']);
+      $em->persist($rude_word);
     }
     $em->flush();
   }

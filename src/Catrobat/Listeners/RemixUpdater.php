@@ -10,6 +10,7 @@ use App\Entity\Program;
 use App\Entity\RemixManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Exception;
 use Symfony\Component\Routing\RouterInterface;
 
 class RemixUpdater
@@ -46,6 +47,7 @@ class RemixUpdater
   /**
    * @throws ORMException
    * @throws OptimisticLockException
+   * @throws Exception
    */
   public function update(ExtractedCatrobatFile $file, Program $program): void
   {

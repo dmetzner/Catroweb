@@ -61,7 +61,7 @@ class MediaPackage
     return $this->id;
   }
 
-  public function setId(int $id)
+  public function setId(int $id): void
   {
     $this->id = $id;
   }
@@ -71,7 +71,7 @@ class MediaPackage
     return $this->name;
   }
 
-  public function setName(string $name)
+  public function setName(string $name): void
   {
     $this->name = $name;
   }
@@ -81,7 +81,7 @@ class MediaPackage
     return $this->nameUrl;
   }
 
-  public function setNameUrl(string $name_url)
+  public function setNameUrl(string $name_url): void
   {
     $this->nameUrl = $name_url;
   }
@@ -91,7 +91,7 @@ class MediaPackage
     return $this->categories;
   }
 
-  public function setCategories(Collection $categories)
+  public function setCategories(Collection $categories): void
   {
     $this->categories = $categories;
   }

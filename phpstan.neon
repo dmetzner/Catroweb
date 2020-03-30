@@ -14,3 +14,6 @@ parameters:
 
       # Even if it not is best practice, it works.
       - '#Call to static method PHPUnit\\Framework\\Assert::assertTrue\(\) with false .*?#'
+
+  # Would be nice, but not worth the amount of work needed to fix this
+  checkMissingIterableValueType: false

@@ -50,10 +50,19 @@ class ApiContext implements KernelAwareContext
 
   private string $url;
 
+  /**
+   * @var mixed[]|string[]|bool[]
+   */
   private array $request_parameters;
 
+  /**
+   * @var mixed[]|UploadedFile[]
+   */
   private array $request_files;
 
+  /**
+   * @var mixed[]|string[]|bool[]
+   */
   private array $request_server;
 
   private ?string $request_content;
@@ -63,11 +72,11 @@ class ApiContext implements KernelAwareContext
    */
   private $last_response;
 
-  private array $stored_json;
-
   /**
-   * @var KernelBrowser|null
+   * @var string[]
    */
+  private array $stored_json = [];
+
   private ?KernelBrowser $kernel_browser = null;
 
   // to df ->function
@@ -96,7 +105,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @BeforeScenario
    */
-  public function followRedirects()
+  public function followRedirects(): void
   {
     $this->getKernelBrowser()->followRedirects(true);
   }
@@ -104,7 +113,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @BeforeScenario
    */
-  public function generateSessionCookie()
+  public function generateSessionCookie(): void
   {
     $client = $this->getKernelBrowser();
 
@@ -120,7 +129,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @BeforeScenario
    */
-  public function clearRequest()
+  public function clearRequest(): void
   {
     $this->method = 'GET';
     $this->url = '/';
@@ -133,7 +142,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I activate the Profiler$/
    */
-  public function iActivateTheProfiler()
+  public function iActivateTheProfiler(): void
   {
     $this->getKernelBrowser()->enableProfiler();
   }
@@ -145,7 +154,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $method
    * @param mixed $uri
    */
-  public function iRequest($method, $uri)
+  public function iRequest($method, $uri): void
   {
     $this->getKernelBrowser()->request(
       $method, $uri, $this->request_parameters, $this->request_files, $this->request_server, $this->request_content
@@ -158,7 +167,7 @@ class ApiContext implements KernelAwareContext
    * @When /^the Request is invoked$/
    * @When /^I invoke the Request$/
    */
-  public function iInvokeTheRequest()
+  public function iInvokeTheRequest(): void
   {
     $this->iRequest($this->method, $this->url);
   }
@@ -175,7 +184,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $url
    */
-  public function iGetFrom($url)
+  public function iGetFrom($url): void
   {
     $this->iRequest('GET', $url);
   }
@@ -185,7 +194,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $url
    */
-  public function iPostTo($url)
+  public function iPostTo($url): void
   {
     $this->iRequest('POST', $url);
   }
@@ -195,7 +204,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $arg1
    */
-  public function iSearchFor($arg1)
+  public function iSearchFor($arg1): void
   {
     $this->iHaveAParameterWithValue('q', $arg1);
     $this->iGetFrom('/app/api/projects/search.json');
@@ -206,7 +215,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $id
    */
-  public function iSearchSimilarProgramsForProgramId($id)
+  public function iSearchSimilarProgramsForProgramId($id): void
   {
     $this->iHaveAParameterWithValue('program_id', $id);
     if (!isset($this->request_parameters['limit']))
@@ -227,7 +236,7 @@ class ApiContext implements KernelAwareContext
    *
    * @throws Exception
    */
-  public function iWantToDownloadTheApkFileOf($arg1)
+  public function iWantToDownloadTheApkFileOf($arg1): void
   {
     $program_manager = $this->getProgramManager();
 
@@ -246,7 +255,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $url
    */
-  public function iGetTheUserSProgramsWith($url)
+  public function iGetTheUserSProgramsWith($url): void
   {
     /** @var User|null $user */
     $user = $this->getUserManager()->findAll()[0];
@@ -258,7 +267,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I upload a valid program$/
    */
-  public function iUploadAValidProgram()
+  public function iUploadAValidProgram(): void
   {
     $this->iHaveAParameterWithValue('username', 'Catrobat');
     $this->iHaveAParameterWithValue('token', 'cccccccccc');
@@ -273,7 +282,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $username
    */
-  public function iAm($username)
+  public function iAm($username): void
   {
     $this->username = $username;
   }
@@ -281,7 +290,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I upload a catrobat program with the same name$/
    */
-  public function iUploadACatrobatProgramWithTheSameName()
+  public function iUploadACatrobatProgramWithTheSameName(): void
   {
     /** @var User|null $user */
     $user = $this->getUserManager()->findUserByUsername($this->username);
@@ -294,7 +303,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I upload a catrobat program$/
    */
-  public function iUploadACatrobatProgram()
+  public function iUploadACatrobatProgram(): void
   {
     $this->iHaveAValidCatrobatFile();
     $this->iHaveAParameterWithTheMdChecksumOf('fileChecksum');
@@ -308,7 +317,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $arg1
    */
-  public function iUploadAnotherProgramUsingToken($arg1)
+  public function iUploadAnotherProgramUsingToken($arg1): void
   {
     $this->iHaveAValidCatrobatFile();
     $this->iHaveAParameterWithTheMdChecksumOf('fileChecksum');
@@ -320,7 +329,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^jenkins uploads the apk file to the given upload url$/
    */
-  public function jenkinsUploadsTheApkFileToTheGivenUploadUrl()
+  public function jenkinsUploadsTheApkFileToTheGivenUploadUrl(): void
   {
     $filepath = $this->FIXTURES_DIR.'test.catrobat';
     Assert::assertTrue(file_exists($filepath), 'File not found');
@@ -340,7 +349,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $category
    * @param mixed $note
    */
-  public function iReportProgramWithNote($program_id, $category, $note)
+  public function iReportProgramWithNote($program_id, $category, $note): void
   {
     $url = '/app/api/reportProject/reportProject.json';
     $this->request_parameters = [
@@ -357,7 +366,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $uname
    * @param mixed $pwd
    */
-  public function iPostLoginUserWithPassword($uname, $pwd)
+  public function iPostLoginUserWithPassword($uname, $pwd): void
   {
     $csrfToken = $this->getSymfonyService('security.csrf.token_manager')
       ->getToken('authenticate')->getValue();
@@ -386,7 +395,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $missing_parameter
    */
-  public function iTryToRegisterWithout($missing_parameter)
+  public function iTryToRegisterWithout($missing_parameter): void
   {
     $this->prepareValidRegistrationParameters();
     switch ($missing_parameter)
@@ -406,7 +415,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I try to register$/
    */
-  public function iTryToRegister()
+  public function iTryToRegister(): void
   {
     $this->iPostTo('/app/api/loginOrRegister/loginOrRegister.json');
   }
@@ -414,7 +423,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I register a new user$/
    */
-  public function iRegisterANewUser()
+  public function iRegisterANewUser(): void
   {
     $this->prepareValidRegistrationParameters();
     $this->iPostTo('/app/api/loginOrRegister/loginOrRegister.json');
@@ -423,7 +432,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I try to register another user with the same email adress$/
    */
-  public function iTryToRegisterAnotherUserWithTheSameEmailAdress()
+  public function iTryToRegisterAnotherUserWithTheSameEmailAdress(): void
   {
     $this->prepareValidRegistrationParameters();
     $this->request_parameters['registrationUsername'] = 'AnotherUser';
@@ -433,7 +442,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I report the program$/
    */
-  public function iReportTheProgram()
+  public function iReportTheProgram(): void
   {
     $this->iHaveAParameterWithValue('note', 'Bad Project');
     $this->iPostTo('/app/api/reportProject/reportProject.json');
@@ -444,7 +453,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $extension
    */
-  public function iShouldReceiveAFile($extension)
+  public function iShouldReceiveAFile($extension): void
   {
     $content_type = $this->getKernelBrowser()->getResponse()->headers->get('Content-Type');
     Assert::assertEquals('image/'.$extension, $content_type);
@@ -455,7 +464,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $name
    */
-  public function iShouldReceiveAFileNamed($name)
+  public function iShouldReceiveAFileNamed($name): void
   {
     $content_disposition = $this->getKernelBrowser()->getResponse()->headers->get('Content-Disposition');
     Assert::assertEquals('attachment; filename="'.$name.'"', $content_disposition);
@@ -464,7 +473,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should receive the apk file$/
    */
-  public function iShouldReceiveTheApkFile()
+  public function iShouldReceiveTheApkFile(): void
   {
     $content_type = $this->getKernelBrowser()->getResponse()->headers->get('Content-Type');
     $code = $this->getKernelBrowser()->getResponse()->getStatusCode();
@@ -475,7 +484,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should receive an application file$/
    */
-  public function iShouldReceiveAnApplicationFile()
+  public function iShouldReceiveAnApplicationFile(): void
   {
     $content_type = $this->getKernelBrowser()->getResponse()->headers->get('Content-Type');
     $code = $this->getKernelBrowser()->getResponse()->getStatusCode();
@@ -486,7 +495,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^The upload should be successful$/
    */
-  public function theUploadShouldBeSuccessful()
+  public function theUploadShouldBeSuccessful(): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     $responseArray = json_decode($response->getContent(), true);
@@ -496,7 +505,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the uploaded program should be a remix root$/
    */
-  public function theUploadedProgramShouldBeARemixRoot()
+  public function theUploadedProgramShouldBeARemixRoot(): void
   {
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
     $this->theProgramShouldBeARemixRoot($json['projectId']);
@@ -505,7 +514,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^It should be uploaded$/
    */
-  public function itShouldBeUploaded()
+  public function itShouldBeUploaded(): void
   {
     $json = json_decode($this->getKernelBrowser()
       ->getResponse()
@@ -520,7 +529,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $status_code
    */
-  public function theResponseStatusCodeShouldBe($status_code)
+  public function theResponseStatusCodeShouldBe($status_code): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     Assert::assertEquals(
@@ -535,7 +544,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $name
    * @param mixed $value
    */
-  public function iHaveARequestParameterWithValue($name, $value)
+  public function iHaveARequestParameterWithValue($name, $value): void
   {
     $this->request_parameters[$name] = $value;
   }
@@ -546,7 +555,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $name
    * @param mixed $value
    */
-  public function iHaveARequestHeaderWithValue($name, $value)
+  public function iHaveARequestHeaderWithValue($name, $value): void
   {
     $this->request_server[$name] = $value;
   }
@@ -554,15 +563,15 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given I have the following JSON request body:
    */
-  public function iHaveTheFollowingJsonRequestBody(PyStringNode $content)
+  public function iHaveTheFollowingJsonRequestBody(PyStringNode $content): void
   {
-    $this->request_content = $content;
+    $this->request_content = $content->__toString();
   }
 
   /**
    * @Then /^I should get the json object:$/
    */
-  public function iShouldGetTheJsonObject(PyStringNode $string)
+  public function iShouldGetTheJsonObject(PyStringNode $string): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     $this->assertJsonRegex($string, $response->getContent());
@@ -575,7 +584,7 @@ class ApiContext implements KernelAwareContext
    *
    * @throws JWTEncodeFailureException
    */
-  public function iUseAValidJwtBearerTokenFor($username)
+  public function iUseAValidJwtBearerTokenFor($username): void
   {
     /** @var JWTManager $jwt_manager */
     $jwt_manager = $this->getJwtManager();
@@ -595,7 +604,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given I use an empty JWT Bearer token
    */
-  public function iUseAnEmptyJwtBearerToken()
+  public function iUseAnEmptyJwtBearerToken(): void
   {
     $this->request_server['HTTP_authorization'] = '';
   }
@@ -603,7 +612,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given I use an invalid JWT Bearer token
    */
-  public function iUseAnInvalidJwtBearerToken()
+  public function iUseAnInvalidJwtBearerToken(): void
   {
     $this->request_server['HTTP_authorization'] = 'Bearer invalid-token';
   }
@@ -615,7 +624,7 @@ class ApiContext implements KernelAwareContext
    *
    * @throws JWTEncodeFailureException
    */
-  public function iUseAnExpiredJwtBearerTokenFor($username)
+  public function iUseAnExpiredJwtBearerTokenFor($username): void
   {
     $token = $this->getJwtEncoder()->encode(['username' => $username, 'exp' => 1]);
     sleep(1);
@@ -636,10 +645,8 @@ class ApiContext implements KernelAwareContext
   /**
    * @param mixed $file
    * @param mixed $user
-   *
-   * @return Response
    */
-  public function submit($file, $user, string $desired_id = '')
+  public function submit($file, $user, string $desired_id = ''): Response
   {
     if (null == $user)
     {
@@ -675,7 +682,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $program_attribute
    */
-  public function iUploadAProgramWith($program_attribute)
+  public function iUploadAProgramWith($program_attribute): void
   {
     switch ($program_attribute)
     {
@@ -715,7 +722,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I upload an invalid program file$/
    */
-  public function iUploadAnInvalidProgramFile()
+  public function iUploadAnInvalidProgramFile(): void
   {
     $this->upload($this->FIXTURES_DIR.'/invalid_archive.catrobat', null);
   }
@@ -725,7 +732,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $id
    */
-  public function iUploadThisProject($id)
+  public function iUploadThisProject($id): void
   {
     $this->upload(sys_get_temp_dir().'/program_generated.catrobat', null, $id);
   }
@@ -736,7 +743,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $username
    */
-  public function iUploadAProject($username)
+  public function iUploadAProject($username): void
   {
     /** @var User|null $user */
     $user = $this->getUserManager()->findUserByUsername($username);
@@ -749,7 +756,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $name
    */
-  public function iUploadTheProgramWithAsName($name)
+  public function iUploadTheProgramWithAsName($name): void
   {
     $this->generateProgramFileWith([
       'name' => $name,
@@ -760,7 +767,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the uploaded program should not be a remix root$/
    */
-  public function theUploadedProgramShouldNotBeARemixRoot()
+  public function theUploadedProgramShouldNotBeARemixRoot(): void
   {
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
     $this->theProgramShouldNotBeARemixRoot($json['projectId']);
@@ -769,7 +776,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the uploaded program should have remix migration date NOT NULL$/
    */
-  public function theUploadedProgramShouldHaveMigrationDateNotNull()
+  public function theUploadedProgramShouldHaveMigrationDateNotNull(): void
   {
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
     $program_manager = $this->getProgramManager();
@@ -782,7 +789,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $scratch_parent_id
    */
-  public function theUploadedProgramShouldHaveAScratchParentHavingScratchID($scratch_parent_id)
+  public function theUploadedProgramShouldHaveAScratchParentHavingScratchID($scratch_parent_id): void
   {
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
     $this->theProgramShouldHaveAScratchParentHavingScratchID($json['projectId'], $scratch_parent_id);
@@ -791,7 +798,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^the uploaded program should have no further Scratch parents$/
    */
-  public function theUploadedProgramShouldHaveNoFurtherScratchParents()
+  public function theUploadedProgramShouldHaveNoFurtherScratchParents(): void
   {
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
     $this->theProgramShouldHaveNoFurtherScratchParents($json['projectId']);
@@ -803,7 +810,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $id
    * @param mixed $depth
    */
-  public function theUploadedProgramShouldHaveACatrobatForwardAncestorHavingIdAndDepth($id, $depth)
+  public function theUploadedProgramShouldHaveACatrobatForwardAncestorHavingIdAndDepth($id, $depth): void
   {
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
 
@@ -815,7 +822,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $depth
    */
-  public function theUploadedProgramShouldHaveACatrobatForwardAncestorHavingItsOwnIdAndDepth($depth)
+  public function theUploadedProgramShouldHaveACatrobatForwardAncestorHavingItsOwnIdAndDepth($depth): void
   {
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
 
@@ -827,7 +834,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $id
    */
-  public function theUploadedProgramShouldHaveACatrobatBackwardParentHavingId($id)
+  public function theUploadedProgramShouldHaveACatrobatBackwardParentHavingId($id): void
   {
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
     $this->theProgramShouldHaveACatrobatBackwardParentHavingId($json['projectId'], $id);
@@ -836,7 +843,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the uploaded program should have no Catrobat forward ancestors except self-relation$/
    */
-  public function theUploadedProgramShouldHaveNoCatrobatForwardAncestorsExceptSelfRelation()
+  public function theUploadedProgramShouldHaveNoCatrobatForwardAncestorsExceptSelfRelation(): void
   {
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
     $this->theProgramShouldHaveNoCatrobatForwardAncestorsExceptSelfRelation($json['projectId']);
@@ -845,7 +852,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the uploaded program should have no Catrobat backward parents$/
    */
-  public function theUploadedProgramShouldHaveNoCatrobatBackwardParents()
+  public function theUploadedProgramShouldHaveNoCatrobatBackwardParents(): void
   {
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
     $this->theProgramShouldHaveNoCatrobatBackwardParents($json['projectId']);
@@ -854,7 +861,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the uploaded program should have no further Catrobat backward parents$/
    */
-  public function theUploadedProgramShouldHaveNoFurtherCatrobatBackwardParents()
+  public function theUploadedProgramShouldHaveNoFurtherCatrobatBackwardParents(): void
   {
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
     $this->theProgramShouldHaveNoFurtherCatrobatBackwardParents($json['projectId']);
@@ -863,7 +870,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the uploaded program should have no Catrobat ancestors except self-relation$/
    */
-  public function theUploadedProgramShouldHaveNoCatrobatAncestors()
+  public function theUploadedProgramShouldHaveNoCatrobatAncestors(): void
   {
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
     $this->theProgramShouldHaveNoCatrobatAncestors($json['projectId']);
@@ -872,7 +879,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the uploaded program should have no Scratch parents$/
    */
-  public function theUploadedProgramShouldHaveNoScratchParents()
+  public function theUploadedProgramShouldHaveNoScratchParents(): void
   {
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
     $this->theProgramShouldHaveNoScratchParents($json['projectId']);
@@ -884,7 +891,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $id
    * @param mixed $depth
    */
-  public function theUploadedProgramShouldHaveCatrobatForwardDescendantHavingIdAndDepth($id, $depth)
+  public function theUploadedProgramShouldHaveCatrobatForwardDescendantHavingIdAndDepth($id, $depth): void
   {
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
     $this->theProgramShouldHaveCatrobatForwardDescendantHavingIdAndDepth($json['projectId'], $id, $depth);
@@ -893,7 +900,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the uploaded program should have no Catrobat forward descendants except self-relation$/
    */
-  public function theUploadedProgramShouldHaveNoCatrobatForwardDescendantsExceptSelfRelation()
+  public function theUploadedProgramShouldHaveNoCatrobatForwardDescendantsExceptSelfRelation(): void
   {
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
     $this->theProgramShouldHaveNoCatrobatForwardDescendantsExceptSelfRelation($json['projectId']);
@@ -902,7 +909,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the uploaded program should have no further Catrobat forward descendants$/
    */
-  public function theUploadedProgramShouldHaveNoFurtherCatrobatForwardDescendants()
+  public function theUploadedProgramShouldHaveNoFurtherCatrobatForwardDescendants(): void
   {
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
     $this->theProgramShouldHaveNoFurtherCatrobatForwardDescendants($json['projectId']);
@@ -916,7 +923,7 @@ class ApiContext implements KernelAwareContext
    * @throws ORMException
    * @throws OptimisticLockException
    */
-  public function theUploadedProgramShouldHaveRemixOfInTheXml($value)
+  public function theUploadedProgramShouldHaveRemixOfInTheXml($value): void
   {
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
 
@@ -926,21 +933,21 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I want to upload a program$/
    */
-  public function iWantToUploadAProgram()
+  public function iWantToUploadAProgram(): void
   {
   }
 
   /**
    * @Given /^I have no parameters$/
    */
-  public function iHaveNoParameters()
+  public function iHaveNoParameters(): void
   {
   }
 
   /**
    * @When /^I upload a standard catrobat program$/
    */
-  public function iUploadAStandardCatrobatProgram()
+  public function iUploadAStandardCatrobatProgram(): void
   {
     $user = $this->insertUser();
     $file = $this->getStandardProgramFile();
@@ -951,7 +958,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should get no programs$/
    */
-  public function iShouldGetNoPrograms()
+  public function iShouldGetNoPrograms(): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     Assert::assertEquals(200, $response->getStatusCode());
@@ -963,7 +970,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should get following programs:$/
    */
-  public function iShouldGetFollowingPrograms(TableNode $table)
+  public function iShouldGetFollowingPrograms(TableNode $table): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     Assert::assertEquals(200, $response->getStatusCode());
@@ -988,7 +995,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the uploaded program should have no further Catrobat forward ancestors$/
    */
-  public function theUploadedProgramShouldHaveNoFurtherCatrobatForwardAncestors()
+  public function theUploadedProgramShouldHaveNoFurtherCatrobatForwardAncestors(): void
   {
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
     $this->theProgramShouldHaveNoFurtherCatrobatForwardAncestors($json['projectId']);
@@ -997,7 +1004,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I start an apk generation of my program$/
    */
-  public function iStartAnApkGenerationOfMyProgram()
+  public function iStartAnApkGenerationOfMyProgram(): void
   {
     $id = 1;
     $this->iGetFrom('/app/ci/build/'.$id);
@@ -1008,7 +1015,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the apk file will not be found$/
    */
-  public function theApkFileWillNotBeFound()
+  public function theApkFileWillNotBeFound(): void
   {
     $code = $this->getKernelBrowser()
       ->getResponse()
@@ -1020,7 +1027,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I report a build error$/
    */
-  public function iReportABuildError()
+  public function iReportABuildError(): void
   {
     $id = 1;
     $url = '/app/ci/failed/'.$id.'?token=UPLOADTOKEN';
@@ -1036,7 +1043,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $id
    * @param mixed $uri
    */
-  public function iGetWithProgramID($uri, $id)
+  public function iGetWithProgramID($uri, $id): void
   {
     $uri = str_replace('@id@', $id, $uri);
 
@@ -1046,7 +1053,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I get the most recent programs$/
    */
-  public function iGetTheMostRecentPrograms()
+  public function iGetTheMostRecentPrograms(): void
   {
     $this->iGetFrom('/app/api/projects/recent.json');
   }
@@ -1057,7 +1064,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $limit
    * @param mixed $offset
    */
-  public function iGetTheMostRecentProgramsWithLimitAndOffset($limit, $offset)
+  public function iGetTheMostRecentProgramsWithLimitAndOffset($limit, $offset): void
   {
     $this->request_parameters = [
       'limit' => $limit,
@@ -1069,7 +1076,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I have downloaded a valid program$/
    */
-  public function iHaveDownloadedAValidProgram()
+  public function iHaveDownloadedAValidProgram(): void
   {
     $id = 1;
     $this->iGetFrom('/app/download/'.$id.'.catrobat');
@@ -1080,7 +1087,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^will get the following JSON:$/
    */
-  public function willGetTheFollowingJson(PyStringNode $string)
+  public function willGetTheFollowingJson(PyStringNode $string): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     Assert::assertEquals(200, $response->getStatusCode());
@@ -1095,7 +1102,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $email_amount
    */
-  public function iShouldSeeOutgoingEmailsInTheProfiler($email_amount)
+  public function iShouldSeeOutgoingEmailsInTheProfiler($email_amount): void
   {
     $profile = $this->getSymfonyProfile();
     /** @var MessageDataCollector $collector */
@@ -1108,7 +1115,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $recipient
    */
-  public function iShouldSeeAEmailWithRecipient($recipient)
+  public function iShouldSeeAEmailWithRecipient($recipient): void
   {
     $profile = $this->getSymfonyProfile();
     /** @var MessageDataCollector $collector */
@@ -1129,7 +1136,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $role
    */
-  public function iAmAUserWithRole($role)
+  public function iAmAUserWithRole($role): void
   {
     $this->insertUser([
       'role' => $role,
@@ -1158,7 +1165,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $needle
    */
-  public function theResponseShouldContain($needle)
+  public function theResponseShouldContain($needle): void
   {
     if (false === strpos($this->getKernelBrowser()
       ->getResponse()
@@ -1171,7 +1178,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^the client response should contain the elements:$/
    */
-  public function theResponseShouldContainTheElements(TableNode $table)
+  public function theResponseShouldContainTheElements(TableNode $table): void
   {
     $program_stats = $table->getHash();
     foreach ($program_stats as $program_stat)
@@ -1192,7 +1199,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $needle
    */
-  public function theResponseShouldNotContain($needle)
+  public function theResponseShouldNotContain($needle): void
   {
     Assert::assertNotContains($needle, $this->getKernelBrowser()->getResponse()->getContent());
   }
@@ -1200,7 +1207,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I update this program$/
    */
-  public function iUpdateThisProgram()
+  public function iUpdateThisProgram(): void
   {
     $pm = $this->getProgramManager();
     $program = $pm->find('1');
@@ -1217,7 +1224,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I am a logged in as super admin$/
    */
-  public function iAmALoggedInAsSuperAdmin()
+  public function iAmALoggedInAsSuperAdmin(): void
   {
     $this->iAmAUserWithRole('ROLE_SUPER_ADMIN');
   }
@@ -1225,7 +1232,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I am logged in as normal user$/
    */
-  public function iAmLoggedInAsNormalUser()
+  public function iAmLoggedInAsNormalUser(): void
   {
     $this->iAmAUserWithRole('ROLE_USER');
   }
@@ -1233,7 +1240,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I am a logged in as admin$/
    */
-  public function iAmALoggedInAsAdmin()
+  public function iAmALoggedInAsAdmin(): void
   {
     $this->iAmAUserWithRole('ROLE_ADMIN');
   }
@@ -1244,7 +1251,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $arg1
    * @param mixed $arg2
    */
-  public function uriFromShouldBe($arg1, $arg2)
+  public function uriFromShouldBe($arg1, $arg2): void
   {
     $link = $this->getKernelBrowser()->getCrawler()->selectLink($arg1)->link();
 
@@ -1260,7 +1267,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $headerKey
    * @param mixed $headerValue
    */
-  public function theResponseHeadershouldContainTheKeyWithTheValue($headerKey, $headerValue)
+  public function theResponseHeadershouldContainTheKeyWithTheValue($headerKey, $headerValue): void
   {
     $headers = $this->getKernelBrowser()->getResponse()->headers;
     Assert::assertEquals($headerValue, $headers->get($headerKey),
@@ -1273,7 +1280,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $id
    */
-  public function theReturnedJsonObjectWithIdWillBe($id, PyStringNode $string)
+  public function theReturnedJsonObjectWithIdWillBe($id, PyStringNode $string): void
   {
     $response = $this->getKernelBrowser()->getResponse();
 
@@ -1289,7 +1296,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $code
    */
-  public function theResponseCodeWillBe($code)
+  public function theResponseCodeWillBe($code): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     Assert::assertEquals($code, $response->getStatusCode(), 'Wrong response code. '.$response->getContent());
@@ -1300,7 +1307,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $arg1
    */
-  public function searchingFor($arg1)
+  public function searchingFor($arg1): void
   {
     $this->method = 'GET';
     $this->url = '/app/api/projects/search.json';
@@ -1313,7 +1320,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $result
    */
-  public function theProgramShouldGet($result)
+  public function theProgramShouldGet($result): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     $response_array = json_decode($response->getContent(), true);
@@ -1336,7 +1343,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $arg1
    */
-  public function iShouldGetATotalOfProjects($arg1)
+  public function iShouldGetATotalOfProjects($arg1): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     $responseArray = json_decode($response->getContent(), true);
@@ -1349,7 +1356,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should get user-specific recommended projects$/
    */
-  public function iShouldGetUserSpecificRecommendedProjects()
+  public function iShouldGetUserSpecificRecommendedProjects(): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     $responseArray = json_decode($response->getContent(), true);
@@ -1366,7 +1373,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should get no user-specific recommended projects$/
    */
-  public function iShouldGetNoUserSpecificRecommendedProjects()
+  public function iShouldGetNoUserSpecificRecommendedProjects(): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     $responseArray = json_decode($response->getContent(), true);
@@ -1381,7 +1388,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $arg1
    */
-  public function iUseTheLimit($arg1)
+  public function iUseTheLimit($arg1): void
   {
     $this->iHaveAParameterWithValue('limit', $arg1);
   }
@@ -1391,7 +1398,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $arg1
    */
-  public function iUseTheOffset($arg1)
+  public function iUseTheOffset($arg1): void
   {
     $this->iHaveAParameterWithValue('offset', $arg1);
   }
@@ -1399,7 +1406,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should get programs in the following order:$/
    */
-  public function iShouldGetProgramsInTheFollowingOrder(TableNode $table)
+  public function iShouldGetProgramsInTheFollowingOrder(TableNode $table): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     $responseArray = json_decode($response->getContent(), true);
@@ -1422,7 +1429,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $program_count
    */
-  public function iShouldGetProgramsInRandomOrder($program_count, TableNode $table)
+  public function iShouldGetProgramsInRandomOrder($program_count, TableNode $table): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     $response_array = json_decode($response->getContent(), true);
@@ -1451,7 +1458,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param string $program_list
    */
-  public function iShouldGetTheProgramsInRandomOrder($program_list)
+  public function iShouldGetTheProgramsInRandomOrder($program_list): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     $response_array = json_decode($response->getContent(), true);
@@ -1480,7 +1487,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param string $program_list
    */
-  public function iShouldGetThePrograms($program_list)
+  public function iShouldGetThePrograms($program_list): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     $responseArray = json_decode($response->getContent(), true);
@@ -1506,7 +1513,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $code
    */
-  public function theResponseCodeShouldBe($code)
+  public function theResponseCodeShouldBe($code): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     Assert::assertEquals($code, $response->getStatusCode(), 'Wrong response code. '.$response->getContent());
@@ -1515,7 +1522,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I store the following json object as "([^"]*)":$/
    */
-  public function iStoreTheFollowingJsonObjectAs(string $name, PyStringNode $json)
+  public function iStoreTheFollowingJsonObjectAs(string $name, PyStringNode $json): void
   {
     $this->stored_json[$name] = $json->getRaw();
   }
@@ -1523,7 +1530,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should get the stored json object "([^"]*)"$/
    */
-  public function iShouldGetTheStoredJsonObject(string $name)
+  public function iShouldGetTheStoredJsonObject(string $name): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     $this->assertJsonRegex($this->stored_json[$name], $response->getContent());
@@ -1534,7 +1541,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $program_count
    */
-  public function iShouldGetScratchProgramsInTheFollowingOrder($program_count, TableNode $table)
+  public function iShouldGetScratchProgramsInTheFollowingOrder($program_count, TableNode $table): void
   {
     $response = $this->getKernelBrowser()->getResponse();
 
@@ -1562,7 +1569,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $parameter
    */
-  public function iHaveAParameterWithAnInvalidMdchecksumOfMyFile($parameter)
+  public function iHaveAParameterWithAnInvalidMdchecksumOfMyFile($parameter): void
   {
     $this->request_parameters[$parameter] = 'INVALIDCHECKSUM';
   }
@@ -1572,7 +1579,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $parameter
    */
-  public function iHaveAParameterWithTheMdChecksumOf($parameter)
+  public function iHaveAParameterWithTheMdChecksumOf($parameter): void
   {
     $this->request_parameters[$parameter] = md5_file($this->request_files[0]->getPathname());
   }
@@ -1580,7 +1587,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I have the POST parameters:$/
    */
-  public function iHaveThePostParameters(TableNode $table)
+  public function iHaveThePostParameters(TableNode $table): void
   {
     foreach ($table->getHash() as $parameter)
     {
@@ -1591,7 +1598,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^i should receive a project file$/
    */
-  public function iShouldReceiveAProjectFile()
+  public function iShouldReceiveAProjectFile(): void
   {
     $content_type = $this->getKernelBrowser()->getResponse()->headers->get('Content-Type');
     Assert::assertEquals('application/zip', $content_type);
@@ -1602,7 +1609,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $name
    */
-  public function iHaveAParameterWithTheReturnedProjectid($name)
+  public function iHaveAParameterWithTheReturnedProjectid($name): void
   {
     $response = json_decode($this->getKernelBrowser()
       ->getResponse()
@@ -1613,7 +1620,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then it should be updated
    */
-  public function itShouldBeUpdated()
+  public function itShouldBeUpdated(): void
   {
     $last_json = json_decode($this->last_response, true);
     $json = json_decode($this->getKernelBrowser()->getResponse()->getContent(), true);
@@ -1627,7 +1634,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $problem
    */
-  public function theUploadProblem($problem)
+  public function theUploadProblem($problem): void
   {
     switch ($problem)
     {
@@ -1659,7 +1666,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given I try to upload a program with unnecessary files
    */
-  public function iTryToUploadAProgramWithUnnecessaryFiles()
+  public function iTryToUploadAProgramWithUnnecessaryFiles(): void
   {
     $this->sendUploadRequest($this->FIXTURES_DIR.'unnecessaryFiles.catrobat');
   }
@@ -1667,7 +1674,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given I try to upload a program with scenes and unnecessary files
    */
-  public function iTryToUploadAProgramWithScenesAndUnnecessaryFiles()
+  public function iTryToUploadAProgramWithScenesAndUnnecessaryFiles(): void
   {
     $this->sendUploadRequest($this->FIXTURES_DIR.'unnecessaryFilesInScenes.catrobat');
   }
@@ -1677,7 +1684,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $id
    */
-  public function iUploadThisProgramWithId($id)
+  public function iUploadThisProgramWithId($id): void
   {
     if (array_key_exists('deviceLanguage', $this->request_parameters))
     {
@@ -1697,7 +1704,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I upload this program$/
    */
-  public function iUploadThisProgram()
+  public function iUploadThisProgram(): void
   {
     if (array_key_exists('deviceLanguage', $this->request_parameters))
     {
@@ -1713,7 +1720,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I upload a program$/
    */
-  public function iUploadAProgram()
+  public function iUploadAProgram(): void
   {
     /** @var User|null $user */
     $user = $this->username ? $this->getUserManager()->findUserByUsername($this->username) : null;
@@ -1725,7 +1732,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $id
    */
-  public function iUploadAProgramWithId($id)
+  public function iUploadAProgramWithId($id): void
   {
     /** @var User|null $user */
     $user = $this->username ? $this->getUserManager()->findUserByUsername($this->username) : null;
@@ -1738,7 +1745,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $id
    * @param mixed $name
    */
-  public function iUploadAProgramWithIdAndName($id, $name)
+  public function iUploadAProgramWithIdAndName($id, $name): void
   {
     /** @var User|null $user */
     $user = $this->username ? $this->getUserManager()->findUserByUsername($this->username) : null;
@@ -1752,7 +1759,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I upload the program again without extensions$/
    */
-  public function iUploadTheProgramAgainWithoutExtensions()
+  public function iUploadTheProgramAgainWithoutExtensions(): void
   {
     $this->iHaveAProjectWithAs('name', 'extensions');
     $this->iUploadAProgram();
@@ -1764,7 +1771,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $name
    * @param mixed $url
    */
-  public function iUploadAnotherProgramWithNameSetToAndUrlSetTo($name, $url)
+  public function iUploadAnotherProgramWithNameSetToAndUrlSetTo($name, $url): void
   {
     $this->iHaveAProjectWithAsTwoHeaderFields('name', $name, 'url', $url);
     $this->iUploadAProgram();
@@ -1780,7 +1787,7 @@ class ApiContext implements KernelAwareContext
    */
   public function iUploadAnotherProgramWithNameSetToUrlSetToAndCatrobatLanguageVersionSetTo(
     $name, $url, $catrobat_language_version
-  ) {
+  ): void {
     $this->iHaveAProjectWithAsMultipleHeaderFields('name', $name, 'url', $url,
       'catrobatLanguageVersion', $catrobat_language_version);
     $this->iUploadAProgram();
@@ -1791,7 +1798,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $tags
    */
-  public function iUploadThisProgramAgainWithTheTags($tags)
+  public function iUploadThisProgramAgainWithTheTags($tags): void
   {
     $this->generateProgramFileWith([
       'tags' => $tags,
@@ -1806,7 +1813,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $name
    * @param mixed $value
    */
-  public function iHaveAParameterWithValue($name, $value)
+  public function iHaveAParameterWithValue($name, $value): void
   {
     $this->request_parameters[$name] = $value;
   }
@@ -1814,7 +1821,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^a catrobat file is attached to the request$/
    */
-  public function iAttachACatrobatFile()
+  public function iAttachACatrobatFile(): void
   {
     $filepath = $this->FIXTURES_DIR.'test.catrobat';
     Assert::assertTrue(file_exists($filepath), 'File not found');
@@ -1826,7 +1833,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $arg1
    */
-  public function thePostParameterContainsTheMdSumOfTheGivenFile($arg1)
+  public function thePostParameterContainsTheMdSumOfTheGivenFile($arg1): void
   {
     $this->request_parameters[$arg1] = md5_file($this->request_files[0]->getPathname());
   }
@@ -1837,7 +1844,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $problem
    */
-  public function thereIsARegistrationProblem($problem)
+  public function thereIsARegistrationProblem($problem): void
   {
     switch ($problem)
     {
@@ -1858,7 +1865,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $problem
    */
-  public function thereIsACheckTokenProblem($problem)
+  public function thereIsACheckTokenProblem($problem): void
   {
     switch ($problem)
     {
@@ -1879,7 +1886,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $name
    * @param mixed $value
    */
-  public function iHaveAParameterWithTheTagId($name, $value)
+  public function iHaveAParameterWithTheTagId($name, $value): void
   {
     $this->request_parameters[$name] = $value;
   }
@@ -1889,7 +1896,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $language
    */
-  public function iUseTheApp($language)
+  public function iUseTheApp($language): void
   {
     switch ($language)
     {
@@ -1910,7 +1917,7 @@ class ApiContext implements KernelAwareContext
    * @Given /^the HTTP Request:$/
    * @Given /^I have the HTTP Request:$/
    */
-  public function iHaveTheHttpRequest(TableNode $table)
+  public function iHaveTheHttpRequest(TableNode $table): void
   {
     $values = $table->getRowsHash();
     $this->method = $values['Method'];
@@ -1921,7 +1928,7 @@ class ApiContext implements KernelAwareContext
    * @Given /^the POST parameters:$/
    * @Given /^I use the POST parameters:$/
    */
-  public function iUseThePostParameters(TableNode $table)
+  public function iUseThePostParameters(TableNode $table): void
   {
     $values = $table->getRowsHash();
     $this->request_parameters = $values;
@@ -1931,7 +1938,7 @@ class ApiContext implements KernelAwareContext
    * @Given /^the GET parameters:$/
    * @Given /^I use the GET parameters:$/
    */
-  public function iUseTheGetParameters(TableNode $table)
+  public function iUseTheGetParameters(TableNode $table): void
   {
     $values = $table->getRowsHash();
     $this->request_parameters = $values;
@@ -1942,7 +1949,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $name
    */
-  public function theServerNameIs($name)
+  public function theServerNameIs($name): void
   {
     $this->request_server['HTTP_HOST'] = $name;
   }
@@ -1950,7 +1957,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I use a secure connection$/
    */
-  public function iUseASecureConnection()
+  public function iUseASecureConnection(): void
   {
     $this->request_server['HTTPS'] = true;
   }
@@ -1963,7 +1970,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $key2
    * @param mixed $value2
    */
-  public function iHaveAProjectWithAsTwoHeaderFields($key1, $value1, $key2, $value2)
+  public function iHaveAProjectWithAsTwoHeaderFields($key1, $value1, $key2, $value2): void
   {
     $this->generateProgramFileWith([
       $key1 => $value1,
@@ -1981,7 +1988,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $key3
    * @param mixed $value3
    */
-  public function iHaveAProjectWithAsMultipleHeaderFields($key1, $value1, $key2, $value2, $key3, $value3)
+  public function iHaveAProjectWithAsMultipleHeaderFields($key1, $value1, $key2, $value2, $key3, $value3): void
   {
     $this->generateProgramFileWith([
       $key1 => $value1,
@@ -1995,7 +2002,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $filename
    */
-  public function iHaveAFile($filename)
+  public function iHaveAFile($filename): void
   {
     $filepath = './src/Catrobat/ApiBundle/Features/Fixtures/'.$filename;
     Assert::assertTrue(file_exists($filepath), 'File not found');
@@ -2005,7 +2012,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I have a valid Catrobat file$/
    */
-  public function iHaveAValidCatrobatFile()
+  public function iHaveAValidCatrobatFile(): void
   {
     $filepath = $this->FIXTURES_DIR.'test.catrobat';
     Assert::assertTrue(file_exists($filepath), 'File not found');
@@ -2016,7 +2023,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I have otherwise valid registration parameters$/
    */
-  public function iHaveOtherwiseValidRegistrationParameters()
+  public function iHaveOtherwiseValidRegistrationParameters(): void
   {
     $this->prepareValidRegistrationParameters();
   }
@@ -2028,7 +2035,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $key
    * @param mixed $value
    */
-  public function iHaveAProjectWithAs($key, $value)
+  public function iHaveAProjectWithAs($key, $value): void
   {
     $this->generateProgramFileWith([
       $key => $value,
@@ -2038,7 +2045,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then I should receive the following programs:
    */
-  public function iShouldReceiveTheFollowingPrograms(TableNode $table)
+  public function iShouldReceiveTheFollowingPrograms(TableNode $table): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     $responseArray = json_decode($response->getContent(), true);
@@ -2056,7 +2063,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $arg1
    */
-  public function theTotalNumberOfFoundProjectsShouldBe($arg1)
+  public function theTotalNumberOfFoundProjectsShouldBe($arg1): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     $responseArray = json_decode($response->getContent(), true);
@@ -2066,7 +2073,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then I should receive my program
    */
-  public function iShouldReceiveMyProgram()
+  public function iShouldReceiveMyProgram(): void
   {
     $response = $this->getKernelBrowser()->getResponse();
     $responseArray = json_decode($response->getContent(), true);
@@ -2077,7 +2084,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When I update my program
    */
-  public function iUpdateMyProgram()
+  public function iUpdateMyProgram(): void
   {
     $file = $this->getDefaultProgramFile();
     $this->upload($file, $this->getUserDataFixtures()->getCurrentUser());
@@ -2089,7 +2096,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $id
    */
-  public function iSubmitAGame($id)
+  public function iSubmitAGame($id): void
   {
     $file = $this->getDefaultProgramFile();
     $this->submit($file, $this->getUserDataFixtures()->getCurrentUser(), $id);
@@ -2098,7 +2105,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then I should get the url to the google form
    */
-  public function iShouldGetTheUrlToTheGoogleForm()
+  public function iShouldGetTheUrlToTheGoogleForm(): void
   {
     $answer = json_decode($this->getKernelBrowser()
       ->getResponse()
@@ -2110,7 +2117,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I submit the program$/
    */
-  public function iSubmitTheProgram()
+  public function iSubmitTheProgram(): void
   {
     $link = $this->last_response->filter('#gamejam-submission')
       ->parents()
@@ -2122,7 +2129,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I login$/
    */
-  public function iLogin()
+  public function iLogin(): void
   {
     $loginButton = $this->last_response;
     $form = $loginButton->selectButton('Login')->form();
@@ -2134,7 +2141,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should be on the details page of my program$/
    */
-  public function iShouldBeRedirectedToTheDetailsPageOfMyProgram()
+  public function iShouldBeRedirectedToTheDetailsPageOfMyProgram(): void
   {
     Assert::assertEquals('/app/project/1', $this->getKernelBrowser()->getRequest()->getPathInfo());
   }
@@ -2144,7 +2151,7 @@ class ApiContext implements KernelAwareContext
    *
    * @throws Exception
    */
-  public function iVisitTheDetailsPageOfAProgramFromAnotherUser()
+  public function iVisitTheDetailsPageOfAProgramFromAnotherUser(): void
   {
     $other = $this->insertUser([
       'name' => 'other',
@@ -2164,7 +2171,7 @@ class ApiContext implements KernelAwareContext
    *
    * @throws Exception
    */
-  public function iSubmitAProgramToThisGamejam()
+  public function iSubmitAProgramToThisGamejam(): void
   {
     if (null == $this->my_program)
     {
@@ -2189,7 +2196,7 @@ class ApiContext implements KernelAwareContext
    *
    * @throws Exception
    */
-  public function iVisitTheDetailsPageOfMyProgram()
+  public function iVisitTheDetailsPageOfMyProgram(): void
   {
     if (null == $this->my_program)
     {
@@ -2205,7 +2212,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^There should be a button to submit it to the jam$/
    */
-  public function thereShouldBeAButtonToSubmitItToTheJam()
+  public function thereShouldBeAButtonToSubmitItToTheJam(): void
   {
     Assert::assertEquals(200, $this->getKernelBrowser()
       ->getResponse()
@@ -2216,7 +2223,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^There should not be a button to submit it to the jam$/
    */
-  public function thereShouldNotBeAButtonToSubmitItToTheJam()
+  public function thereShouldNotBeAButtonToSubmitItToTheJam(): void
   {
     Assert::assertEquals(200, $this->getKernelBrowser()
       ->getResponse()
@@ -2227,7 +2234,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^There should be a div with whats the gamejam$/
    */
-  public function thereShouldBeADivWithWhatsTheGamejam()
+  public function thereShouldBeADivWithWhatsTheGamejam(): void
   {
     Assert::assertEquals(200, $this->getKernelBrowser()
       ->getResponse()
@@ -2238,7 +2245,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^There should not be a div with whats the gamejam$/
    */
-  public function thereShouldNotBeADivWithWhatsTheGamejam()
+  public function thereShouldNotBeADivWithWhatsTheGamejam(): void
   {
     Assert::assertEquals(200, $this->getKernelBrowser()
       ->getResponse()
@@ -2251,7 +2258,7 @@ class ApiContext implements KernelAwareContext
    *
    * @throws Exception
    */
-  public function iSubmitMyProgramToAGamejam()
+  public function iSubmitMyProgramToAGamejam(): void
   {
     $this->insertDefaultGameJam([
       'formurl' => 'https://localhost/url/to/form',
@@ -2280,7 +2287,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then /^I should be redirected to the google form$/
    */
-  public function iShouldBeRedirectedToTheGoogleForm()
+  public function iShouldBeRedirectedToTheGoogleForm(): void
   {
     Assert::assertTrue($this->getKernelBrowser()->getResponse() instanceof RedirectResponse);
     Assert::assertEquals('https://localhost/url/to/form', $this->getKernelBrowser()->getResponse()->headers->get('location'));
@@ -2291,7 +2298,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $arg1
    */
-  public function iSubmitAGameWhichGetsTheId($arg1)
+  public function iSubmitAGameWhichGetsTheId($arg1): void
   {
     $file = $this->getDefaultProgramFile();
     $this->submit($file, $this->getUserDataFixtures()->getCurrentUser(), $arg1);
@@ -2302,7 +2309,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $id
    */
-  public function theReturnedUrlShouldBe($id, PyStringNode $string)
+  public function theReturnedUrlShouldBe($id, PyStringNode $string): void
   {
     $answer = (array) json_decode($this->getKernelBrowser()->getResponse()->getContent());
 
@@ -2315,7 +2322,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then The submission should be rejected
    */
-  public function theSubmissionShouldBeRejected()
+  public function theSubmissionShouldBeRejected(): void
   {
     $answer = json_decode($this->getKernelBrowser()
       ->getResponse()
@@ -2326,7 +2333,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then The message should be:
    */
-  public function theMessageShouldBe(PyStringNode $string)
+  public function theMessageShouldBe(PyStringNode $string): void
   {
     $answer = json_decode($this->getKernelBrowser()
       ->getResponse()
@@ -2337,7 +2344,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When I upload my game
    */
-  public function iUploadMyGame()
+  public function iUploadMyGame(): void
   {
     $file = $this->getDefaultProgramFile();
     $this->upload($file, $this->getUserDataFixtures()->getCurrentUser());
@@ -2346,7 +2353,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Then I should not get the url to the google form
    */
-  public function iShouldNotGetTheUrlToTheGoogleForm()
+  public function iShouldNotGetTheUrlToTheGoogleForm(): void
   {
     $answer = json_decode($this->getKernelBrowser()
       ->getResponse()
@@ -2359,7 +2366,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $id
    */
-  public function iAlreadySubmittedMyGame($id)
+  public function iAlreadySubmittedMyGame($id): void
   {
     $file = $this->getDefaultProgramFile();
     $this->last_response = $this->submit($file, $this->getUserDataFixtures()->getCurrentUser(), $id)->getContent();
@@ -2370,7 +2377,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $id
    */
-  public function iAlreadyFilledTheGoogleForm($id)
+  public function iAlreadyFilledTheGoogleForm($id): void
   {
     $this->getKernelBrowser()->request('GET', '/app/api/gamejam/finalize/'.$id);
     Assert::assertEquals('200', $this->getKernelBrowser()
@@ -2381,7 +2388,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When I resubmit my game
    */
-  public function iResubmitMyGame()
+  public function iResubmitMyGame(): void
   {
     $file = $this->getDefaultProgramFile();
     $this->submit($file, $this->getUserDataFixtures()->getCurrentUser());
@@ -2390,7 +2397,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When I fill out the google form
    */
-  public function iFillOutTheGoogleForm()
+  public function iFillOutTheGoogleForm(): void
   {
     $this->getKernelBrowser()->request('GET', '/app/api/gamejam/finalize/1');
     Assert::assertEquals('200', $this->getKernelBrowser()
@@ -2403,7 +2410,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $arg1
    */
-  public function iShouldSeeAMessage($arg1)
+  public function iShouldSeeAMessage($arg1): void
   {
     Assert::assertContains($arg1, $this->getKernelBrowser()->getResponse()->getContent());
   }
@@ -2413,7 +2420,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $hashtag
    */
-  public function iShouldSeeTheHashtagInTheProgramDescription($hashtag)
+  public function iShouldSeeTheHashtagInTheProgramDescription($hashtag): void
   {
     Assert::assertContains($hashtag, $this->getKernelBrowser()
       ->getResponse()
@@ -2427,7 +2434,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $program_id
    */
-  public function theProgramShouldBeARemixRoot($program_id)
+  public function theProgramShouldBeARemixRoot($program_id): void
   {
     $program_manager = $this->getProgramManager();
     $uploaded_program = $program_manager->find($program_id);
@@ -2439,7 +2446,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $program_id
    */
-  public function theProgramShouldNotBeARemixRoot($program_id)
+  public function theProgramShouldNotBeARemixRoot($program_id): void
   {
     $program_manager = $this->getProgramManager();
     /** @var Program $uploaded_program */
@@ -2453,7 +2460,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $program_id
    * @param mixed $scratch_parent_id
    */
-  public function theProgramShouldHaveAScratchParentHavingScratchID($program_id, $scratch_parent_id)
+  public function theProgramShouldHaveAScratchParentHavingScratchID($program_id, $scratch_parent_id): void
   {
     $direct_edge_relation = $this->getScratchProgramRemixRepository()->findOneBy([
       'scratch_parent_id' => $scratch_parent_id,
@@ -2470,14 +2477,14 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $program_id
    */
-  public function theProgramShouldHaveNoFurtherScratchParents($program_id)
+  public function theProgramShouldHaveNoFurtherScratchParents($program_id): void
   {
     $direct_edge_relations = $this->getScratchProgramRemixRepository()->findBy([
       'catrobat_child_id' => $program_id,
     ]);
 
     $further_scratch_parent_relations = array_filter($direct_edge_relations,
-      function (ScratchProgramRemixRelation $relation)
+      function (ScratchProgramRemixRelation $relation): bool
       {
         return !array_key_exists(
           $relation->getUniqueKey(), $this->checked_catrobat_remix_forward_ancestor_relations
@@ -2494,7 +2501,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $ancestor_program_id
    * @param mixed $depth
    */
-  public function theProgramShouldHaveACatrobatForwardAncestorHavingIdAndDepth($program_id, $ancestor_program_id, $depth)
+  public function theProgramShouldHaveACatrobatForwardAncestorHavingIdAndDepth($program_id, $ancestor_program_id, $depth): void
   {
     $forward_ancestor_relation = $this->getProgramRemixForwardRepository()->findOneBy([
       'ancestor_id' => $ancestor_program_id,
@@ -2519,7 +2526,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $program_id
    * @param mixed $backward_parent_program_id
    */
-  public function theProgramShouldHaveACatrobatBackwardParentHavingId($program_id, $backward_parent_program_id)
+  public function theProgramShouldHaveACatrobatBackwardParentHavingId($program_id, $backward_parent_program_id): void
   {
     $backward_parent_relation = $this->getProgramRemixBackwardRepository()->findOneBy([
       'parent_id' => $backward_parent_program_id,
@@ -2536,7 +2543,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $program_id
    */
-  public function theProgramShouldHaveNoCatrobatForwardAncestorsExceptSelfRelation($program_id)
+  public function theProgramShouldHaveNoCatrobatForwardAncestorsExceptSelfRelation($program_id): void
   {
     $forward_ancestors_including_self_referencing_relation = $this
       ->getProgramRemixForwardRepository()
@@ -2544,7 +2551,7 @@ class ApiContext implements KernelAwareContext
     ;
 
     Assert::assertCount(0, array_filter($forward_ancestors_including_self_referencing_relation,
-      function (ProgramRemixRelation $relation)
+      function (ProgramRemixRelation $relation): bool
       {
         return $relation->getDepth() >= 1;
       }));
@@ -2555,7 +2562,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $program_id
    */
-  public function theProgramShouldHaveNoFurtherCatrobatForwardAncestors($program_id)
+  public function theProgramShouldHaveNoFurtherCatrobatForwardAncestors($program_id): void
   {
     $forward_ancestors_including_self_referencing_relation = $this
       ->getProgramRemixForwardRepository()
@@ -2563,7 +2570,7 @@ class ApiContext implements KernelAwareContext
     ;
 
     $further_forward_ancestor_relations = array_filter($forward_ancestors_including_self_referencing_relation,
-      function (ProgramRemixRelation $relation)
+      function (ProgramRemixRelation $relation): bool
       {
         return !array_key_exists(
           $relation->getUniqueKey(), $this->checked_catrobat_remix_forward_ancestor_relations
@@ -2578,7 +2585,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $program_id
    */
-  public function theProgramShouldHaveNoCatrobatBackwardParents($program_id)
+  public function theProgramShouldHaveNoCatrobatBackwardParents($program_id): void
   {
     $backward_parent_relations = $this->getProgramRemixBackwardRepository()->findBy(['child_id' => $program_id]);
     Assert::assertCount(0, $backward_parent_relations);
@@ -2589,12 +2596,12 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $program_id
    */
-  public function theProgramShouldHaveNoFurtherCatrobatBackwardParents($program_id)
+  public function theProgramShouldHaveNoFurtherCatrobatBackwardParents($program_id): void
   {
     $backward_parent_relations = $this->getProgramRemixBackwardRepository()->findBy(['child_id' => $program_id]);
 
     $further_backward_parent_relations = array_filter($backward_parent_relations,
-      function (ProgramRemixBackwardRelation $relation)
+      function (ProgramRemixBackwardRelation $relation): bool
       {
         return !array_key_exists(
           $relation->getUniqueKey(), $this->checked_catrobat_remix_backward_relations
@@ -2609,7 +2616,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $program_id
    */
-  public function theProgramShouldHaveNoCatrobatAncestors($program_id)
+  public function theProgramShouldHaveNoCatrobatAncestors($program_id): void
   {
     $this->theProgramShouldHaveNoCatrobatForwardAncestorsExceptSelfRelation($program_id);
     $this->theProgramShouldHaveNoCatrobatBackwardParents($program_id);
@@ -2620,7 +2627,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $program_id
    */
-  public function theProgramShouldHaveNoScratchParents($program_id)
+  public function theProgramShouldHaveNoScratchParents($program_id): void
   {
     $scratch_parents = $this->getScratchProgramRemixRepository()->findBy(['catrobat_child_id' => $program_id]);
     Assert::assertCount(0, $scratch_parents);
@@ -2633,7 +2640,7 @@ class ApiContext implements KernelAwareContext
    * @param mixed $descendant_program_id
    * @param mixed $depth
    */
-  public function theProgramShouldHaveCatrobatForwardDescendantHavingIdAndDepth($program_id, $descendant_program_id, $depth)
+  public function theProgramShouldHaveCatrobatForwardDescendantHavingIdAndDepth($program_id, $descendant_program_id, $depth): void
   {
     /** @var ProgramRemixRelation $forward_descendant_relation */
     $forward_descendant_relation = $this->getProgramRemixForwardRepository()->findOneBy([
@@ -2658,7 +2665,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $program_id
    */
-  public function theProgramShouldHaveNoCatrobatForwardDescendantsExceptSelfRelation($program_id)
+  public function theProgramShouldHaveNoCatrobatForwardDescendantsExceptSelfRelation($program_id): void
   {
     $forward_ancestors_including_self_referencing_relation = $this
       ->getProgramRemixForwardRepository()
@@ -2666,7 +2673,7 @@ class ApiContext implements KernelAwareContext
     ;
 
     Assert::assertCount(0, array_filter($forward_ancestors_including_self_referencing_relation,
-      function (ProgramRemixRelation $relation)
+      function (ProgramRemixRelation $relation): bool
       {
         return $relation->getDepth() >= 1;
       }));
@@ -2677,7 +2684,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $program_id
    */
-  public function theProgramShouldHaveNoFurtherCatrobatForwardDescendants($program_id)
+  public function theProgramShouldHaveNoFurtherCatrobatForwardDescendants($program_id): void
   {
     $forward_descendants_including_self_referencing_relation = $this
       ->getProgramRemixForwardRepository()
@@ -2685,7 +2692,7 @@ class ApiContext implements KernelAwareContext
     ;
 
     $further_forward_descendant_relations = array_filter($forward_descendants_including_self_referencing_relation,
-      function (ProgramRemixRelation $relation)
+      function (ProgramRemixRelation $relation): bool
       {
         return !array_key_exists(
           $relation->getUniqueKey(), $this->checked_catrobat_remix_forward_descendant_relations
@@ -2700,11 +2707,8 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $program_id
    * @param mixed $value
-   *
-   * @throws ORMException
-   * @throws OptimisticLockException
    */
-  public function theProgramShouldHaveRemixofInTheXml($program_id, $value)
+  public function theProgramShouldHaveRemixofInTheXml($program_id, $value): void
   {
     $program_manager = $this->getProgramManager();
     /** @var Program $uploaded_program */
@@ -2722,7 +2726,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @AfterStep
    */
-  public function saveResponseToFile(AfterStepScope $scope)
+  public function saveResponseToFile(AfterStepScope $scope): void
   {
     if (null == $this->ERROR_DIR)
     {
@@ -2751,7 +2755,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $build_type
    */
-  public function iRequestFromASpecificBuildTypeOfCatroidApp($build_type)
+  public function iRequestFromASpecificBuildTypeOfCatroidApp($build_type): void
   {
     $this->iUseTheUserAgentParameterized('0.998', 'PocketCode', '0.9.60', $build_type);
   }
@@ -2759,7 +2763,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @Given /^I request from an ios app$/
    */
-  public function iRequestFromAnIOSApp()
+  public function iRequestFromAnIOSApp(): void
   {
     // see org.catrobat.catroid.ui.WebViewActivity
     $platform = 'iPhone';
@@ -2772,7 +2776,7 @@ class ApiContext implements KernelAwareContext
    *
    * @param mixed $theme
    */
-  public function iUseASpecificThemedApp($theme)
+  public function iUseASpecificThemedApp($theme): void
   {
     $this->iUseTheUserAgentParameterized('0.998', 'PocketCode', '0.9.60',
       'release', $theme);
@@ -2781,7 +2785,7 @@ class ApiContext implements KernelAwareContext
   /**
    * @When /^I upload a catrobat program with the phiro app$/
    */
-  public function iUploadACatrobatProgramWithThePhiroProApp()
+  public function iUploadACatrobatProgramWithThePhiroProApp(): void
   {
     $user = $this->insertUser();
     $program = $this->getStandardProgramFile();
@@ -2789,7 +2793,7 @@ class ApiContext implements KernelAwareContext
     Assert::assertEquals(200, $response->getStatusCode(), 'Wrong response code. '.$response->getContent());
   }
 
-  private function sendUploadRequest(?string $filepath)
+  private function sendUploadRequest(?string $filepath): void
   {
     Assert::assertTrue(file_exists($filepath), 'File not found');
 
@@ -2841,7 +2845,7 @@ class ApiContext implements KernelAwareContext
     return $client->getResponse();
   }
 
-  private function prepareValidRegistrationParameters()
+  private function prepareValidRegistrationParameters(): void
   {
     $this->request_parameters['registrationUsername'] = 'newuser';
     $this->request_parameters['registrationPassword'] = 'topsecret';
@@ -2849,12 +2853,13 @@ class ApiContext implements KernelAwareContext
     $this->request_parameters['registrationCountry'] = 'at';
   }
 
-  private function iUseTheUserAgent($user_agent)
+  private function iUseTheUserAgent(string $user_agent): void
   {
     $this->request_server['HTTP_USER_AGENT'] = $user_agent;
   }
 
-  private function iUseTheUserAgentParameterized($lang_version, $flavor, $app_version, $build_type, $theme = 'pocketcode')
+  private function iUseTheUserAgentParameterized(string $lang_version, string $flavor, string $app_version,
+                                                 string $build_type, string $theme = 'pocketcode'): void
   {
     // see org.catrobat.catroid.ui.WebViewActivity
     $platform = 'Android';

@@ -78,8 +78,10 @@ class ParsedObjectsContainerTest extends TestCase
 
   /**
    * @test
+   *
+   * @throws Exception
    */
-  public function mustThrowExceptionIfCorruptedGroup()
+  public function mustThrowExceptionIfCorruptedGroup(): void
   {
     $this->expectExceptionMessage(Exception::class);
 

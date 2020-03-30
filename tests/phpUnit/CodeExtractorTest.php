@@ -68,7 +68,7 @@ class CodeExtractorTest extends TestCase
     $this->checkFiles('/Resources/CodeXmls/nestedObjects/');
   }
 
-  private function checkFiles($path): void
+  private function checkFiles(string $path): void
   {
     $output = $this->getCode($path);
     $referenceOutput = $this->readReferenceOutputFile($path);
@@ -129,7 +129,7 @@ class CodeExtractorTest extends TestCase
     $absolutePath = __DIR__.$path.'reference.output';
     $referenceOutputFile = fopen($absolutePath, 'r');
 
-    if (false === $referenceOutputFile)
+    if (!$referenceOutputFile)
     {
       die('Unable to open file!');
     }

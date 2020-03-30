@@ -28,7 +28,7 @@ class RefreshEnvironmentContext implements KernelAwareContext
    *
    * @throws ToolsException
    */
-  public static function prepare()
+  public static function prepare(): void
   {
     $kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
     $kernel->boot();
@@ -49,7 +49,7 @@ class RefreshEnvironmentContext implements KernelAwareContext
    *
    * @throws DBALException
    */
-  public function databaseRollback()
+  public function databaseRollback(): void
   {
     $em = $this->getManager();
 
@@ -74,7 +74,7 @@ class RefreshEnvironmentContext implements KernelAwareContext
    *
    * @BeforeScenario
    */
-  public function emptyStorage()
+  public function emptyStorage(): void
   {
     $this->emptyDirectory($this->getSymfonyParameter('catrobat.file.extract.dir'));
     $this->emptyDirectory($this->getSymfonyParameter('catrobat.file.storage.dir'));

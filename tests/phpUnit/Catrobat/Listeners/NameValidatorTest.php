@@ -22,7 +22,7 @@ class NameValidatorTest extends TestCase
   private NameValidator $name_validator;
 
   /**
-   * @var MockObject|RudeWordFilter
+   * @var RudeWordFilter|MockObject
    */
   private $rude_word_filter;
 
