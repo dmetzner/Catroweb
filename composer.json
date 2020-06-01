@@ -44,7 +44,7 @@
         "symfony/process": "^4.4",
         "symfony/swiftmailer-bundle": "^3.4",
         "symfony/twig-pack": "^1.0",
-        "symfony/yaml": "^4.4",
+        "symfony/yaml": "^5.1",
         "twbs/bootstrap": "4.4.1"
     },
     "require-dev": {
