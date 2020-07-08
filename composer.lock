@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "36f7f6fe284a9c07d0f2c1a7459342eb",
+    "content-hash": "3852fb94c8d168adef2008a45d07ceb6",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -62,16 +62,16 @@
         },
         {
             "name": "catrobat/capi",
-            "version": "v1.0.40",
+            "version": "v1.0.41",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Catrobat/Catroweb-API.git",
-                "reference": "60aa9aee7cc344a65ec41ce2cad6eb8fd1c6b95e"
+                "reference": "fd658069865cf36fcd8c5ea5e86c27cd68a7b303"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Catrobat/Catroweb-API/zipball/60aa9aee7cc344a65ec41ce2cad6eb8fd1c6b95e",
-                "reference": "60aa9aee7cc344a65ec41ce2cad6eb8fd1c6b95e",
+                "url": "https://api.github.com/repos/Catrobat/Catroweb-API/zipball/fd658069865cf36fcd8c5ea5e86c27cd68a7b303",
+                "reference": "fd658069865cf36fcd8c5ea5e86c27cd68a7b303",
                 "shasum": ""
             },
             "require": {
@@ -97,6 +97,11 @@
                     "OpenAPI\\Server\\": "./"
                 }
             },
+            "scripts": {
+                "test": [
+                    "vendor/bin/phpunit"
+                ]
+            },
             "license": [
                 "unlicense"
             ],
@@ -114,10 +119,10 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/Catrobat/Catroweb-API/tree/v1.0.40",
+                "source": "https://github.com/Catrobat/Catroweb-API/tree/v1.0.41",
                 "issues": "https://github.com/Catrobat/Catroweb-API/issues"
             },
-            "time": "2020-06-09T11:06:10+00:00"
+            "time": "2020-07-07T12:09:42+00:00"
         },
         {
             "name": "clue/stream-filter",
@@ -9648,16 +9653,16 @@
         },
         {
             "name": "symfony/translation-contracts",
-            "version": "v2.1.2",
+            "version": "v2.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation-contracts.git",
-                "reference": "e5ca07c8f817f865f618aa072c2fe8e0e637340e"
+                "reference": "616a9773c853097607cf9dd6577d5b143ffdcd63"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/e5ca07c8f817f865f618aa072c2fe8e0e637340e",
-                "reference": "e5ca07c8f817f865f618aa072c2fe8e0e637340e",
+                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/616a9773c853097607cf9dd6577d5b143ffdcd63",
+                "reference": "616a9773c853097607cf9dd6577d5b143ffdcd63",
                 "shasum": ""
             },
             "require": {
@@ -9670,6 +9675,10 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "2.1-dev"
+                },
+                "thanks": {
+                    "name": "symfony/contracts",
+                    "url": "https://github.com/symfony/contracts"
                 }
             },
             "autoload": {
@@ -9715,7 +9724,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-05-20T17:43:50+00:00"
+            "time": "2020-07-06T13:23:11+00:00"
         },
         {
             "name": "symfony/twig-bridge",
@@ -11706,12 +11715,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "9249b0c368e5d056167292293afa580d4467787a"
+                "reference": "fcf47f2f3deda26b176c5ee4e3ba17572006bd78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/9249b0c368e5d056167292293afa580d4467787a",
-                "reference": "9249b0c368e5d056167292293afa580d4467787a",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/fcf47f2f3deda26b176c5ee4e3ba17572006bd78",
+                "reference": "fcf47f2f3deda26b176c5ee4e3ba17572006bd78",
                 "shasum": ""
             },
             "require": {
@@ -11795,7 +11804,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-06-27T17:13:42+00:00"
+            "time": "2020-07-03T12:52:07+00:00"
         },
         {
             "name": "myclabs/deep-copy",
