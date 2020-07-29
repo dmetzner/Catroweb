@@ -1,4 +1,4 @@
-name: Crowdin Translations
+name: Synchronize Crowdin
 
 on:
   workflow_dispatch:
