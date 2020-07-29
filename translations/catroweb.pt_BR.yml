@@ -3,6 +3,7 @@
 localLanguage: Inglês
 username: Nome de usuário
 password: Senha
+createNewPassword: Create new password
 accountSettings: Configurações da Conta
 email: E-Mail
 aboutPocketCode: Sobre o Pocket Code
@@ -66,6 +67,9 @@ notificationsClearError: "Não foi possível marcar as notificações como lidas
 notificationsDeleteError: "Não foi possível excluir as notificações!"
 pleaseWait: "Por favor, aguarde..."
 projects: "Programas"
+oauthPopUpTitle: "External account sign in information"
+oauthInfo: 'You have just used an external account to log in. We created a random username for you. If you want to change your username or create a new password for your account please go to my profile page. Click %link_start% here %link_end% to go to your profile page'
+oauthHere: "here"
 statistics: "Statistics"
 indexPage:
   recommendedSection:
@@ -769,14 +773,6 @@ admin:
     ramMaintenance: RAM maintenance
     noRemovableObjects: Não há objetos removíveis disponíveis.
     removableObjects: Removable objects
-    manualBackups: Backups manuais
-    noRemovableBackupObjects: Não há arquivos de backup removíveis neste servidor.
-    btnCreateBackup: Criar backup
-    btnDownloadBackup: Baixar backup
-    btnRestoreBackup: Restaurar backup
-    btnDeleteBackup: Excluir backup
-    createBackupConfirmationTitle: Criar arquivo de backup
-    createBackupConfirmationText: Este processo pode demorar um pouco. A página recarregará logo após!
 recommender:
   similarPrograms: Similar projects
   mostDownloadedProgramsOfUsersThatAlsoDownloadedOtherPrograms: Users Who Downloaded This Project Also Downloaded
