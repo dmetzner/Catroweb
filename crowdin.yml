@@ -21,7 +21,7 @@ files: [
   # Source files filter
   # e.g. "/resources/en/*.json"
   #
-  "source" : "catroweb.en.yml",
+  "source" : "translations/catroweb.en.yml",
 
   #
   # Where translations will be placed
