@@ -14,6 +14,19 @@ jobs:
         with:
           upload_translations: true
           download_translations: true
+
+#          config: '/crowdin.yml'
+#          dryrun_action: true
+#
+#          # config options
+#
+#          # This is a numeric id, not to be confused with Crowdin API v1 "project identifier" string
+#          # See "API v2" on https://crowdin.com/project/<your-project>/settings#api
+#          project_id_env: CROWDIN_PROJECT_ID
+#
+#          # A personal access token, not to be confused with Crowdin API v1 "API key"
+#          # See https://crowdin.com/settings#api-key to generate a token
+#          api_token_env: CROWDIN_PERSONAL_TOKEN
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
