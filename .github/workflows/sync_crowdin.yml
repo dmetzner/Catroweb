@@ -1,4 +1,4 @@
-name: Crowdin Translations X
+name: Crowdin Translations
 
 on:
   workflow_dispatch:
