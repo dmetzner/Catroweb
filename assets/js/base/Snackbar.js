@@ -14,7 +14,7 @@ function showSnackbar (id, text = '', duration = SnackbarDuration.short) {
   const visibleSnacks = $('.mdc-snackbar:visible').length
   if (visibleSnacks > 0) {
     window.setTimeout(function () {
-      showSnackbar(id, text)
+      this.showSnackbar(id, text)
     }, 250)
     return
   }
