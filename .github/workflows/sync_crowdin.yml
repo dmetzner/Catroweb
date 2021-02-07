@@ -23,7 +23,7 @@ name: Synchronize Crowdin
 #
 on:
   schedule:
-    - cron:  '0 0 * * *'
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 jobs:
@@ -40,14 +40,14 @@ jobs:
   #
   synchronize-with-crowdin:
     # Only should run on the main repo. (Running without the secrets would result in a fail anyway!)
-    if: github.repository == 'Catrobat/Catroweb'
+#    if: github.repository == 'Catrobat/Catroweb'
 
     name: Synchronize Crowdin Translations
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - uses: crowdin/github-action@1.0.17
+      - uses: crowdin/github-action@1.0.16
         with:
           upload_translations: true
           download_translations: true
