@@ -4,10 +4,7 @@ namespace App\Api\Exceptions;
 
 use Exception;
 
-/**
- * Class ApiVersionNotSupportedException.
- */
-class APIVersionNotSupportedException extends Exception
+class ApiVersionNotSupportedException extends ApiException
 {
   /**
    * ApiVersionNotSupportedException constructor.
@@ -15,8 +12,8 @@ class APIVersionNotSupportedException extends Exception
    * @param string         $requested_api_version the requested API version which is not supported
    * @param Exception|null $previous              the previous exception
    */
-  public function __construct($requested_api_version, Exception $previous = null)
+  public function __construct(string $requested_api_version, Exception $previous = null)
   {
-    parent::__construct("The requested API version {$requested_api_version} is not supported!", 1, $previous);
+    parent::__construct("The requested API version '{$requested_api_version}' is not supported!", 1, $previous);
   }
 }

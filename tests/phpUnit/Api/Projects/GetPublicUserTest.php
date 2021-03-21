@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @internal
- * @covers \App\Api\ProjectsApi
+ * @covers \App\Api\ProjectsApi.php
  */
 class GetPublicUserTest extends WebTestCase
 {

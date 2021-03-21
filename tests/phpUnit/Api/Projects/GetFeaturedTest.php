@@ -18,7 +18,7 @@ use Tests\phpUnit\TestUtils\PHPUnitUtils;
 
 /**
  * @internal
- * @covers \App\Api\ProjectsApi
+ * @covers \App\Api\ProjectsApi.php
  */
 class GetFeaturedTest extends TestCase
 {

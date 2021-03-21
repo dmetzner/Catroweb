@@ -20,7 +20,7 @@ use Tests\phpUnit\TestUtils\PHPUnitUtils;
 
 /**
  * @internal
- * @covers \App\Api\ProjectsApi
+ * @covers \App\Api\ProjectsApi.php
  */
 class GetRecommendedTest extends TestCase
 {

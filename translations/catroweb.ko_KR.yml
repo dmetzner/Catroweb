@@ -557,7 +557,7 @@ pmd:
   failed:
     text: 프로그램 업로드하지 못했습니다.
 codeview:
-  title: '코드 보기 (Automatic Translation)'
+  title: '코드 보기 (Automatic Translate)'
   showCode: '코드 표시'
   hideCode: '코드 숨기기'
   showStatistics: '코드의 통계 보기'
