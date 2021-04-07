@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/Catrobat/Catroweb-Symfony#readme",
   "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.2",
+    "@fortawesome/fontawesome-free": "^5.15.3",
     "@symfony/webpack-encore": "^1.1.2",
     "core-js": "^3.10.0",
     "eslint": "^7.23.0",
